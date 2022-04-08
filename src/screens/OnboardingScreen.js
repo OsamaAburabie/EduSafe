@@ -53,10 +53,7 @@ const Slide = ({item}) => {
 };
 
 const OnboardingScreen = ({navigation}) => {
-  const [appFirstLaunch, setAppFirstLaunch] = useStorage(
-    'appFirstLaunch',
-    true,
-  );
+  const [appFirstLaunch, setAppFirstLaunch] = useStorage('appFirstLaunch');
 
   const [currentSlideIndex, setCurrentSlideIndex] = React.useState(0);
   const ref = React.useRef();
@@ -84,7 +81,7 @@ const OnboardingScreen = ({navigation}) => {
 
   const getStarted = () => {
     setAppFirstLaunch(false);
-    navigation.replace('HomeScreen');
+    navigation.replace('LoginScreen');
   };
 
   const Footer = () => {
