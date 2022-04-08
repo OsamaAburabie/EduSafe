@@ -14,7 +14,7 @@ import {COLORS} from '../../utils/colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 
-const SignupScreen = () => {
+const SignupScreen = ({navigation}) => {
   const [data, setData] = React.useState({
     username: '',
     password: '',
@@ -103,12 +103,12 @@ const SignupScreen = () => {
               color: COLORS.black,
             },
           ]}>
-          Email
+          Name
         </Text>
         <View style={styles.action}>
           <FontAwesome name="envelope-o" color={COLORS.black} size={20} />
           <TextInput
-            placeholder="Your Email"
+            placeholder="Your Name"
             placeholderTextColor="#666666"
             style={[
               styles.textInput,
@@ -134,6 +134,36 @@ const SignupScreen = () => {
           </View>
         )}
 
+        <Text
+          style={[
+            styles.text_footer,
+            {
+              color: COLORS.black,
+              marginTop: 35,
+            },
+          ]}>
+          Email
+        </Text>
+        <View style={styles.action}>
+          <FontAwesome name="envelope-o" color={COLORS.black} size={20} />
+          <TextInput
+            placeholder="Your Email"
+            placeholderTextColor="#666666"
+            style={[
+              styles.textInput,
+              {
+                color: COLORS.black,
+              },
+            ]}
+            autoCapitalize="none"
+            onChangeText={val => handlePasswordChange(val)}
+          />
+        </View>
+        {data.isValidPassword ? null : (
+          <View animation="fadeInLeft" duration={500}>
+            <Text style={styles.errorMsg}>Wrong Email</Text>
+          </View>
+        )}
         <Text
           style={[
             styles.text_footer,
@@ -182,7 +212,6 @@ const SignupScreen = () => {
         </TouchableOpacity>
         <View style={styles.button}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('SignUpScreen')}
             style={[
               styles.signIn,
               {
@@ -198,7 +227,7 @@ const SignupScreen = () => {
                   color: COLORS.white,
                 },
               ]}>
-              Sign In
+              Sign Up
             </Text>
           </TouchableOpacity>
 
@@ -219,7 +248,7 @@ const SignupScreen = () => {
                   color: COLORS.primary,
                 },
               ]}>
-              Sign Up
+              Sign In
             </Text>
           </TouchableOpacity>
         </View>
