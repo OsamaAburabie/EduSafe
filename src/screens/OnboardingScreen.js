@@ -11,10 +11,9 @@ import {
   Dimensions,
 } from 'react-native';
 import {useStorage} from '../../hooks/UseStorage';
+import {COLORS} from '../../utils/colors';
 
 const {width, height} = Dimensions.get('window');
-
-const COLORS = {primary: '#008080', white: '#fff', black: '#333'};
 
 const slides = [
   {
@@ -81,7 +80,7 @@ const OnboardingScreen = ({navigation}) => {
 
   const getStarted = () => {
     setAppFirstLaunch(false);
-    navigation.replace('LoginScreen');
+    navigation.replace('AuthStack');
   };
 
   const Footer = () => {

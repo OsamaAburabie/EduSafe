@@ -14,7 +14,7 @@ import {COLORS} from '../../utils/colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 
-const LoginScreen = ({navigation}) => {
+const SignupScreen = () => {
   const [data, setData] = React.useState({
     username: '',
     password: '',
@@ -182,6 +182,7 @@ const LoginScreen = ({navigation}) => {
         </TouchableOpacity>
         <View style={styles.button}>
           <TouchableOpacity
+            onPress={() => navigation.navigate('SignUpScreen')}
             style={[
               styles.signIn,
               {
@@ -202,7 +203,7 @@ const LoginScreen = ({navigation}) => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate('SignupScreen')}
+            onPress={() => navigation.navigate('LoginScreen')}
             style={[
               styles.signIn,
               {
@@ -227,7 +228,7 @@ const LoginScreen = ({navigation}) => {
   );
 };
 
-export default LoginScreen;
+export default SignupScreen;
 
 const styles = StyleSheet.create({
   container: {
