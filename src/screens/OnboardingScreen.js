@@ -138,7 +138,7 @@ const OnboardingScreen = ({navigation}) => {
                 style={[
                   styles.btn,
                   {
-                    borderColor: COLORS.black,
+                    borderColor: COLORS.primary,
                     borderWidth: 1,
                     backgroundColor: 'transparent',
                   },
@@ -148,7 +148,7 @@ const OnboardingScreen = ({navigation}) => {
                   style={{
                     fontWeight: 'bold',
                     fontSize: 15,
-                    color: COLORS.black,
+                    color: COLORS.primary,
                   }}>
                   SKIP
                 </Text>
