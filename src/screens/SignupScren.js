@@ -106,7 +106,7 @@ const SignupScreen = ({navigation}) => {
           Name
         </Text>
         <View style={styles.action}>
-          <FontAwesome name="envelope-o" color={COLORS.black} size={20} />
+          <FontAwesome name="user-o" color={COLORS.black} size={20} />
           <TextInput
             placeholder="Your Name"
             placeholderTextColor="#666666"
