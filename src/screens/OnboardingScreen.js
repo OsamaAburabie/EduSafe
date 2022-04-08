@@ -14,25 +14,25 @@ import {useStorage} from '../../hooks/UseStorage';
 
 const {width, height} = Dimensions.get('window');
 
-const COLORS = {primary: '#282534', white: '#fff'};
+const COLORS = {primary: '#008080', white: '#fff', black: '#333'};
 
 const slides = [
   {
     id: '1',
     image: require('../images/image1.png'),
-    title: 'Best Digital Solution',
+    title: 'Lorem ipsum dolor',
     subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   },
   {
     id: '2',
     image: require('../images/image2.png'),
-    title: 'Achieve Your Goals',
+    title: 'Lorem ipsum dolor',
     subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   },
   {
     id: '3',
     image: require('../images/image3.png'),
-    title: 'Increase Your Value',
+    title: 'Lorem ipsum dolor',
     subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   },
 ];
@@ -106,7 +106,7 @@ const OnboardingScreen = ({navigation}) => {
               style={[
                 styles.indicator,
                 currentSlideIndex == index && {
-                  backgroundColor: COLORS.white,
+                  backgroundColor: COLORS.primary,
                   width: 25,
                 },
               ]}
@@ -118,8 +118,16 @@ const OnboardingScreen = ({navigation}) => {
         <View style={{marginBottom: 20}}>
           {currentSlideIndex == slides.length - 1 ? (
             <View style={{height: 50}}>
-              <TouchableOpacity style={styles.btn} onPress={getStarted}>
-                <Text style={{fontWeight: 'bold', fontSize: 15, color: '#333'}}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.btn}
+                onPress={getStarted}>
+                <Text
+                  style={{
+                    fontWeight: 'bold',
+                    fontSize: 15,
+                    color: COLORS.white,
+                  }}>
                   GET STARTED
                 </Text>
               </TouchableOpacity>
@@ -131,7 +139,7 @@ const OnboardingScreen = ({navigation}) => {
                 style={[
                   styles.btn,
                   {
-                    borderColor: COLORS.white,
+                    borderColor: COLORS.black,
                     borderWidth: 1,
                     backgroundColor: 'transparent',
                   },
@@ -141,7 +149,7 @@ const OnboardingScreen = ({navigation}) => {
                   style={{
                     fontWeight: 'bold',
                     fontSize: 15,
-                    color: COLORS.white,
+                    color: COLORS.black,
                   }}>
                   SKIP
                 </Text>
@@ -155,7 +163,7 @@ const OnboardingScreen = ({navigation}) => {
                   style={{
                     fontWeight: 'bold',
                     fontSize: 15,
-                    color: '#333',
+                    color: COLORS.white,
                   }}>
                   NEXT
                 </Text>
@@ -168,8 +176,8 @@ const OnboardingScreen = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.primary}}>
-      <StatusBar backgroundColor={COLORS.primary} />
+    <SafeAreaView style={{flex: 1, backgroundColor: COLORS.white}}>
+      <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" />
       <FlatList
         ref={ref}
         onMomentumScrollEnd={updateCurrentSlideIndex}
@@ -187,7 +195,7 @@ const OnboardingScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   subtitle: {
-    color: COLORS.white,
+    color: COLORS.black,
     fontSize: 13,
     marginTop: 10,
     maxWidth: '70%',
@@ -195,7 +203,7 @@ const styles = StyleSheet.create({
     lineHeight: 23,
   },
   title: {
-    color: COLORS.white,
+    color: COLORS.black,
     fontSize: 22,
     fontWeight: 'bold',
     marginTop: 20,
@@ -217,7 +225,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 50,
     borderRadius: 5,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -3,6 +3,7 @@ package com.edusafe;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
+import com.zoontek.rnbootsplash.RNBootSplash; // <- add this necessary import
 import android.os.Bundle;
 public class MainActivity extends ReactActivity {
 
@@ -36,10 +37,16 @@ public class MainActivity extends ReactActivity {
       reactRootView.setIsFabric(BuildConfig.IS_NEW_ARCHITECTURE_ENABLED);
       return reactRootView;
     }
+
+    @Override
+     protected void loadApp(String appKey) {
+      RNBootSplash.init(getPlainActivity()); // <- initialize the splash screen
+      super.loadApp(appKey);
+    }
   }
 
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(null);
   }
 }
