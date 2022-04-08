@@ -138,7 +138,7 @@ const OnboardingScreen = ({navigation}) => {
                 style={[
                   styles.btn,
                   {
-                    borderColor: COLORS.black,
+                    borderColor: COLORS.primary,
                     borderWidth: 1,
                     backgroundColor: 'transparent',
                   },
