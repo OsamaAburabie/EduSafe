@@ -32,7 +32,11 @@ function App() {
     email: 'ahmad@gmail.com',
   };
 
-  const [user] = useStorage('user', null);
+  const [user, setUser] = useStorage('user', null);
+
+  useEffect(() => {
+    setUser(DefaultUser);
+  }, []);
 
   const AuthStack = () => {
     return (
@@ -56,9 +60,9 @@ function App() {
           headerShown: false,
           cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         }}>
-        {appFirstLaunch ? (
+        {/* {appFirstLaunch ? (
           <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
-        ) : null}
+        ) : null} */}
 
         {user ? (
           <Stack.Screen name="HomeScreen" component={HomeScreen} />

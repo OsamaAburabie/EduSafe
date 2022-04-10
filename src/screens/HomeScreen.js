@@ -1,38 +1,43 @@
 import React from 'react';
-import {Button, SafeAreaView, Text} from 'react-native';
-import {useStorage} from '../../hooks/UseStorage';
-const HomeScreen = () => {
-  const SecondUser = {
-    name: 'ahmad',
-    age: '20',
-    email: 'ahmad@gmail.com',
-  };
-  const [user, setUser] = useStorage('user');
-  const [appFirstLaunch, setAppFirstLaunch] = useStorage('appFirstLaunch');
+import {Button, StatusBar, StyleSheet} from 'react-native';
+// @ts-ignore
+import Modal from 'react-native-modal';
+import {COLORS} from '../../utils/colors';
+import DefaultModalContent from '../../utils/DefaultModalContent';
 
-  const changeUsername = () => {
-    const oldUser = user;
-    const newUser = {...oldUser, name: 'osos'};
-    setUser(newUser);
-  };
+const BottomHalfModal = () => {
+  const [isVisible, setIsVisible] = React.useState(false);
 
+  const close = () => {
+    setIsVisible(false);
+  };
   return (
-    <SafeAreaView
-      style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text style={{color: '#333'}}>HomeScreen</Text>
-      <Text style={{color: '#333'}}>{user.name}</Text>
-      <Text style={{color: '#333'}}>{user.age}</Text>
-      <Text style={{color: '#333'}}>{user.email}</Text>
-      <Button
-        title="Set user"
-        onPress={() => {
-          setUser();
+    <>
+      <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" />
+      <Button title="Show Modal" onPress={() => setIsVisible(true)} />
+      <Modal
+        testID={'modal'}
+        isVisible={isVisible}
+        onModalHide={() => {
+          console.log('wow');
         }}
-      />
-      <Button title="Set username to osama" onPress={changeUsername} />
-      <Button title="Set onborading" onPress={() => setAppFirstLaunch(true)} />
-    </SafeAreaView>
+        onSwipeComplete={close}
+        swipeDirection={['down']}
+        // swipeThreshold={50}
+        onBackdropPress={close}
+        backdropOpacity={0}
+        style={styles.view}>
+        <DefaultModalContent onPress={close} />
+      </Modal>
+    </>
   );
 };
 
-export default HomeScreen;
+const styles = StyleSheet.create({
+  view: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+});
+
+export default BottomHalfModal;
