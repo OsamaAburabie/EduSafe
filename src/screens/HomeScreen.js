@@ -7,9 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-// @ts-ignore
 import Modal from 'react-native-modal';
-import {COLORS} from '../../utils/colors';
 import DefaultModalContent from '../../utils/DefaultModalContent';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -38,12 +36,8 @@ const BottomHalfModal = () => {
   };
 
   return (
-    <View style={{flex: 1, position: 'relative'}}>
-      <Text style={{color: 'white', fontSize: 40, position: 'absolute'}}>
-        wow
-      </Text>
+    <View style={{flex: 1}}>
       <StatusBar backgroundColor="#000" barStyle="light-content" />
-      {/* <Button title="Show Modal" onPress={() => setIsVisible(true)} /> */}
       <QRCodeScanner
         showMarker
         markerStyle={{
@@ -69,7 +63,6 @@ const BottomHalfModal = () => {
         }}
         onSwipeComplete={close}
         swipeDirection={['down']}
-        // swipeThreshold={50}
         onBackdropPress={close}
         backdropOpacity={0}
         style={styles.view}>
