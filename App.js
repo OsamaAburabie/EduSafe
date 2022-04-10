@@ -54,7 +54,6 @@ function App() {
 
   return (
     <NavigationContainer onReady={() => RNBootSplash.hide({fade: true})}>
-      <StatusBar barStyle="light-content" />
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

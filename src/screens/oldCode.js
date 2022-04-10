@@ -1,21 +1,10 @@
 import React, {useRef, useState} from 'react';
-import {
-  Button,
-  Dimensions,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Button, StatusBar, StyleSheet, Text, View} from 'react-native';
 // @ts-ignore
 import Modal from 'react-native-modal';
 import {COLORS} from '../../utils/colors';
 import DefaultModalContent from '../../utils/DefaultModalContent';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import Icon from 'react-native-vector-icons/Ionicons';
-
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const BottomHalfModal = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -45,21 +34,16 @@ const BottomHalfModal = () => {
       <StatusBar backgroundColor="#000" barStyle="light-content" />
       {/* <Button title="Show Modal" onPress={() => setIsVisible(true)} /> */}
       <QRCodeScanner
-        showMarker
+        showMarker={true}
         markerStyle={{
+          borderColor: 'white',
           borderWidth: 0,
-          padding: 0,
         }}
         ref={node => {
           scannerRef = node;
         }}
         onRead={onRead}
-        cameraStyle={{height: SCREEN_HEIGHT}}
-        customMarker={
-          <View style={styles.rectangleContainer}>
-            <Icon name="md-scan" size={SCREEN_WIDTH * 0.5} color="white" />
-          </View>
-        }
+        cameraStyle={{height: '100%'}}
       />
       <Modal
         testID={'modal'}
@@ -83,14 +67,6 @@ const styles = StyleSheet.create({
   view: {
     justifyContent: 'flex-end',
     margin: 0,
-  },
-
-  rectangleContainer: {
-    backgroundColor: 'transparent',
-    height: SCREEN_HEIGHT,
-    width: SCREEN_WIDTH,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 

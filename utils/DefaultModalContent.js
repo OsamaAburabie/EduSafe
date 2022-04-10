@@ -4,6 +4,10 @@ import {Button, StyleSheet, Text, View} from 'react-native';
 const DefaultModalContent = props => (
   <View style={styles.content}>
     <View style={styles.slider}></View>
+    <Text style={[styles.contentTitle]}>{props.data}</Text>
+    <Text style={styles.contentTitle}>Hi 👋!</Text>
+    <Text style={styles.contentTitle}>Hi 👋!</Text>
+    <Text style={styles.contentTitle}>Hi 👋!</Text>
     <Text style={styles.contentTitle}>Hi 👋!</Text>
     <Text style={styles.contentTitle}>Hi 👋!</Text>
     <Text style={styles.contentTitle}>Hi 👋!</Text>
@@ -27,6 +31,7 @@ const styles = StyleSheet.create({
   contentTitle: {
     fontSize: 20,
     marginBottom: 12,
+    color: '#333',
   },
   slider: {
     height: 7,
