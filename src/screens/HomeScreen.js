@@ -12,24 +12,44 @@ import DefaultModalContent from '../../utils/DefaultModalContent';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../utils/colors';
+import axios from 'axios';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const BottomHalfModal = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [data, setData] = useState('');
+  const [data, setData] = useState(null);
+  const [fetchError, setFetchError] = useState(null);
+  console.log(fetchError);
   let scannerRef = useRef(null);
 
   const close = () => {
     setIsVisible(false);
     scannerRef.reactivate();
   };
+  const fetch = async id => {
+    try {
+      const res = await axios.get(
+        `https://jsonplaceholder.typicode.com/todos/${id}`,
+      );
+      if (res.data) {
+        setData(res.data);
+      }
+    } catch (error) {
+      // console.log(error);
+      setFetchError(error);
+    }
+  };
 
   const onRead = e => {
-    console.log(e.data);
-    setData(e.data);
     setIsVisible(true);
+    fetch(e.data);
+  };
+
+  const onHide = () => {
+    setData(null);
+    setFetchError(null);
   };
 
   const activateScanner = () => {
@@ -74,15 +94,17 @@ const BottomHalfModal = () => {
       <Modal
         testID={'modal'}
         isVisible={isVisible}
-        onModalHide={() => {
-          setData('');
-        }}
+        onModalHide={onHide}
         onSwipeComplete={close}
         swipeDirection={['down']}
         onBackdropPress={close}
         backdropOpacity={0}
         style={styles.view}>
-        <DefaultModalContent onPress={close} data={data} />
+        <DefaultModalContent
+          onPress={close}
+          data={data}
+          fetchError={fetchError}
+        />
       </Modal>
     </View>
   );

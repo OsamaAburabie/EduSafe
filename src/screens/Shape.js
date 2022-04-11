@@ -1,5 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
+import axios from 'axios';
 
 const Shape = () => {
   return (
@@ -12,7 +13,7 @@ const Shape = () => {
           borderEndWidth: 5,
           borderTopWidth: 5,
           borderTopRightRadius: 20,
-          transform: [{rotate: '270deg'}],
+          //   transform: [{rotate: '270deg'}],
         }}></View>
     </View>
   );

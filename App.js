@@ -12,6 +12,7 @@ import LoginScreen from './src/screens/LoginScreen';
 import RNBootSplash from 'react-native-bootsplash';
 import SignupScreen from './src/screens/SignupScren';
 import {CardStyleInterpolators} from '@react-navigation/stack';
+import Shape from './src/screens/Shape';
 const Stack = createStackNavigator();
 
 function App() {

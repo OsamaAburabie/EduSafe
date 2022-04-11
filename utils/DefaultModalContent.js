@@ -1,29 +1,38 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {Button, StyleSheet, Text, View, ActivityIndicator} from 'react-native';
 
-const DefaultModalContent = props => (
-  <View style={styles.content}>
-    <View style={styles.slider}></View>
-    <Text style={[styles.contentTitle]}>{props.data}</Text>
-    <Text style={styles.contentTitle}>Hi 👋!</Text>
-    <Text style={styles.contentTitle}>Hi 👋!</Text>
-    <Text style={styles.contentTitle}>Hi 👋!</Text>
-    <Text style={styles.contentTitle}>Hi 👋!</Text>
-    <Text style={styles.contentTitle}>Hi 👋!</Text>
-    <Text style={styles.contentTitle}>Hi 👋!</Text>
-    <Text style={styles.contentTitle}>Hi 👋!</Text>
-    <Text style={styles.contentTitle}>Hi 👋!</Text>
-    <Text style={styles.contentTitle}>Hi 👋!</Text>
-    <Text style={styles.contentTitle}>Hi 👋!</Text>
-  </View>
-);
+const DefaultModalContent = ({data, fetchError}) => {
+  return (
+    <View style={styles.content}>
+      {data ? (
+        <>
+          <View style={styles.slider}></View>
+          <Text style={[styles.contentTitle]}> id: {data?.id}</Text>
+          <Text style={[styles.contentTitle]}>
+            completed: {data?.completed}
+          </Text>
+          <Text style={[styles.contentTitle]}> title: {data?.title}</Text>
+        </>
+      ) : (
+        <>
+          {fetchError ? (
+            <View>
+              <Text style={[styles.contentTitle]}>Error</Text>
+            </View>
+          ) : (
+            <ActivityIndicator size="large" color="#0000ff" />
+          )}
+        </>
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   content: {
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    // borderRadius: 4,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     borderColor: 'rgba(0, 0, 0, 0.1)',
