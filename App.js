@@ -12,7 +12,7 @@ import LoginScreen from './src/screens/LoginScreen';
 import RNBootSplash from 'react-native-bootsplash';
 import SignupScreen from './src/screens/SignupScren';
 import {CardStyleInterpolators} from '@react-navigation/stack';
-import Shape from './src/screens/Shape';
+import ScanScreen from './src/screens/ScanScreen';
 const Stack = createStackNavigator();
 
 function App() {
@@ -35,9 +35,7 @@ function App() {
 
   const [user, setUser] = useStorage('user', null);
 
-  useEffect(() => {
-    setUser(DefaultUser);
-  }, []);
+  console.log(user);
 
   const AuthStack = () => {
     return (
@@ -49,6 +47,19 @@ function App() {
         }}>
         <Stack.Screen name="LoginScreen" component={LoginScreen} />
         <Stack.Screen name="SignupScreen" component={SignupScreen} />
+      </Stack.Navigator>
+    );
+  };
+
+  const HomeStack = () => {
+    return (
+      <Stack.Navigator
+        initialRouteName="HomeScreen"
+        screenOptions={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}>
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="ScanScreen" component={ScanScreen} />
       </Stack.Navigator>
     );
   };
@@ -65,7 +76,7 @@ function App() {
         ) : null} */}
 
         {user ? (
-          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen name="HomeStack" component={HomeStack} />
         ) : (
           <Stack.Screen name="AuthStack" component={AuthStack} />
         )}
