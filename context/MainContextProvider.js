@@ -19,6 +19,7 @@ export const MainContextProvider = ({children}) => {
     'appFirstLaunch',
     true,
   );
+  const [granted, setGranted] = useStorage('cameraPermissionGranted', false);
 
   const Register = values => {
     axios
@@ -59,6 +60,8 @@ export const MainContextProvider = ({children}) => {
         Register,
         Login,
         Logout,
+        granted,
+        setGranted,
       }}>
       {children}
     </MainContext.Provider>

@@ -1,7 +1,17 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
+  check,
+  PERMISSIONS,
+  RESULTS,
+  request,
+  openSettings,
+} from 'react-native-permissions';
+
+import {
+  AppState,
   Button,
   Dimensions,
+  PermissionsAndroid,
   StatusBar,
   StyleSheet,
   Text,
@@ -13,17 +23,17 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../utils/colors';
 import axios from 'axios';
+import {useMainContext} from '../../context/MainContextProvider';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const ScanScreen = () => {
+  const {granted, setGranted} = useMainContext();
   const [isVisible, setIsVisible] = useState(false);
   const [data, setData] = useState(null);
   const [fetchError, setFetchError] = useState(null);
-  console.log(fetchError);
   let scannerRef = useRef(null);
-
   const close = () => {
     setIsVisible(false);
     scannerRef.reactivate();
@@ -52,63 +62,108 @@ const ScanScreen = () => {
     setFetchError(null);
   };
 
-  const activateScanner = () => {
-    scannerRef.reactivate();
+  //check permission if camera is granted
+  const checkPermission = async () => {
+    const permission = await check(PERMISSIONS.ANDROID.CAMERA);
+    if (permission === 'granted') {
+      setGranted(true);
+    } else {
+      setGranted(false);
+    }
   };
 
-  return (
-    <View style={{flex: 1}}>
-      <StatusBar backgroundColor="#000" barStyle="light-content" />
-      <QRCodeScanner
-        showMarker
-        markerStyle={{
-          borderWidth: 0,
-          padding: 0,
-        }}
-        ref={node => {
-          scannerRef = node;
-        }}
-        onRead={onRead}
-        cameraStyle={{height: SCREEN_HEIGHT}}
-        customMarker={
-          <View style={styles.rectangleContainer}>
-            <View style={styles.topOverlay}></View>
+  const requestPermission = async () => {
+    const permission = await request(PERMISSIONS.ANDROID.CAMERA);
+    if (permission === 'granted') {
+      setGranted(true);
+    } else {
+      setGranted(false);
+    }
+  };
 
-            <View style={{flexDirection: 'row'}}>
-              <View style={styles.leftAndRightOverlay} />
+  useEffect(() => {
+    checkPermission();
+    requestPermission();
+  }, []);
 
-              <View style={styles.rectangle}>
-                <View style={styles.cornerRight} />
-                <View style={styles.cornerBottomRight} />
-                <View style={styles.cornerLeft} />
-                <View style={styles.cornerBottomLeft} />
+  // check permission when app is in foreground
+  const appState = useRef(AppState.currentState);
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      appState.current = nextAppState;
+      if (appState.current === 'active') {
+        checkPermission();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  if (granted) {
+    return (
+      <View style={{flex: 1}}>
+        <StatusBar backgroundColor="#000" barStyle="light-content" />
+        <QRCodeScanner
+          showMarker
+          markerStyle={{
+            borderWidth: 0,
+            padding: 0,
+          }}
+          ref={node => {
+            scannerRef = node;
+          }}
+          onRead={onRead}
+          cameraStyle={{height: SCREEN_HEIGHT}}
+          customMarker={
+            <View style={styles.rectangleContainer}>
+              <View style={styles.topOverlay}></View>
+
+              <View style={{flexDirection: 'row'}}>
+                <View style={styles.leftAndRightOverlay} />
+
+                <View style={styles.rectangle}>
+                  <View style={styles.cornerRight} />
+                  <View style={styles.cornerBottomRight} />
+                  <View style={styles.cornerLeft} />
+                  <View style={styles.cornerBottomLeft} />
+                </View>
+
+                <View style={styles.leftAndRightOverlay} />
               </View>
 
-              <View style={styles.leftAndRightOverlay} />
+              <View style={styles.bottomOverlay} />
             </View>
-
-            <View style={styles.bottomOverlay} />
-          </View>
-        }
-      />
-      <Modal
-        testID={'modal'}
-        isVisible={isVisible}
-        onModalHide={onHide}
-        onSwipeComplete={close}
-        swipeDirection={['down']}
-        onBackdropPress={close}
-        backdropOpacity={0}
-        style={styles.view}>
-        <DefaultModalContent
-          onPress={close}
-          data={data}
-          fetchError={fetchError}
+          }
         />
-      </Modal>
-    </View>
-  );
+        <Modal
+          testID={'modal'}
+          isVisible={isVisible}
+          onModalHide={onHide}
+          onSwipeComplete={close}
+          swipeDirection={['down']}
+          onBackdropPress={close}
+          backdropOpacity={0}
+          style={styles.view}>
+          <DefaultModalContent
+            onPress={close}
+            data={data}
+            fetchError={fetchError}
+          />
+        </Modal>
+      </View>
+    );
+  } else {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Button title="Go to settings" onPress={openSettings} />
+      </View>
+    );
+  }
 };
+
+export default ScanScreen;
 
 const overlayColor = 'rgba(0,0,0,0.5)'; // this gives us a black color with a 50% transparency
 
@@ -218,5 +273,3 @@ const styles = StyleSheet.create({
     backgroundColor: scanBarColor,
   },
 });
-
-export default ScanScreen;
