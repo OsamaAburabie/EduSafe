@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
+import {useMainContext} from '../../context/MainContextProvider';
 import {useStorage} from '../../hooks/UseStorage';
 import {COLORS} from '../../utils/colors';
 
@@ -52,7 +53,7 @@ const Slide = ({item}) => {
 };
 
 const OnboardingScreen = ({navigation}) => {
-  const [appFirstLaunch, setAppFirstLaunch] = useStorage('appFirstLaunch');
+  const {setAppFirstLaunch} = useMainContext();
 
   const [currentSlideIndex, setCurrentSlideIndex] = React.useState(0);
   const ref = React.useRef();

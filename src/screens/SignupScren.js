@@ -17,10 +17,10 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import axios from '../../config/axios';
 import {useStorage} from '../../hooks/UseStorage';
+import {useMainContext} from '../../context/MainContextProvider';
 const SignupScreen = ({navigation}) => {
   const [isPasswordVisable, setIsPasswordVisable] = React.useState(true);
-  const [_, setUser] = useStorage('user');
-
+  const {Register} = useMainContext();
   const updateSecureTextEntry = () => {
     setIsPasswordVisable(prevState => !prevState);
   };
@@ -41,17 +41,7 @@ const SignupScreen = ({navigation}) => {
   });
 
   const onSubmit = values => {
-    axios
-      .post('/api/auth/register', values)
-      .then(res => {
-        if (res?.data?.success) {
-          setUser(res?.data?.user);
-          navigation.navigate('HomeScreen');
-        }
-      })
-      .catch(err => {
-        console.log(err.response.data);
-      });
+    Register(values);
   };
 
   return (
