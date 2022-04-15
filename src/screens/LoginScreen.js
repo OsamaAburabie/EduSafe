@@ -20,7 +20,7 @@ import {useStorage} from '../../hooks/UseStorage';
 import {useMainContext} from '../../context/MainContextProvider';
 const SignupScreen = ({navigation}) => {
   const [isPasswordVisable, setIsPasswordVisable] = React.useState(true);
-  const {Login} = useMainContext();
+  const {setUser} = useMainContext();
   const updateSecureTextEntry = () => {
     setIsPasswordVisable(prevState => !prevState);
   };
@@ -32,8 +32,27 @@ const SignupScreen = ({navigation}) => {
       .required('Password is required'),
   });
 
-  const onSubmit = values => {
-    Login(values);
+  const Login = (values, actions) => {
+    axios
+      .post('/api/auth/login', values)
+      .then(res => {
+        if (res?.data?.success) {
+          setUser(res?.data?.user);
+        }
+      })
+      .catch(err => {
+        if (err?.response?.data?.errors) {
+          err.response.data.errors.forEach(error => {
+            actions.setFieldError(error.path[1], error.message);
+          });
+        } else {
+          actions.setFieldError('general', 'Something went wrong');
+        }
+      });
+  };
+
+  const onSubmit = (values, actions) => {
+    Login(values, actions);
   };
 
   return (
@@ -98,6 +117,12 @@ const SignupScreen = ({navigation}) => {
               {errors.email && touched.email ? (
                 <View>
                   <Text style={styles.errorMsg}>{errors.email}</Text>
+                </View>
+              ) : null}
+
+              {errors.general ? (
+                <View>
+                  <Text style={styles.errorMsg}>{errors.general}</Text>
                 </View>
               ) : null}
 
