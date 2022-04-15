@@ -1,7 +1,7 @@
-import {Button, Image, StyleSheet, Text, View} from 'react-native';
+import {Button, Image, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {useStorage} from '../../hooks/UseStorage';
 import {useMainContext} from '../../context/MainContextProvider';
+import {COLORS} from '../../utils/colors';
 
 const HomeScreen = ({navigation}) => {
   // const [user, setUser] = useStorage('user', null);
@@ -10,16 +10,12 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View>
-      <Button title="Logout" onPress={Logout} />
+      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
       <Text style={styles.text}>First Name : {user?.firstName}</Text>
       <Text style={styles.text}>Last Name: {user?.lastName}</Text>
       <Text style={styles.text}>Email: {user?.email}</Text>
       <Image source={{uri: user?.avatar}} style={{height: 100, width: 100}} />
-
-      <Button
-        title="Go to Scan Screen"
-        onPress={() => navigation.navigate('ScanScreen')}
-      />
+      <Button title="Logout" onPress={Logout} />
     </View>
   );
 };

@@ -104,7 +104,7 @@ const ScanScreen = () => {
   if (granted) {
     return (
       <View style={{flex: 1}}>
-        <StatusBar backgroundColor="#000" barStyle="light-content" />
+        {/* <StatusBar backgroundColor="#000" barStyle="light-content" /> */}
         <QRCodeScanner
           showMarker
           markerStyle={{
