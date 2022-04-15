@@ -8,7 +8,7 @@ import ScanScreen from '../src/screens/ScanScreen';
 
 const Stack = createStackNavigator();
 
-const HomeStack = () => {
+const AppStack = () => {
   return (
     <Stack.Navigator
       initialRouteName="HomeScreen"
@@ -21,4 +21,4 @@ const HomeStack = () => {
   );
 };
 
-export default HomeStack;
+export default AppStack;

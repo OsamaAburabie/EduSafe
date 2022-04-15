@@ -7,7 +7,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import HomeStack from './HomeStack';
+import AppStack from './AppStack';
 import {useMainContext} from '../context/MainContextProvider';
 import AuthStack from './AuthStack';
 import OnboardingScreen from '../src/screens/OnboardingScreen';
@@ -28,7 +28,7 @@ const RootNavigator = () => {
           <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
         ) : null}
         {user ? (
-          <Stack.Screen name="HomeStack" component={HomeStack} />
+          <Stack.Screen name="AppStack" component={AppStack} />
         ) : (
           <Stack.Screen name="AuthStack" component={AuthStack} />
         )}
