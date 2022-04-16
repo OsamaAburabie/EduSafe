@@ -16,7 +16,6 @@ import Feather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import axios from '../../config/axios';
-import {useStorage} from '../../hooks/UseStorage';
 import {useMainContext} from '../../context/MainContextProvider';
 const SignupScreen = ({navigation}) => {
   const [isPasswordVisable, setIsPasswordVisable] = React.useState(true);

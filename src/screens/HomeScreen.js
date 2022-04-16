@@ -16,6 +16,10 @@ const HomeScreen = ({navigation}) => {
       <Text style={styles.text}>Email: {user?.email}</Text>
       <Image source={{uri: user?.avatar}} style={{height: 100, width: 100}} />
       <Button title="Logout" onPress={Logout} />
+      <Button
+        title="go to edit"
+        onPress={() => navigation.navigate('Edit Profile')}
+      />
     </View>
   );
 };

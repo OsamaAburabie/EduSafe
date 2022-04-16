@@ -2,25 +2,22 @@ import React, {useEffect, useRef, useState} from 'react';
 import {
   check,
   PERMISSIONS,
-  RESULTS,
   request,
   openSettings,
 } from 'react-native-permissions';
 
 import {
+  ActivityIndicator,
   AppState,
   Button,
   Dimensions,
-  PermissionsAndroid,
   StatusBar,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 import Modal from 'react-native-modal';
 import DefaultModalContent from '../../utils/DefaultModalContent';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import Icon from 'react-native-vector-icons/Ionicons';
 import {COLORS} from '../../utils/colors';
 import axios from 'axios';
 import {useMainContext} from '../../context/MainContextProvider';
@@ -32,6 +29,7 @@ const ScanScreen = () => {
   const {granted, setGranted} = useMainContext();
   const [isVisible, setIsVisible] = useState(false);
   const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [fetchError, setFetchError] = useState(null);
   let scannerRef = useRef(null);
   const close = () => {
@@ -45,15 +43,20 @@ const ScanScreen = () => {
       );
       if (res.data) {
         setData(res.data);
+        setIsLoading(false);
+        setIsVisible(true);
       }
     } catch (error) {
       // console.log(error);
       setFetchError(error);
+      setIsLoading(false);
+      setIsVisible(true);
     }
   };
 
   const onRead = e => {
-    setIsVisible(true);
+    // setIsVisible(true);
+    setIsLoading(true);
     fetch(e.data);
   };
 
@@ -104,7 +107,7 @@ const ScanScreen = () => {
   if (granted) {
     return (
       <View style={{flex: 1}}>
-        {/* <StatusBar backgroundColor="#000" barStyle="light-content" /> */}
+        <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
         <QRCodeScanner
           showMarker
           markerStyle={{
@@ -124,6 +127,13 @@ const ScanScreen = () => {
                 <View style={styles.leftAndRightOverlay} />
 
                 <View style={styles.rectangle}>
+                  {isLoading && (
+                    <ActivityIndicator
+                      style={{top: '43%'}}
+                      size="large"
+                      color={COLORS.primary}
+                    />
+                  )}
                   <View style={styles.cornerRight} />
                   <View style={styles.cornerBottomRight} />
                   <View style={styles.cornerLeft} />
