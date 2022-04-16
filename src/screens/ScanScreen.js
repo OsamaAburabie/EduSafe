@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
   },
 
   bottomOverlay: {
-    flex: 1,
+    flex: 1.5,
     height: SCREEN_WIDTH,
     width: SCREEN_WIDTH,
     backgroundColor: overlayColor,
