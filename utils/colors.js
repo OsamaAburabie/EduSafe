@@ -1,1 +1,6 @@
-export const COLORS = {primary: '#008080', white: '#fff', black: '#333'};
+export const COLORS = {
+  primary: '#008080',
+  white: '#fff',
+  lightWhite: '#C3DFE0',
+  black: '#333',
+};

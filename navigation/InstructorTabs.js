@@ -3,17 +3,16 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HomeScreen from '../src/screens/HomeScreen';
 import {COLORS} from '../utils/colors';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {tabScreenOptions} from '../utils/tabScreenOptions';
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 function InstructorTabs() {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
-      activeColor={COLORS.white}
-      barStyle={{backgroundColor: COLORS.primary}}
-      shifting={false}>
+      initialRouteName="GuardStack"
+      screenOptions={tabScreenOptions}>
       <Tab.Screen
         name="Home"
         component={HomeScreen}
