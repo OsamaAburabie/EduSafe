@@ -2,6 +2,7 @@ import {Button, Image, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {useMainContext} from '../../context/MainContextProvider';
 import {COLORS} from '../../utils/colors';
+import RadioExample from '../components/RadioExample';
 
 const HomeScreen = ({navigation}) => {
   // const [user, setUser] = useStorage('user', null);

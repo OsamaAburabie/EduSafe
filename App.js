@@ -7,7 +7,7 @@ import {COLORS} from './utils/colors';
 const App = () => {
   return (
     <MainContextProvider>
-      <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" />
+      {/* <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" /> */}
       <RootNavigator />
     </MainContextProvider>
   );

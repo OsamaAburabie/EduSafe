@@ -4,8 +4,9 @@ import {COLORS} from '../utils/colors';
 import HomeScreen from '../src/screens/HomeScreen';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import EditProfile from '../src/screens/EditProfile';
+import {createStackNavigator} from '@react-navigation/stack';
 
-const Stack = createNativeStackNavigator();
+const Stack = createStackNavigator();
 
 export const GuardStack = () => {
   return (
@@ -36,6 +37,7 @@ export const ProfileStack = () => {
         },
         headerTintColor: COLORS.white,
         animation: 'none',
+        animationEnabled: false,
       }}>
       <Stack.Screen name="Profile" component={HomeScreen} />
       <Stack.Screen name="Edit Profile" component={EditProfile} />

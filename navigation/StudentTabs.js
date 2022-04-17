@@ -4,6 +4,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HomeScreen from '../src/screens/HomeScreen';
 import {COLORS} from '../utils/colors';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {ProfileStack} from './TabStacks';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -16,7 +17,7 @@ function StudentTabs() {
       shifting={false}>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={ProfileStack}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({color}) => (
@@ -26,7 +27,7 @@ function StudentTabs() {
       />
       <Tab.Screen
         name="Health"
-        component={HomeScreen}
+        component={ProfileStack}
         options={{
           tabBarLabel: 'Health',
           tabBarIcon: ({color}) => (
