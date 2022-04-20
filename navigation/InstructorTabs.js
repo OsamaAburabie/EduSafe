@@ -2,7 +2,6 @@ import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HomeScreen from '../src/screens/HomeScreen';
-import {COLORS} from '../utils/colors';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {tabScreenOptions} from '../utils/tabScreenOptions';
 

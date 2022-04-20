@@ -1,29 +1,28 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View, ActivityIndicator} from 'react-native';
+import {
+  Button,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+  Image,
+} from 'react-native';
 
 const DefaultModalContent = ({data, fetchError}) => {
   return (
     <View style={styles.content}>
-      {data ? (
+      {data && (
         <>
-          <View style={styles.slider}></View>
-          <Text style={[styles.contentTitle]}> id: {data?.id}</Text>
-          <Text style={[styles.contentTitle]}>
-            completed: {data?.completed}
-          </Text>
-          <Text style={[styles.contentTitle]}> title: {data?.title}</Text>
-        </>
-      ) : (
-        <>
-          {fetchError ? (
-            <View>
-              <Text style={[styles.contentTitle]}>Error</Text>
-            </View>
-          ) : (
-            <ActivityIndicator size="large" color="#0000ff" />
-          )}
+          <View style={styles.avatarContainer}>
+            <Image style={styles.avatar} source={{uri: data.avatar}} />
+            <Text style={[styles.contentTitle]}>
+              {data?.firstName} {data?.lastName}
+            </Text>
+          </View>
         </>
       )}
+
+      {fetchError && <Text style={[styles.contentTitle]}>Error</Text>}
     </View>
   );
 };
@@ -31,16 +30,25 @@ const DefaultModalContent = ({data, fetchError}) => {
 const styles = StyleSheet.create({
   content: {
     backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     borderColor: 'rgba(0, 0, 0, 0.1)',
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   contentTitle: {
     fontSize: 20,
-    marginBottom: 12,
     color: '#333',
+  },
+  avatarContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
   slider: {
     height: 7,

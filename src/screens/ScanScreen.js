@@ -19,14 +19,15 @@ import Modal from 'react-native-modal';
 import DefaultModalContent from '../../utils/DefaultModalContent';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {COLORS} from '../../utils/colors';
-import axios from 'axios';
+// import axios from 'axios';
+import axios from '../../config/axios';
 import {useMainContext} from '../../context/MainContextProvider';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const ScanScreen = () => {
-  const {granted, setGranted} = useMainContext();
+  const {user, granted, setGranted} = useMainContext();
   const [isVisible, setIsVisible] = useState(false);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,16 +39,17 @@ const ScanScreen = () => {
   };
   const fetch = async id => {
     try {
-      const res = await axios.get(
-        `https://jsonplaceholder.typicode.com/todos/${id}`,
-      );
-      if (res.data) {
-        setData(res.data);
+      const res = await axios.get(`/api/guard/student_info/${id}`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      if (res.data.success) {
+        setData(res.data.student);
         setIsLoading(false);
         setIsVisible(true);
       }
     } catch (error) {
-      // console.log(error);
       setFetchError(error);
       setIsLoading(false);
       setIsVisible(true);
@@ -176,17 +178,7 @@ const ScanScreen = () => {
 export default ScanScreen;
 
 const overlayColor = 'rgba(0,0,0,0.5)'; // this gives us a black color with a 50% transparency
-
 const rectDimensions = SCREEN_WIDTH * 0.65; // this is equivalent to 255 from a 393 device width
-const rectBorderWidth = SCREEN_WIDTH * 0.005; // this is equivalent to 2 from a 393 device width
-const rectBorderColor = 'white';
-
-const scanBarWidth = SCREEN_WIDTH * 0.46; // this is equivalent to 180 from a 393 device width
-const scanBarHeight = SCREEN_WIDTH * 0.0025; //this is equivalent to 1 from a 393 device width
-const scanBarColor = '#22ff00';
-
-const iconScanColor = 'blue';
-
 const styles = StyleSheet.create({
   view: {
     justifyContent: 'flex-end',
@@ -271,11 +263,5 @@ const styles = StyleSheet.create({
     height: SCREEN_WIDTH * 0.65,
     width: SCREEN_WIDTH,
     backgroundColor: overlayColor,
-  },
-
-  scanBar: {
-    width: scanBarWidth,
-    height: scanBarHeight,
-    backgroundColor: scanBarColor,
   },
 });
