@@ -1,16 +1,11 @@
-import {
-  StyleSheet,
-  Text,
-  Touchable,
-  View,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableWithoutFeedback} from 'react-native';
 import React, {useState} from 'react';
 import {COLORS} from '../../utils/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {TouchableRipple} from 'react-native-paper';
-import {TouchableHighlight} from 'react-native-gesture-handler';
+import dayjs from 'dayjs';
+import {useMainContext} from '../../context/MainContextProvider';
+import axios from '../../config/axios';
+
 const EventItem = ({
   id,
   title,
@@ -21,33 +16,87 @@ const EventItem = ({
   joining,
 }) => {
   const [join, setJoin] = useState(joining);
-  const [tinvited, setTinvited] = useState(totalInvited);
   const [tjoined, setTjoined] = useState(totalJoined);
+  const [isLoading, setIsLoading] = useState(false);
+  const {user, events, setEvents} = useMainContext();
 
-  const handleJoin = () => {
-    if (join) {
-      setJoin(false);
-      setTjoined(tjoined - 1);
-    } else {
-      setJoin(true);
-      setTjoined(tjoined + 1);
-    }
+  const updateEventState = (id, joiningState, totJoined) => {
+    const newEvents = events.map(event => {
+      if (event.id === id) {
+        return {...event, joining: joiningState, totalJoined: totJoined};
+      }
+      return event;
+    });
+    setEvents(newEvents);
   };
 
+  const fetch = async id => {
+    setIsLoading(true);
+    try {
+      const res = await axios.post(`/api/student/join_event/${id}`, null, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      if (res.data.success) {
+        if (res.data.joining) {
+          setJoin(true);
+          setTjoined(tjoined + 1);
+          updateEventState(id, true, tjoined + 1);
+        } else {
+          setJoin(false);
+          setTjoined(tjoined - 1);
+          updateEventState(id, false, tjoined - 1);
+        }
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error.response.data);
+    }
+  };
+  const handleJoin = () => {
+    if (isLoading) return;
+    fetch(id);
+  };
+
+  //make the first letter of the title uppercase
+  const titleUpper = title.charAt(0).toUpperCase() + title.slice(1);
+  const formatedDate = dayjs(date).format('MMM D, h:mm A');
   return (
     <View key={id} style={styles.eventContainer}>
-      <View style={styles.eventInfo}>
-        <Text style={styles.eventTitle}>{title}</Text>
-        <Text style={styles.eventDescription}>{description}</Text>
+      <View>
+        <Text style={[styles.eventTitle, {marginBottom: description ? 0 : 5}]}>
+          {titleUpper}
+        </Text>
+        {description && (
+          <Text style={[styles.text, {marginBottom: 5}]}>{description}</Text>
+        )}
         <View style={styles.eventDate}>
-          <MaterialCommunityIcons name="calendar" size={20} />
-          <Text style={styles.eventDateText}>{date}</Text>
+          <MaterialCommunityIcons
+            name="calendar"
+            size={20}
+            color={COLORS.primary}
+          />
+          <Text style={styles.text}>{formatedDate}</Text>
         </View>
         <View style={styles.eventStats}>
-          <MaterialCommunityIcons name="account" size={20} />
-          <Text style={styles.eventStatsText}>{tinvited} invited</Text>
-          <MaterialCommunityIcons name="account-check" size={20} />
-          <Text style={styles.eventStatsText}>{tjoined} joined</Text>
+          <MaterialCommunityIcons
+            name="account"
+            size={20}
+            color={COLORS.primary}
+          />
+          <Text style={[styles.text, {marginRight: 8, fontWeight: 'bold'}]}>
+            {totalInvited} invited
+          </Text>
+          <MaterialCommunityIcons
+            name="account-check"
+            size={20}
+            color={COLORS.primary}
+          />
+          <Text style={[styles.text, {marginRight: 8, fontWeight: 'bold'}]}>
+            {tjoined} joined
+          </Text>
         </View>
       </View>
       <View style={styles.eventControls}>
@@ -92,27 +141,17 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     borderBottomWidth: 1,
     borderColor: COLORS.lightWhite,
-    padding: 10,
+    padding: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  eventInfo: {},
   eventStats: {
     flexDirection: 'row',
   },
-  eventStatsText: {
-    marginRight: 8,
-    fontWeight: 'bold',
-  },
   eventTitle: {
     fontSize: 20,
-    color: COLORS.black,
+    color: COLORS.primary,
     fontWeight: 'bold',
-  },
-  eventDescription: {
-    fontSize: 16,
-    color: COLORS.black,
-    marginBottom: 4,
   },
   eventControls: {
     flexDirection: 'column',
@@ -136,5 +175,8 @@ const styles = StyleSheet.create({
   },
   eventDate: {
     flexDirection: 'row',
+  },
+  text: {
+    color: COLORS.gray,
   },
 });

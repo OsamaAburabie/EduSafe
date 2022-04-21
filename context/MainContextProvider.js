@@ -1,4 +1,4 @@
-import React, {useState, createContext} from 'react';
+import React, {useState, createContext, useEffect} from 'react';
 import {useStorage} from '../hooks/UseStorage';
 import axios from '../config/axios';
 
@@ -15,41 +15,34 @@ export const useMainContext = () => {
 
 export const MainContextProvider = ({children}) => {
   const [user, setUser] = useStorage('user', null);
+  const [events, setEvents] = useStorage('events', null);
   const [appFirstLaunch, setAppFirstLaunch] = useStorage(
     'appFirstLaunch',
     true,
   );
   const [granted, setGranted] = useStorage('cameraPermissionGranted', false);
 
-  const Register = values => {
-    axios
-      .post('/api/auth/register', values)
-      .then(res => {
-        if (res?.data?.success) {
-          setUser(res?.data?.user);
-        }
-      })
-      .catch(err => {
-        console.log(err.response.data);
-      });
-  };
-
-  const Login = values => {
-    axios
-      .post('/api/auth/login', values)
-      .then(res => {
-        if (res?.data?.success) {
-          setUser(res?.data?.user);
-        }
-      })
-      .catch(err => {
-        console.log(err.response.data);
-      });
-  };
-
   const Logout = () => {
     setUser(null);
+    setEvents(null);
   };
+
+  const fetchEvents = async () => {
+    try {
+      const res = await axios.get(`/api/student/events`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      setEvents(res.data);
+    } catch (error) {
+      console.log(error.response.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
   return (
     <MainContext.Provider
       value={{
@@ -57,11 +50,11 @@ export const MainContextProvider = ({children}) => {
         setAppFirstLaunch,
         user,
         setUser,
-        Register,
-        Login,
         Logout,
         granted,
         setGranted,
+        events,
+        setEvents,
       }}>
       {children}
     </MainContext.Provider>
