@@ -3,8 +3,8 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import LoginScreen from '../src/screens/LoginScreen';
-import SignupScreen from '../src/screens/SignupScren';
+import LoginScreen from '../../src/screens/LoginScreen';
+import SignupScreen from '../../src/screens/SignupScren';
 
 const Stack = createStackNavigator();
 

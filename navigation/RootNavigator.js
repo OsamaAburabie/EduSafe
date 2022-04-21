@@ -7,9 +7,9 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import AppStack from './AppStack';
+import AppStack from './Stacks/AppStack';
 import {useMainContext} from '../context/MainContextProvider';
-import AuthStack from './AuthStack';
+import AuthStack from './Stacks/AuthStack';
 import OnboardingScreen from '../src/screens/OnboardingScreen';
 
 const Stack = createStackNavigator();

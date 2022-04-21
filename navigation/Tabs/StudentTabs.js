@@ -1,9 +1,9 @@
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import HomeScreen from '../src/screens/HomeScreen';
-import {ProfileStack} from './TabStacks';
+import HomeScreen from '../../src/screens/HomeScreen';
+import {EventStack, ProfileStack} from '../Stacks/TabStacks';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {tabScreenOptions} from '../utils/tabScreenOptions';
+import {tabScreenOptions} from '../../utils/tabScreenOptions';
 
 const Tab = createBottomTabNavigator();
 
@@ -12,7 +12,7 @@ function StudentTabs() {
     <Tab.Navigator initialRouteName="Home" screenOptions={tabScreenOptions}>
       <Tab.Screen
         name="Home"
-        component={ProfileStack}
+        component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({color}) => (
@@ -22,7 +22,7 @@ function StudentTabs() {
       />
       <Tab.Screen
         name="Health"
-        component={ProfileStack}
+        component={HomeScreen}
         options={{
           tabBarLabel: 'Health',
           tabBarIcon: ({color}) => (
@@ -31,8 +31,8 @@ function StudentTabs() {
         }}
       />
       <Tab.Screen
-        name="Events"
-        component={HomeScreen}
+        name="EventsStack"
+        component={EventStack}
         options={{
           tabBarLabel: 'Events',
           tabBarIcon: ({color}) => (
@@ -41,8 +41,8 @@ function StudentTabs() {
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={HomeScreen}
+        name="ProfileStack"
+        component={ProfileStack}
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({color}) => (

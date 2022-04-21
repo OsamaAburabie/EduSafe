@@ -1,8 +1,8 @@
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {GuardStack, ProfileStack} from './TabStacks';
+import {GuardStack, ProfileStack} from '../Stacks/TabStacks';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {tabScreenOptions} from '../utils/tabScreenOptions';
+import {tabScreenOptions} from '../../utils/tabScreenOptions';
 
 const Tab = createBottomTabNavigator();
 

@@ -1,8 +1,8 @@
 import React from 'react';
-import {useMainContext} from '../context/MainContextProvider';
-import GuardTabs from './GuardTabs';
-import InstructorTabs from './InstructorTabs';
-import StudentTabs from './StudentTabs';
+import {useMainContext} from '../../context/MainContextProvider';
+import GuardTabs from '../Tabs/GuardTabs';
+import InstructorTabs from '../Tabs/InstructorTabs';
+import StudentTabs from '../Tabs/StudentTabs';
 
 function AppStack() {
   const {user} = useMainContext();
