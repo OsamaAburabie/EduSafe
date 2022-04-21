@@ -1,6 +1,7 @@
-import React, {useState, createContext, useEffect} from 'react';
+import React, {useState, createContext, useEffect, useRef} from 'react';
 import {useStorage} from '../hooks/UseStorage';
 import axios from '../config/axios';
+import {AppState} from 'react-native';
 
 export const MainContext = createContext({});
 
@@ -34,14 +35,28 @@ export const MainContextProvider = ({children}) => {
           Authorization: `Bearer ${user.token}`,
         },
       });
-      setEvents(res.data);
+      if (res.data.length > 0) {
+        setEvents(res.data);
+      }
     } catch (error) {
       console.log(error.response.data);
     }
   };
 
   useEffect(() => {
+    if (!user) return;
     fetchEvents();
+  }, [user]);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', state => {
+      if (state === 'background' || state === 'inactive') {
+        fetchEvents();
+      }
+    });
+    return () => {
+      subscription.remove();
+    };
   }, []);
   return (
     <MainContext.Provider
@@ -55,6 +70,7 @@ export const MainContextProvider = ({children}) => {
         setGranted,
         events,
         setEvents,
+        fetchEvents,
       }}>
       {children}
     </MainContext.Provider>

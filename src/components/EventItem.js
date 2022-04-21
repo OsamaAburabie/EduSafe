@@ -18,17 +18,7 @@ const EventItem = ({
   const [join, setJoin] = useState(joining);
   const [tjoined, setTjoined] = useState(totalJoined);
   const [isLoading, setIsLoading] = useState(false);
-  const {user, events, setEvents} = useMainContext();
-
-  const updateEventState = (id, joiningState, totJoined) => {
-    const newEvents = events.map(event => {
-      if (event.id === id) {
-        return {...event, joining: joiningState, totalJoined: totJoined};
-      }
-      return event;
-    });
-    setEvents(newEvents);
-  };
+  const {user, fetchEvents} = useMainContext();
 
   const fetch = async id => {
     setIsLoading(true);
@@ -38,15 +28,13 @@ const EventItem = ({
           Authorization: `Bearer ${user.token}`,
         },
       });
-      if (res.data.success) {
+      if (res.data?.success) {
         if (res.data.joining) {
           setJoin(true);
           setTjoined(tjoined + 1);
-          updateEventState(id, true, tjoined + 1);
         } else {
           setJoin(false);
           setTjoined(tjoined - 1);
-          updateEventState(id, false, tjoined - 1);
         }
       }
       setIsLoading(false);
