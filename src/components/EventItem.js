@@ -103,19 +103,24 @@ const EventItem = ({
             </Text>
           </View>
         </TouchableWithoutFeedback>
-        <View
-          style={[
-            styles.joinButton,
-            {
-              backgroundColor: COLORS.white,
-            },
-          ]}>
-          <MaterialCommunityIcons
-            name="qrcode"
-            size={22}
-            color={COLORS.primary}
-          />
-        </View>
+        <View style={{width: 10}}></View>
+        {join && (
+          <TouchableWithoutFeedback>
+            <View
+              style={[
+                styles.joinButton,
+                {
+                  backgroundColor: COLORS.white,
+                },
+              ]}>
+              <MaterialCommunityIcons
+                name="qrcode"
+                size={22}
+                color={COLORS.primary}
+              />
+            </View>
+          </TouchableWithoutFeedback>
+        )}
       </View>
     </View>
   );
@@ -142,14 +147,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   eventControls: {
-    flexDirection: 'column',
+    flexDirection: 'row-reverse',
+    alignItems: 'flex-end',
   },
   joinButton: {
     height: 30,
     width: 80,
     backgroundColor: COLORS.primary,
     borderRadius: 20,
-    marginBottom: 8,
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
