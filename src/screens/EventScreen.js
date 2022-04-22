@@ -5,7 +5,7 @@ import EventItem from '../components/EventItem';
 import axios from '../../config/axios';
 import {useMainContext} from '../../context/MainContextProvider';
 import {useFocusEffect} from '@react-navigation/native';
-const EventScreen = () => {
+const EventScreen = ({navigation}) => {
   const {user, events, setEvents} = useMainContext();
 
   //update all events to seen when the screen is loaded
@@ -30,12 +30,22 @@ const EventScreen = () => {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     updateSeenLocal();
+  //     updateSeenRequest();
+  //   }, []),
+  // );
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (!events) return;
       updateSeenLocal();
       updateSeenRequest();
-    }, []),
-  );
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <FlatList

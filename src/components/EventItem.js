@@ -1,11 +1,19 @@
-import {StyleSheet, Text, View, TouchableWithoutFeedback} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useState} from 'react';
 import {COLORS} from '../../utils/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import dayjs from 'dayjs';
 import {useMainContext} from '../../context/MainContextProvider';
 import axios from '../../config/axios';
-
+import Modal from 'react-native-modal';
+import EventQrModal from './EventQrModal';
+import {useNavigation} from '@react-navigation/native';
 const EventItem = ({
   id,
   title,
@@ -18,7 +26,10 @@ const EventItem = ({
   const [join, setJoin] = useState(joining);
   const [tjoined, setTjoined] = useState(totalJoined);
   const [isLoading, setIsLoading] = useState(false);
-  const {user, fetchEvents} = useMainContext();
+  const {user} = useMainContext();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const navigation = useNavigation();
 
   const fetch = async id => {
     setIsLoading(true);
@@ -48,96 +59,145 @@ const EventItem = ({
     fetch(id);
   };
 
+  const onHide = () => {
+    setIsModalVisible(false);
+  };
+
   //make the first letter of the title uppercase
   const titleUpper = title.charAt(0).toUpperCase() + title.slice(1);
   const formatedDate = dayjs(date).format('MMM D, h:mm A');
   return (
-    <View key={id} style={styles.eventContainer}>
-      <View>
-        <Text style={[styles.eventTitle, {marginBottom: description ? 0 : 5}]}>
-          {titleUpper}
-        </Text>
-        {description && (
-          <Text style={[styles.text, {marginBottom: 5}]}>{description}</Text>
-        )}
-        <View style={styles.eventDate}>
-          <MaterialCommunityIcons
-            name="calendar"
-            size={20}
-            color={COLORS.primary}
-          />
-          <Text style={styles.text}>{formatedDate}</Text>
-        </View>
-        <View style={styles.eventStats}>
-          <MaterialCommunityIcons
-            name="account"
-            size={20}
-            color={COLORS.primary}
-          />
-          <Text style={[styles.text, {marginRight: 8, fontWeight: 'bold'}]}>
-            {totalInvited} invited
-          </Text>
-          <MaterialCommunityIcons
-            name="account-check"
-            size={20}
-            color={COLORS.primary}
-          />
-          <Text style={[styles.text, {marginRight: 8, fontWeight: 'bold'}]}>
-            {tjoined} joined
-          </Text>
-        </View>
-      </View>
-      <View style={styles.eventControls}>
-        <TouchableWithoutFeedback onPress={handleJoin}>
-          <View
-            style={[
-              styles.joinButton,
-              {backgroundColor: join ? COLORS.white : COLORS.primary},
-            ]}>
-            <Text
-              style={[
-                styles.joinButtonText,
-                {color: join ? COLORS.primary : COLORS.white},
-              ]}>
-              {join ? 'Joined' : 'Join'}
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
-        <View style={{width: 10}}></View>
-        {join && (
-          <TouchableWithoutFeedback>
-            <View
-              style={[
-                styles.joinButton,
-                {
-                  backgroundColor: COLORS.white,
-                },
-              ]}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => navigation.navigate('EventDetails')}>
+      <>
+        <View key={id} style={styles.eventContainer}>
+          <View style={styles.eventInfo}>
+            <View>
+              <Text
+                style={[
+                  styles.eventTitle,
+                  {
+                    marginBottom: description ? -5 : 2,
+                  },
+                ]}>
+                {titleUpper}
+              </Text>
+              {description && (
+                <Text style={[styles.text, {marginBottom: 4}]}>
+                  {description}
+                </Text>
+              )}
+            </View>
+            <View style={styles.eventDate}>
               <MaterialCommunityIcons
-                name="qrcode"
-                size={22}
+                name="calendar"
+                size={20}
                 color={COLORS.primary}
               />
+              <Text style={[styles.text, {marginRight: 8}]}>
+                {formatedDate}
+              </Text>
             </View>
-          </TouchableWithoutFeedback>
-        )}
-      </View>
-    </View>
+            <View style={styles.eventStats}>
+              <MaterialCommunityIcons
+                name="account"
+                size={20}
+                color={COLORS.primary}
+              />
+              <Text style={[styles.text, {marginRight: 8, fontWeight: 'bold'}]}>
+                {totalInvited} invited
+              </Text>
+              <MaterialCommunityIcons
+                name="account-check"
+                size={20}
+                color={COLORS.primary}
+              />
+              <Text style={[styles.text, {marginRight: 8, fontWeight: 'bold'}]}>
+                {tjoined} joined
+              </Text>
+            </View>
+          </View>
+          <View style={styles.eventControls}>
+            <TouchableWithoutFeedback onPress={handleJoin}>
+              <View
+                style={[
+                  styles.joinButton,
+                  {backgroundColor: join ? COLORS.white : COLORS.primary},
+                ]}>
+                <Text
+                  style={[
+                    styles.joinButtonText,
+                    {color: join ? COLORS.primary : COLORS.white},
+                  ]}>
+                  {join ? 'Joined' : 'Join'}
+                  {join && (
+                    <MaterialCommunityIcons
+                      name="account-check"
+                      size={20}
+                      color={COLORS.primary}
+                    />
+                  )}
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
+            <View style={{width: 10}}></View>
+            {join && (
+              <TouchableWithoutFeedback onPress={() => setIsModalVisible(true)}>
+                <View
+                  style={[
+                    styles.joinButton,
+                    {
+                      backgroundColor: COLORS.white,
+                    },
+                  ]}>
+                  <MaterialCommunityIcons
+                    name="qrcode"
+                    size={22}
+                    color={COLORS.primary}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
+            )}
+          </View>
+        </View>
+
+        <Modal
+          testID={'modal'}
+          isVisible={isModalVisible}
+          onSwipeComplete={onHide}
+          swipeDirection={['down']}
+          onBackdropPress={onHide}
+          backdropOpacity={0.5}
+          backdropTransitionInTiming={0}
+          backdropTransitionOutTiming={0}
+          style={styles.modalView}>
+          <EventQrModal inviteId={id} />
+        </Modal>
+      </>
+    </TouchableOpacity>
   );
+  0.8;
 };
 
 export default EventItem;
 
 const styles = StyleSheet.create({
+  modalView: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
   eventContainer: {
     width: '100%',
     backgroundColor: COLORS.white,
     borderBottomWidth: 1,
     borderColor: COLORS.lightWhite,
-    padding: 8,
+    paddingVertical: 2,
+    paddingHorizontal: 6,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  eventInfo: {},
   eventStats: {
     flexDirection: 'row',
   },
@@ -149,10 +209,11 @@ const styles = StyleSheet.create({
   eventControls: {
     flexDirection: 'row-reverse',
     alignItems: 'flex-end',
+    marginBottom: 4,
   },
   joinButton: {
     height: 30,
-    width: 80,
+    width: 85,
     backgroundColor: COLORS.primary,
     borderRadius: 20,
     textAlign: 'center',

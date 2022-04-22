@@ -23,6 +23,8 @@ target 'EduSafe' do
 
   pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'EduSafeTests' do
     inherit! :complete
     # Pods for testing
