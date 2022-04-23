@@ -67,10 +67,10 @@ const EventItem = ({
   const titleUpper = title.charAt(0).toUpperCase() + title.slice(1);
   const formatedDate = dayjs(date).format('MMM D, h:mm A');
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      onPress={() => navigation.navigate('EventDetails')}>
-      <>
+    <>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => navigation.navigate('EventDetails')}>
         <View key={id} style={styles.eventContainer}>
           <View style={styles.eventInfo}>
             <View>
@@ -161,23 +161,22 @@ const EventItem = ({
             )}
           </View>
         </View>
+      </TouchableOpacity>
 
-        <Modal
-          testID={'modal'}
-          isVisible={isModalVisible}
-          onSwipeComplete={onHide}
-          swipeDirection={['down']}
-          onBackdropPress={onHide}
-          backdropOpacity={0.5}
-          backdropTransitionInTiming={0}
-          backdropTransitionOutTiming={0}
-          style={styles.modalView}>
-          <EventQrModal inviteId={id} />
-        </Modal>
-      </>
-    </TouchableOpacity>
+      <Modal
+        testID={'modal'}
+        isVisible={isModalVisible}
+        onSwipeComplete={onHide}
+        swipeDirection={'down'}
+        onBackdropPress={onHide}
+        backdropOpacity={0.5}
+        backdropTransitionInTiming={0}
+        backdropTransitionOutTiming={0}
+        style={styles.modalView}>
+        <EventQrModal inviteId={id} />
+      </Modal>
+    </>
   );
-  0.8;
 };
 
 export default EventItem;
