@@ -64,7 +64,7 @@ const SignupScreen = ({navigation}) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" />
       <View style={styles.header}>
         <Image

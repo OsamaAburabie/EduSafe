@@ -4,7 +4,6 @@ import {COLORS} from '../../utils/colors';
 import EventItem from '../components/EventItem';
 import axios from '../../config/axios';
 import {useMainContext} from '../../context/MainContextProvider';
-import {useFocusEffect} from '@react-navigation/native';
 const EventScreen = ({navigation}) => {
   const {user, events, setEvents} = useMainContext();
 

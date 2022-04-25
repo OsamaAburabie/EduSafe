@@ -35,11 +35,12 @@ export const MainContextProvider = ({children}) => {
           Authorization: `Bearer ${user.token}`,
         },
       });
-      if (res.data.length > 0) {
-        setEvents(res.data);
+      if (res.data?.success) {
+        console.log(res.data);
+        setEvents(res.data?.events);
       }
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error?.response?.data);
     }
   };
 
