@@ -36,7 +36,6 @@ export const MainContextProvider = ({children}) => {
         },
       });
       if (res.data?.success) {
-        console.log(res.data);
         setEvents(res.data?.events);
       }
     } catch (error) {
