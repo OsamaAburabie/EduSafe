@@ -1,7 +1,12 @@
 import React, {useEffect} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from '../../src/screens/HomeScreen';
-import {EventStack, ProfileStack} from '../Stacks/TabStacks';
+import {
+  EventStack,
+  HealthStack,
+  HomeStack,
+  ProfileStack,
+} from '../Stacks/TabStacks';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {tabScreenOptions} from '../../utils/tabScreenOptions';
 import {useMainContext} from '../../context/MainContextProvider';
@@ -23,22 +28,30 @@ function StudentTabs() {
   return (
     <Tab.Navigator initialRouteName="Home" screenOptions={tabScreenOptions}>
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="HomeStack"
+        component={HomeStack}
         options={{
           tabBarLabel: 'Home',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="home" color={color} size={26} />
+          tabBarIcon: ({color, focused}) => (
+            <MaterialCommunityIcons
+              name={`${focused ? 'home' : 'home-outline'}`}
+              color={color}
+              size={26}
+            />
           ),
         }}
       />
       <Tab.Screen
-        name="Health"
-        component={HomeScreen}
+        name="HealthStack"
+        component={HealthStack}
         options={{
           tabBarLabel: 'Health',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="heart" color={color} size={26} />
+          tabBarIcon: ({color, focused}) => (
+            <MaterialCommunityIcons
+              name={`${focused ? 'heart' : 'heart-outline'}`}
+              color={color}
+              size={26}
+            />
           ),
         }}
       />
@@ -47,8 +60,12 @@ function StudentTabs() {
         component={EventStack}
         options={{
           tabBarLabel: 'Events',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="bullhorn" color={color} size={26} />
+          tabBarIcon: ({color, focused}) => (
+            <MaterialCommunityIcons
+              name={`${focused ? 'bullhorn' : 'bullhorn-outline'}`}
+              color={color}
+              size={26}
+            />
           ),
           tabBarBadge: unSeen,
         }}
@@ -58,8 +75,12 @@ function StudentTabs() {
         component={ProfileStack}
         options={{
           tabBarLabel: 'Profile',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="account" color={color} size={26} />
+          tabBarIcon: ({color, focused}) => (
+            <MaterialCommunityIcons
+              name={`${focused ? 'account' : 'account-outline'}`}
+              color={color}
+              size={26}
+            />
           ),
         }}
       />

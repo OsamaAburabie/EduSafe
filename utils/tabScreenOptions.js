@@ -3,10 +3,12 @@ import {COLORS} from './colors';
 export const tabScreenOptions = {
   headerShown: false,
   tabBarStyle: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.white,
     height: 60,
     borderTopColor: 'transparent',
-    borderTopWidth: 0,
+    borderWidth: 0,
+    elevation: 0,
+    shadowOpacity: 0,
   },
   tabBarLabelStyle: {
     marginBottom: 10,
@@ -18,6 +20,6 @@ export const tabScreenOptions = {
     marginBottom: -12,
   },
 
-  tabBarActiveTintColor: COLORS.white,
-  tabBarInactiveTintColor: COLORS.lightWhite,
+  tabBarActiveTintColor: COLORS.primary,
+  tabBarInactiveTintColor: COLORS.primary,
 };

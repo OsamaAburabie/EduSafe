@@ -5,11 +5,13 @@ import EditProfileScreen from '../../src/screens/EditProfileScreen';
 import {createStackNavigator} from '@react-navigation/stack';
 import EventScreen from '../../src/screens/EventScreen';
 import EventDetailsScreen from '../../src/screens/EventDetailsScreen';
-import {Pressable} from 'react-native';
+import {Image, Pressable} from 'react-native';
 import HeaderMenuButton from '../../src/components/HeaderMenuButton';
 import ProfileScreen from '../../src/screens/ProfileScreen';
 import HeaderBellButton from '../../src/components/HeaderBellButton';
 import HeaderBackButton from '../../src/components/HeaderBackButton';
+import HealthScreen from '../../src/screens/HealthScreen';
+import HomeScreen from '../../src/screens/HomeScreen';
 
 const Stack = createStackNavigator();
 const stackOptions = {
@@ -19,6 +21,10 @@ const stackOptions = {
   headerTintColor: COLORS.primary,
   animationEnabled: false,
   headerShadowVisible: false,
+  headerTitleStyle: {
+    fontWeight: 'bold',
+    fontFamily: 'Roboto',
+  },
 };
 
 export const GuardStack = () => {
@@ -85,6 +91,50 @@ export const EventStack = () => {
       }}>
       <Stack.Screen name="Events" component={EventScreen} />
       <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
+    </Stack.Navigator>
+  );
+};
+export const HealthStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={({navigation, route}) => {
+        return {
+          ...stackOptions,
+          headerLeft: () => (
+            <HeaderMenuButton onPress={() => navigation.openDrawer()} />
+          ),
+          headerRight: () => <HeaderBellButton />,
+        };
+      }}>
+      <Stack.Screen name="Health" component={HealthScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export const HomeStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={({navigation, route}) => {
+        return {
+          ...stackOptions,
+          headerLeft: () => (
+            // <Image
+            //   source={require('../../assets/bootsplash_logo.png')}
+            //   style={{
+            //     width: 35,
+            //     height: 35,
+            //     marginLeft: 10,
+            //     marginRight: -23,
+            //     marginBottom: 8,
+            //   }}
+            // />]
+
+            <HeaderMenuButton onPress={() => navigation.openDrawer()} />
+          ),
+          headerRight: () => <HeaderBellButton />,
+        };
+      }}>
+      <Stack.Screen name="Home" component={HomeScreen} />
     </Stack.Navigator>
   );
 };

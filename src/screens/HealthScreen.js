@@ -2,16 +2,16 @@ import {StatusBar, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {COLORS} from '../../utils/colors';
 
-const HomeScreen = () => {
+const HealthScreen = () => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" />
-      <Text style={{color: '#333'}}>HomeScreen</Text>
+      <Text style={{color: '#333'}}>HealthScreen</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+export default HealthScreen;
 
 const styles = StyleSheet.create({
   container: {
