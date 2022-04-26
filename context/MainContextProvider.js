@@ -48,16 +48,16 @@ export const MainContextProvider = ({children}) => {
     fetchEvents();
   }, [user]);
 
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', state => {
-      if (state === 'background' || state === 'inactive') {
-        fetchEvents();
-      }
-    });
-    return () => {
-      subscription.remove();
-    };
-  }, []);
+  // useEffect(() => {
+  //   const subscription = AppState.addEventListener('change', state => {
+  //     if (state === 'background' || state === 'inactive') {
+  //       fetchEvents();
+  //     }
+  //   });
+  //   return () => {
+  //     subscription.remove();
+  //   };
+  // }, []);
   return (
     <MainContext.Provider
       value={{

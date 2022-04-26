@@ -17,11 +17,7 @@ function GuardTabs() {
         options={{
           tabBarLabel: 'Scan',
           tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons
-              name="qrcode-scan"
-              color={color}
-              size={26}
-            />
+            <MaterialCommunityIcons name="qrcode" color={color} size={26} />
           ),
         }}
       />

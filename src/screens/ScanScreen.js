@@ -22,6 +22,7 @@ import {COLORS} from '../../utils/colors';
 // import axios from 'axios';
 import axios from '../../config/axios';
 import {useMainContext} from '../../context/MainContextProvider';
+import {FocusAwareStatusBar} from '../../utils/FocusAwareStatusBar';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -109,7 +110,10 @@ const ScanScreen = () => {
   if (granted) {
     return (
       <View style={{flex: 1}}>
-        <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
+        <FocusAwareStatusBar
+          backgroundColor={COLORS.primary}
+          barStyle="light-content"
+        />
         <QRCodeScanner
           showMarker
           markerStyle={{

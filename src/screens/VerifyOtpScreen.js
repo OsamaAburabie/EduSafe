@@ -72,10 +72,12 @@ const VerifyOtpScreen = ({navigation}) => {
       <Pressable style={styles.container} onPress={Keyboard.dismiss}>
         <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" />
         <View style={{width: '70%'}}>
-          <Text style={[styles.text, {fontWeight: '300', color: COLORS.black}]}>
+          <Text style={[styles.text, {fontWeight: '500', color: COLORS.black}]}>
             We've sent you a code at
           </Text>
-          <Text style={[styles.text, {fontWeight: '500'}]}>{user?.email}</Text>
+          <Text style={[styles.text, {fontWeight: '500'}]}>
+            ({user?.email})
+          </Text>
         </View>
         <OTPInputField
           setPinReady={setPinReady}

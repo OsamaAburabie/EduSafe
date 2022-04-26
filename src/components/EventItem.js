@@ -26,9 +26,8 @@ const EventItem = ({
   const [join, setJoin] = useState(joining);
   const [tjoined, setTjoined] = useState(totalJoined);
   const [isLoading, setIsLoading] = useState(false);
-  const {user} = useMainContext();
+  const {user, fetchEvents} = useMainContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
-
   const navigation = useNavigation();
 
   const fetch = async id => {
@@ -43,15 +42,17 @@ const EventItem = ({
         if (res.data.joining) {
           setJoin(true);
           setTjoined(tjoined + 1);
+          fetchEvents();
         } else {
           setJoin(false);
           setTjoined(tjoined - 1);
+          fetchEvents();
         }
       }
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      console.log(error.response.data);
+      console.log(error.response?.data);
     }
   };
   const handleJoin = () => {
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: COLORS.lightWhite,
     paddingVertical: 2,
-    paddingHorizontal: 6,
+    paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
