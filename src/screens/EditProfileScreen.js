@@ -57,9 +57,9 @@ const EditProfileScreen = ({navigation}) => {
       if (responseJson.success) {
         setUser({
           ...user,
-          firstName: values.firstName,
-          lastName: values.lastName,
+          ...responseJson.user,
         });
+
         Keyboard.dismiss();
         navigation.navigate('Profile');
       }
@@ -107,107 +107,104 @@ const EditProfileScreen = ({navigation}) => {
             touched,
             isSubmitting,
           }) => (
-            console.log(isSubmitting),
-            (
-              <>
-                <Text
+            <>
+              <Text
+                style={[
+                  styles.text_footer,
+                  {
+                    color: COLORS.black,
+                  },
+                ]}>
+                First Name
+              </Text>
+              <View style={styles.action}>
+                <FontAwesome name="user-o" color={COLORS.black} size={20} />
+                <TextInput
+                  placeholder="Your First Name"
+                  placeholderTextColor="#666666"
                   style={[
-                    styles.text_footer,
+                    styles.textInput,
                     {
                       color: COLORS.black,
                     },
-                  ]}>
-                  First Name
-                </Text>
-                <View style={styles.action}>
-                  <FontAwesome name="user-o" color={COLORS.black} size={20} />
-                  <TextInput
-                    placeholder="Your First Name"
-                    placeholderTextColor="#666666"
-                    style={[
-                      styles.textInput,
-                      {
-                        color: COLORS.black,
-                      },
-                    ]}
-                    autoCapitalize="none"
-                    onChangeText={handleChange('firstName')}
-                    onBlur={handleBlur('firstName')}
-                    value={values.firstName}
-                  />
+                  ]}
+                  autoCapitalize="none"
+                  onChangeText={handleChange('firstName')}
+                  onBlur={handleBlur('firstName')}
+                  value={values.firstName}
+                />
+              </View>
+              {/* Error msg */}
+              {errors.firstName && touched.firstName ? (
+                <View>
+                  <Text style={styles.errorMsg}>{errors.firstName}</Text>
                 </View>
-                {/* Error msg */}
-                {errors.firstName && touched.firstName ? (
-                  <View>
-                    <Text style={styles.errorMsg}>{errors.firstName}</Text>
-                  </View>
-                ) : null}
-                {errors.general ? (
-                  <View>
-                    <Text style={styles.errorMsg}>{errors.general}</Text>
-                  </View>
-                ) : null}
+              ) : null}
+              {errors.general ? (
+                <View>
+                  <Text style={styles.errorMsg}>{errors.general}</Text>
+                </View>
+              ) : null}
 
-                <Text
+              <Text
+                style={[
+                  styles.text_footer,
+                  {
+                    color: COLORS.black,
+                    marginTop: 35,
+                  },
+                ]}>
+                Last Name
+              </Text>
+              <View style={styles.action}>
+                <FontAwesome name="user-o" color={COLORS.black} size={20} />
+                <TextInput
+                  placeholder="Your Last Name"
+                  placeholderTextColor="#666666"
                   style={[
-                    styles.text_footer,
+                    styles.textInput,
                     {
                       color: COLORS.black,
-                      marginTop: 35,
+                    },
+                  ]}
+                  autoCapitalize="none"
+                  onChangeText={handleChange('lastName')}
+                  onBlur={handleBlur('lastName')}
+                  value={values.lastName}
+                />
+              </View>
+              {/* Error msg */}
+              {errors.lastName && touched.lastName ? (
+                <View>
+                  <Text style={styles.errorMsg}>{errors.lastName}</Text>
+                </View>
+              ) : null}
+
+              <View style={styles.button}>
+                <TouchableOpacity
+                  disabled={isSubmitting}
+                  activeOpacity={0.8}
+                  onPress={handleSubmit}
+                  style={[
+                    styles.signIn,
+                    {
+                      backgroundColor: COLORS.primary,
+                      borderColor: COLORS.primary,
+                      borderWidth: 1,
                     },
                   ]}>
-                  Last Name
-                </Text>
-                <View style={styles.action}>
-                  <FontAwesome name="user-o" color={COLORS.black} size={20} />
-                  <TextInput
-                    placeholder="Your Last Name"
-                    placeholderTextColor="#666666"
+                  <Text
                     style={[
-                      styles.textInput,
+                      styles.textSign,
                       {
-                        color: COLORS.black,
-                      },
-                    ]}
-                    autoCapitalize="none"
-                    onChangeText={handleChange('lastName')}
-                    onBlur={handleBlur('lastName')}
-                    value={values.lastName}
-                  />
-                </View>
-                {/* Error msg */}
-                {errors.lastName && touched.lastName ? (
-                  <View>
-                    <Text style={styles.errorMsg}>{errors.lastName}</Text>
-                  </View>
-                ) : null}
-
-                <View style={styles.button}>
-                  <TouchableOpacity
-                    disabled={isSubmitting}
-                    activeOpacity={0.8}
-                    onPress={handleSubmit}
-                    style={[
-                      styles.signIn,
-                      {
-                        backgroundColor: COLORS.primary,
-                        borderColor: COLORS.primary,
-                        borderWidth: 1,
+                        color: COLORS.white,
                       },
                     ]}>
-                    <Text
-                      style={[
-                        styles.textSign,
-                        {
-                          color: COLORS.white,
-                        },
-                      ]}>
-                      Save
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </>
-            )
+                    Save
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>
           )}
         </Formik>
       </View>
