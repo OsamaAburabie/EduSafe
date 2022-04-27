@@ -36,9 +36,7 @@ const ProfileScreen = ({navigation}) => {
       </View>
       {/*  */}
       <View style={styles.sepertor}></View>
-      {/*  */}
-
-      {/* <QRCode value={user?.id} color={COLORS.primary} size={300} /> */}
+      {/* ================================================================ */}
 
       <View style={styles.profileStats}>
         <View style={styles.statButtons}>
