@@ -2,29 +2,30 @@ import React from 'react';
 import ScanScreen from '../../src/screens/ScanScreen';
 import {COLORS} from '../../utils/colors';
 import EditProfileScreen from '../../src/screens/EditProfileScreen';
-import {createStackNavigator} from '@react-navigation/stack';
 import EventScreen from '../../src/screens/EventScreen';
 import EventDetailsScreen from '../../src/screens/EventDetailsScreen';
-import {Image, Pressable} from 'react-native';
 import HeaderMenuButton from '../../src/components/HeaderMenuButton';
 import ProfileScreen from '../../src/screens/ProfileScreen';
 import HeaderBellButton from '../../src/components/HeaderBellButton';
 import HeaderBackButton from '../../src/components/HeaderBackButton';
 import HealthScreen from '../../src/screens/HealthScreen';
 import HomeScreen from '../../src/screens/HomeScreen';
-
+import {
+  CardStyleInterpolators,
+  createStackNavigator,
+} from '@react-navigation/stack';
 const Stack = createStackNavigator();
 const stackOptions = {
   headerStyle: {
     backgroundColor: COLORS.white,
   },
   headerTintColor: COLORS.primary,
-  animationEnabled: false,
   headerShadowVisible: false,
   headerTitleStyle: {
     fontWeight: 'bold',
     fontFamily: 'Roboto',
   },
+  cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 };
 
 export const GuardStack = () => {

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 import React from 'react';
 import {COLORS} from '../../utils/colors';
@@ -54,7 +55,10 @@ const SignupScreen = ({navigation}) => {
             actions.setFieldError(error.path[1], error.message);
           });
         } else {
-          actions.setFieldError('general', 'Something went wrong');
+          ToastAndroid.show(
+            'Something went wrong, try again later',
+            ToastAndroid.SHORT,
+          );
         }
       });
   };
