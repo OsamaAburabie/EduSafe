@@ -68,7 +68,13 @@ export const ProfileStack = () => {
         };
       }}>
       <Stack.Screen name="Profile" component={ProfileScreen} />
-      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+      <Stack.Screen
+        name="EditProfile"
+        options={{
+          headerTitle: 'Edit Profile',
+        }}
+        component={EditProfileScreen}
+      />
     </Stack.Navigator>
   );
 };
@@ -91,7 +97,13 @@ export const EventStack = () => {
         };
       }}>
       <Stack.Screen name="Events" component={EventScreen} />
-      <Stack.Screen name="EventDetails" component={EventDetailsScreen} />
+      <Stack.Screen
+        name="EventDetails"
+        options={{
+          headerTitle: 'Event Details',
+        }}
+        component={EventDetailsScreen}
+      />
     </Stack.Navigator>
   );
 };

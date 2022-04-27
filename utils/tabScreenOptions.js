@@ -7,7 +7,7 @@ export const tabScreenOptions = {
     height: 60,
     borderTopColor: 'transparent',
     borderWidth: 0,
-    elevation: 0,
+    elevation: 10,
     shadowOpacity: 0,
   },
   tabBarLabelStyle: {

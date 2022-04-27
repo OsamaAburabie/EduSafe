@@ -1,5 +1,4 @@
 import {
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
@@ -11,17 +10,20 @@ import {
   Keyboard,
   ToastAndroid,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {COLORS} from '../../utils/colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import axios from '../../config/axios';
-import {useStorage} from '../../hooks/UseStorage';
 import {useMainContext} from '../../context/MainContextProvider';
+import ImagePicker from 'react-native-image-crop-picker';
+
 const EditProfileScreen = ({navigation}) => {
   const {user, setUser} = useMainContext();
+  const initialAvatar = {
+    path: user.avatar,
+  };
+  const [avatar, setAvatar] = useState(initialAvatar);
 
   const SignupSchema = Yup.object().shape({
     firstName: Yup.string()
@@ -34,16 +36,18 @@ const EditProfileScreen = ({navigation}) => {
       .required('Last Name is required'),
   });
 
-  const Register = async (values, actions) => {
+  const submitEdit = async (values, actions) => {
     let formData = new FormData();
     formData.append('firstName', values.firstName);
     formData.append('lastName', values.lastName);
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-        Authorization: `Bearer ${user.token}`,
-      },
-    };
+    if (avatar.path !== initialAvatar.path) {
+      formData.append('pic', {
+        uri: avatar?.path,
+        type: avatar?.mime,
+        name: avatar?.path,
+      });
+    }
+
     try {
       let res = await fetch('http://192.168.1.67:5000/api/user/profile', {
         method: 'put',
@@ -79,13 +83,29 @@ const EditProfileScreen = ({navigation}) => {
   };
 
   const onSubmit = (values, actions) => {
-    Register(values, actions);
+    submitEdit(values, actions);
   };
 
+  const openGalleryCrop = async () => {
+    try {
+      await ImagePicker.openPicker({
+        cropping: true,
+        compressImageQuality: 0.5,
+      }).then(image => {
+        setAvatar(image);
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" />
-
+      <View style={styles.avatarContainer}>
+        <TouchableOpacity onPress={openGalleryCrop}>
+          <Image source={{uri: avatar?.path}} style={styles.avatar} />
+        </TouchableOpacity>
+      </View>
       <View
         style={[
           styles.footer,
@@ -219,14 +239,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.white,
   },
-  header: {
-    flex: 1,
-    justifyContent: 'center',
+  avatarContainer: {
     alignItems: 'center',
-    paddingVertical: 50,
+    marginVertical: 30,
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
   footer: {
-    flex: 3,
+    flex: 1,
     backgroundColor: '#fff',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -268,7 +291,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: 20,
   },
   signIn: {
     width: '100%',
