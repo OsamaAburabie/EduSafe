@@ -111,8 +111,8 @@ const ScanScreen = () => {
     return (
       <View style={{flex: 1}}>
         <FocusAwareStatusBar
-          backgroundColor={COLORS.primary}
-          barStyle="light-content"
+          backgroundColor={COLORS.white}
+          barStyle="dark-content"
         />
         <QRCodeScanner
           showMarker
@@ -173,6 +173,10 @@ const ScanScreen = () => {
   } else {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <FocusAwareStatusBar
+          backgroundColor={COLORS.white}
+          barStyle="dark-content"
+        />
         <Button title="Go to settings" onPress={openSettings} />
       </View>
     );

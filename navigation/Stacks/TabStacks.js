@@ -31,13 +31,13 @@ const stackOptions = {
 export const GuardStack = () => {
   return (
     <Stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: COLORS.primary,
-        },
-        headerTintColor: COLORS.white,
-        animationEnabled: false,
-        headerShadowVisible: false,
+      screenOptions={({navigation, route}) => {
+        return {
+          ...stackOptions,
+          headerLeft: () => (
+            <HeaderMenuButton onPress={() => navigation.openDrawer()} />
+          ),
+        };
       }}>
       <Stack.Screen
         name="Scan"
@@ -64,7 +64,6 @@ export const ProfileStack = () => {
               );
             }
           },
-          headerRight: () => <HeaderBellButton />,
         };
       }}>
       <Stack.Screen name="Profile" component={ProfileScreen} />
@@ -93,7 +92,6 @@ export const EventStack = () => {
               );
             }
           },
-          headerRight: () => <HeaderBellButton />,
         };
       }}>
       <Stack.Screen name="Events" component={EventScreen} />
@@ -116,7 +114,6 @@ export const HealthStack = () => {
           headerLeft: () => (
             <HeaderMenuButton onPress={() => navigation.openDrawer()} />
           ),
-          headerRight: () => <HeaderBellButton />,
         };
       }}>
       <Stack.Screen name="Health" component={HealthScreen} />
@@ -144,7 +141,6 @@ export const HomeStack = () => {
 
             <HeaderMenuButton onPress={() => navigation.openDrawer()} />
           ),
-          headerRight: () => <HeaderBellButton />,
         };
       }}>
       <Stack.Screen name="Home" component={HomeScreen} />

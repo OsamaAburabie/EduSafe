@@ -26,8 +26,12 @@ function GuardTabs() {
         component={ProfileStack}
         options={{
           tabBarLabel: 'Profile',
-          tabBarIcon: ({color}) => (
-            <MaterialCommunityIcons name="account" color={color} size={26} />
+          tabBarIcon: ({color, focused}) => (
+            <MaterialCommunityIcons
+              name={`${focused ? 'account' : 'account-outline'}`}
+              color={color}
+              size={26}
+            />
           ),
         }}
       />
