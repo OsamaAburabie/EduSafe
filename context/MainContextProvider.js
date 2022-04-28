@@ -66,11 +66,6 @@ export const MainContextProvider = ({children}) => {
     fetchUser();
   }, []);
 
-  useEffect(() => {
-    if (!user) return;
-    fetchEvents();
-  }, [user]);
-
   // useEffect(() => {
   //   const subscription = AppState.addEventListener('change', state => {
   //     if (state === 'background' || state === 'inactive') {

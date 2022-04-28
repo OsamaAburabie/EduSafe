@@ -14,12 +14,10 @@ import axios from '../../config/axios';
 import {useMainContext} from '../../context/MainContextProvider';
 const EventScreen = ({navigation}) => {
   const {user, events, setEvents} = useMainContext();
-  const {width, height} = useWindowDimensions();
-  //update all events to seen when the screen is loaded
+
+  const unseenEvents = events && events.filter(event => !event.seen);
+
   const updateSeenLocal = () => {
-    //check if there is unseen events
-    const unseenEvents = events.filter(event => !event.seen);
-    if (!unseenEvents.length) return;
     setEvents(
       events.map(event => {
         event.seen = true;
@@ -42,7 +40,7 @@ const EventScreen = ({navigation}) => {
 
   React.useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      if (!events) return;
+      if (!unseenEvents.length) return;
       updateSeenLocal();
       updateSeenRequest();
     });
@@ -51,7 +49,7 @@ const EventScreen = ({navigation}) => {
   }, [navigation]);
 
   return (
-    <View style={{width, height, backgroundColor: 'red'}}>
+    <View style={{flex: 1}}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
       <FlatList
         data={events}
