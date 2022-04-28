@@ -6,194 +6,83 @@ import {
   View,
   Pressable,
   ScrollView,
+  RefreshControl,
+  ToastAndroid,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {COLORS} from '../../utils/colors';
 import {useMainContext} from '../../context/MainContextProvider';
-import QRCode from 'react-native-qrcode-svg';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import axios from '../../config/axios';
+import ProfileStats from '../components/ProfileStats';
 const ProfileScreen = ({navigation}) => {
-  const {user} = useMainContext();
+  const {user, setUser} = useMainContext();
   const [selected, setSelected] = useState('qr');
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      const res = await axios.get(`/api/user/me`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      setRefreshing(false);
+      if (res.data.success) {
+        setUser({
+          ...user,
+          ...res.data.user,
+        });
+      }
+    } catch (err) {
+      setRefreshing(false);
+      ToastAndroid.show(
+        'Something went wrong, try again later',
+        ToastAndroid.SHORT,
+      );
+    }
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
-      <View style={styles.profileInfoContainer}>
-        <Image source={{uri: user?.avatar}} style={styles.profileImage} />
-        <View style={styles.profileInfo}>
-          <Text style={styles.profileName}>
-            {user?.firstName} {user?.lastName}
-          </Text>
-          <Text style={styles.profileEmail}>{user?.email}</Text>
-          <Pressable
-            style={[styles.btn]}
-            onPress={() => navigation.navigate('EditProfile')}>
-            <Text style={[styles.btnText]}>Edit Profile</Text>
-          </Pressable>
-        </View>
-      </View>
-      {/*  */}
-      <View style={styles.sepertor}></View>
-      {/* ================================================================ */}
-
-      <View style={styles.profileStats}>
-        <View style={styles.statButtons}>
-          <Pressable
-            onPress={() => setSelected('penalties')}
-            style={[
-              styles.statbtn,
-              {
-                backgroundColor:
-                  selected === 'penalties' ? COLORS.primary : COLORS.white,
-                borderColor:
-                  selected === 'penalties' ? COLORS.white : COLORS.primary,
-                borderWidth: selected === 'penalties' ? 0 : 1,
-              },
-            ]}>
-            <MaterialCommunityIcons
-              name="alert-circle"
-              size={22}
-              color={selected === 'penalties' ? COLORS.white : COLORS.primary}
-            />
-            <Text
-              style={[
-                styles.statbtnText,
-                {
-                  color:
-                    selected === 'penalties' ? COLORS.white : COLORS.primary,
-                },
-              ]}>
-              Penalties
+    <ScrollView
+      contentContainerStyle={{flexGrow: 1}}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          progressBackgroundColor={COLORS.white}
+          colors={[COLORS.primary]}
+        />
+      }
+      nestedScrollEnabled={true}>
+      <View style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
+        <View style={styles.profileInfoContainer}>
+          <Image source={{uri: user?.avatar}} style={styles.profileImage} />
+          <View style={styles.profileInfo}>
+            <Text style={styles.profileName}>
+              {user?.firstName} {user?.lastName}{' '}
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: user?.valuePoints >= 0 ? 'orange' : 'red',
+                }}>
+                ({user?.valuePoints} Points)
+              </Text>
             </Text>
-          </Pressable>
-          {/* separator */}
-          <View style={{width: 2}}></View>
-          <Pressable
-            onPress={() => setSelected('qr')}
-            style={[
-              styles.statbtn,
-              {
-                backgroundColor:
-                  selected === 'qr' ? COLORS.primary : COLORS.white,
-                borderColor: selected === 'qr' ? COLORS.white : COLORS.primary,
-                borderWidth: selected === 'qr' ? 0 : 1,
-              },
-            ]}>
-            <MaterialCommunityIcons
-              name="qrcode"
-              size={22}
-              color={selected === 'qr' ? COLORS.white : COLORS.primary}
-            />
-            <Text
-              style={[
-                styles.statbtnText,
-                {
-                  color: selected === 'qr' ? COLORS.white : COLORS.primary,
-                },
-              ]}>
-              QR Code
-            </Text>
-          </Pressable>
+            <Text style={styles.profileEmail}>{user?.email}</Text>
+            <Pressable
+              style={[styles.btn]}
+              onPress={() => navigation.navigate('EditProfile')}>
+              <Text style={[styles.btnText]}>Edit Profile</Text>
+            </Pressable>
+          </View>
         </View>
-        <View style={styles.statContainer}>
-          {selected === 'penalties' && (
-            <ScrollView style={{flex: 1, width: '100%'}}>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-              <View>
-                <Text style={{fontSize: 30, color: COLORS.primary}}>
-                  Penalty
-                </Text>
-              </View>
-            </ScrollView>
-          )}
-
-          {selected === 'qr' && (
-            <QRCode value={user?.id} color={COLORS.primary} size={300} />
-          )}
-        </View>
+        {/*  */}
+        <View style={styles.sepertor}></View>
+        {/* ================================================================ */}
+        <ProfileStats selected={selected} setSelected={setSelected} />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -251,41 +140,5 @@ const styles = StyleSheet.create({
     width: '75%',
     backgroundColor: COLORS.lightWhite,
     marginVertical: 20,
-  },
-
-  profileStats: {
-    flex: 2,
-    width: '100%',
-  },
-  statButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-  },
-  statbtn: {
-    backgroundColor: COLORS.primary,
-    flex: 1,
-    flexDirection: 'row',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  statbtnText: {
-    color: COLORS.white,
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginLeft: 2,
-  },
-  statContainer: {
-    flex: 1,
-    backgroundColor: COLORS.white,
-    borderRadius: 10,
-    marginBottom: 15,
-    marginTop: 20,
-    elevation: 2,
-    paddingHorizontal: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

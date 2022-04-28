@@ -43,6 +43,29 @@ export const MainContextProvider = ({children}) => {
     }
   };
 
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get(`/api/user/me`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      if (res.data.success) {
+        setUser({
+          ...user,
+          ...res.data.user,
+        });
+      }
+    } catch (err) {
+      console.log(err?.response);
+    }
+  };
+
+  useEffect(() => {
+    if (!user) return;
+    fetchUser();
+  }, []);
+
   useEffect(() => {
     if (!user) return;
     fetchEvents();

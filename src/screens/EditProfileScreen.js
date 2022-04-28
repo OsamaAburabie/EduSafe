@@ -17,6 +17,7 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {useMainContext} from '../../context/MainContextProvider';
 import ImagePicker from 'react-native-image-crop-picker';
+import {baseURL} from '../../config/axios';
 
 const EditProfileScreen = ({navigation}) => {
   const {user, setUser} = useMainContext();
@@ -49,7 +50,7 @@ const EditProfileScreen = ({navigation}) => {
     }
 
     try {
-      let res = await fetch('http://192.168.1.67:5000/api/user/profile', {
+      let res = await fetch(`${baseURL}/api/user/profile`, {
         method: 'put',
         body: formData,
         headers: {
