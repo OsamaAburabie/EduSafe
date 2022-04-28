@@ -28,13 +28,13 @@ const SignupScreen = ({navigation}) => {
 
   const SignupSchema = Yup.object().shape({
     firstName: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('First Name is required'),
+      .min(3, 'First name must be at least 3 characters long')
+      .max(50, 'First name must be less than 50 characters long')
+      .required('First name is required'),
     lastName: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Last Name is required'),
+      .min(3, 'Last name must be at least 3 characters long')
+      .max(50, 'Last name must be less than 50 characters long')
+      .required('Last name is required'),
     email: Yup.string().email('Invalid email').required('Email is required'),
     password: Yup.string()
       .min(6, 'Password must be at least 6 characters')

@@ -27,13 +27,13 @@ const EditProfileScreen = ({navigation}) => {
 
   const SignupSchema = Yup.object().shape({
     firstName: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('First Name is required'),
+      .min(3, 'First name must be at least 3 characters long')
+      .max(50, 'First name must be less than 50 characters long')
+      .required('First name is required'),
     lastName: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Last Name is required'),
+      .min(3, 'Last name must be at least 3 characters long')
+      .max(50, 'First name must be less than 50 characters long')
+      .required('Last name is required'),
   });
 
   const submitEdit = async (values, actions) => {
@@ -58,6 +58,16 @@ const EditProfileScreen = ({navigation}) => {
         },
       });
       let responseJson = await res.json();
+      if (!res.ok) {
+        // get error message from body or default to response status
+        if (responseJson?.errors) {
+          responseJson?.errors.forEach(error => {
+            actions.setFieldError(error.path[1], error.message);
+          });
+        } else {
+          return Promise.reject('Something went wrong');
+        }
+      }
       if (responseJson.success) {
         setUser({
           ...user,
@@ -68,17 +78,10 @@ const EditProfileScreen = ({navigation}) => {
         navigation.navigate('Profile');
       }
     } catch (err) {
-      actions.setSubmitting(false);
-      if (err?.response?.data?.errors) {
-        err.response.data.errors.forEach(error => {
-          actions.setFieldError(error.path[1], error.message);
-        });
-      } else {
-        ToastAndroid.show(
-          'Something went wrong, try again later',
-          ToastAndroid.SHORT,
-        );
-      }
+      ToastAndroid.show(
+        'Something went wrong, try again later',
+        ToastAndroid.SHORT,
+      );
     }
   };
 
@@ -202,11 +205,10 @@ const EditProfileScreen = ({navigation}) => {
 
               <View style={styles.button}>
                 <TouchableOpacity
-                  disabled={isSubmitting}
                   activeOpacity={0.8}
                   onPress={handleSubmit}
                   style={[
-                    styles.signIn,
+                    styles.btn,
                     {
                       backgroundColor: COLORS.primary,
                       borderColor: COLORS.primary,
@@ -215,7 +217,7 @@ const EditProfileScreen = ({navigation}) => {
                   ]}>
                   <Text
                     style={[
-                      styles.textSign,
+                      styles.textBtn,
                       {
                         color: COLORS.white,
                       },
@@ -244,9 +246,11 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 125,
+    height: 125,
+    borderRadius: 62.5,
+    borderWidth: 2,
+    borderColor: COLORS.primary,
   },
   footer: {
     flex: 1,
@@ -293,14 +297,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
-  signIn: {
+  btn: {
     width: '100%',
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
   },
-  textSign: {
+  textBtn: {
     fontSize: 18,
     fontWeight: 'bold',
   },
