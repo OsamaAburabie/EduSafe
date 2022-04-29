@@ -16,7 +16,10 @@ export const useMainContext = () => {
 
 export const MainContextProvider = ({children}) => {
   const [user, setUser] = useStorage('user', null);
+  //
   const [events, setEvents] = useStorage('events', null);
+  const [unseenEventsNum, setUnseenEventsNum] = useState(null);
+  //
   const [appFirstLaunch, setAppFirstLaunch] = useStorage(
     'appFirstLaunch',
     true,
@@ -37,6 +40,7 @@ export const MainContextProvider = ({children}) => {
       });
       if (res.data?.success) {
         setEvents(res.data?.events);
+        setUnseenEventsNum(res.data?.unseenNumber);
       }
     } catch (error) {
       console.log(`${error} at fetchEvents`);
@@ -88,6 +92,8 @@ export const MainContextProvider = ({children}) => {
         setGranted,
         events,
         setEvents,
+        unseenEventsNum,
+        setUnseenEventsNum,
         fetchEvents,
       }}>
       {children}

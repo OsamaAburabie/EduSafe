@@ -14,17 +14,8 @@ import {useMainContext} from '../../context/MainContextProvider';
 const Tab = createBottomTabNavigator();
 
 function StudentTabs() {
-  const {events} = useMainContext();
-  const [unSeen, setUnSeen] = React.useState(null);
-  useEffect(() => {
-    if (!events) return;
-    const unseen = events.filter(event => event.seen === false);
-    if (unseen.length > 0) {
-      setUnSeen(unseen.length);
-    } else {
-      setUnSeen(null);
-    }
-  }, [events]);
+  const {unseenEventsNum} = useMainContext();
+
   return (
     <Tab.Navigator initialRouteName="Home" screenOptions={tabScreenOptions}>
       <Tab.Screen
@@ -67,7 +58,7 @@ function StudentTabs() {
               size={26}
             />
           ),
-          tabBarBadge: unSeen,
+          tabBarBadge: unseenEventsNum,
         }}
       />
       <Tab.Screen

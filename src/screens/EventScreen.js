@@ -13,17 +13,10 @@ import EventItem from '../components/EventItem';
 import axios from '../../config/axios';
 import {useMainContext} from '../../context/MainContextProvider';
 const EventScreen = ({navigation}) => {
-  const {user, events, setEvents} = useMainContext();
-
-  const unseenEvents = events && events.filter(event => !event.seen);
+  const {user, events, unseenEventsNum, setUnseenEventsNum} = useMainContext();
 
   const updateSeenLocal = () => {
-    setEvents(
-      events.map(event => {
-        event.seen = true;
-        return event;
-      }),
-    );
+    setUnseenEventsNum(null);
   };
 
   const updateSeenRequest = async () => {
@@ -39,14 +32,10 @@ const EventScreen = ({navigation}) => {
   };
 
   React.useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      if (!unseenEvents.length) return;
-      updateSeenLocal();
-      updateSeenRequest();
-    });
-
-    return unsubscribe;
-  }, [navigation]);
+    if (unseenEventsNum == null) return;
+    updateSeenLocal();
+    updateSeenRequest();
+  }, []);
 
   return (
     <View style={{flex: 1}}>
