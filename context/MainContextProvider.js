@@ -18,7 +18,10 @@ export const MainContextProvider = ({children}) => {
   const [user, setUser] = useStorage('user', null);
   //
   const [events, setEvents] = useStorage('events', null);
-  const [unseenEventsNum, setUnseenEventsNum] = useState(null);
+  const [unseenEventsNum, setUnseenEventsNum] = useStorage(
+    'unseenEventsNum',
+    null,
+  );
   //
   const [appFirstLaunch, setAppFirstLaunch] = useStorage(
     'appFirstLaunch',
@@ -28,7 +31,6 @@ export const MainContextProvider = ({children}) => {
 
   const Logout = () => {
     setUser(null);
-    setEvents(null);
   };
 
   const fetchEvents = async () => {
