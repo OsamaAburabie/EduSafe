@@ -4,6 +4,7 @@ import {
   View,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  ToastAndroid,
 } from 'react-native';
 import React, {useState} from 'react';
 import {COLORS} from '../../utils/colors';
@@ -23,43 +24,46 @@ const EventItem = ({
   totalJoined,
   joining,
 }) => {
-  const [join, setJoin] = useState(joining);
-  const [tjoined, setTjoined] = useState(totalJoined);
-  const [isLoading, setIsLoading] = useState(false);
-  const {user, fetchEvents} = useMainContext();
+  const {user} = useMainContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigation = useNavigation();
+  const [state, setState] = useState({
+    totalJoined,
+    joining,
+  });
 
-  const fetch = async id => {
-    setIsLoading(true);
+  const fetch = async (id, joining) => {
     try {
-      const res = await axios.post(`/api/student/join_event/${id}`, null, {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
+      const res = await axios.post(
+        `/api/student/join_event/${id}`,
+        {
+          joining,
         },
-      });
-      if (res.data?.success) {
-        if (res.data.joining) {
-          setJoin(true);
-          setTjoined(tjoined + 1);
-          fetchEvents();
-        } else {
-          setJoin(false);
-          setTjoined(tjoined - 1);
-          fetchEvents();
-        }
-      }
-      setIsLoading(false);
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        },
+      );
+      // console.log(res.data);
+      // i dont need to do anything with the response
     } catch (error) {
-      setIsLoading(false);
-      console.log(error.response?.data);
+      ToastAndroid.show(
+        'Something went wrong, try again later',
+        ToastAndroid.SHORT,
+      );
     }
   };
   const handleJoin = () => {
-    if (isLoading) return;
-    fetch(id);
-  };
+    setState({
+      totalJoined: state.joining
+        ? state.totalJoined - 1
+        : state.totalJoined + 1,
+      joining: !state.joining,
+    });
 
+    fetch(id, !state.joining);
+  };
   const onHide = () => {
     setIsModalVisible(false);
   };
@@ -115,7 +119,7 @@ const EventItem = ({
                 color={COLORS.primary}
               />
               <Text style={[styles.text, {marginRight: 8, fontWeight: 'bold'}]}>
-                {tjoined} joined
+                {state.totalJoined} joined
               </Text>
             </View>
           </View>
@@ -124,15 +128,19 @@ const EventItem = ({
               <View
                 style={[
                   styles.joinButton,
-                  {backgroundColor: join ? COLORS.white : COLORS.primary},
+                  {
+                    backgroundColor: state.joining
+                      ? COLORS.white
+                      : COLORS.primary,
+                  },
                 ]}>
                 <Text
                   style={[
                     styles.joinButtonText,
-                    {color: join ? COLORS.primary : COLORS.white},
+                    {color: state.joining ? COLORS.primary : COLORS.white},
                   ]}>
-                  {join ? 'Joined' : 'Join'}
-                  {join && (
+                  {state.joining ? 'Joined' : 'Join'}
+                  {state.joining && (
                     <MaterialCommunityIcons
                       name="account-check"
                       size={20}
@@ -143,7 +151,7 @@ const EventItem = ({
               </View>
             </TouchableWithoutFeedback>
             <View style={{width: 10}}></View>
-            {join && (
+            {state.joining && (
               <TouchableWithoutFeedback onPress={() => setIsModalVisible(true)}>
                 <View
                   style={[
