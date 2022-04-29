@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useMainContext} from '../../context/MainContextProvider';
 import GuardTabs from '../Tabs/GuardTabs';
 import InstructorTabs from '../Tabs/InstructorTabs';
@@ -8,9 +8,12 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import DrawerContent from '../../src/components/DrawerContent';
 
 function AppStack() {
-  const {user} = useMainContext();
+  const {user, fetchEvents} = useMainContext();
   const verified = user?.verified;
-
+  useEffect(() => {
+    if (!user) return;
+    fetchEvents();
+  }, []);
   if (!verified) {
     return <VerifyStack />;
   }

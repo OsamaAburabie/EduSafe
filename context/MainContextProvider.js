@@ -39,7 +39,7 @@ export const MainContextProvider = ({children}) => {
         setEvents(res.data?.events);
       }
     } catch (error) {
-      console.log(error?.response?.data);
+      console.log(`${error} at fetchEvents`);
     }
   };
 
@@ -56,8 +56,8 @@ export const MainContextProvider = ({children}) => {
           ...res.data.user,
         });
       }
-    } catch (err) {
-      console.log(err?.response);
+    } catch (error) {
+      console.log(`${error} at fetchUser`);
     }
   };
 
