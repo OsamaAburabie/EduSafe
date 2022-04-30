@@ -10,28 +10,28 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {useMainContext} from '../../context/MainContextProvider';
-import {useStorage} from '../../hooks/UseStorage';
-import {COLORS} from '../../utils/colors';
+import {useMainContext} from '../../../context/MainContextProvider';
+import {useStorage} from '../../../hooks/UseStorage';
+import {COLORS} from '../../../utils/colors';
 
 const {width, height} = Dimensions.get('window');
 
 const slides = [
   {
     id: '1',
-    image: require('../images/image1.png'),
+    image: require('../../images/image1.png'),
     title: 'Lorem ipsum dolor',
     subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   },
   {
     id: '2',
-    image: require('../images/image2.png'),
+    image: require('../../images/image2.png'),
     title: 'Lorem ipsum dolor',
     subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   },
   {
     id: '3',
-    image: require('../images/image3.png'),
+    image: require('../../images/image3.png'),
     title: 'Lorem ipsum dolor',
     subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
   },

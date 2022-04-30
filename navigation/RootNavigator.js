@@ -2,7 +2,7 @@ import {View, Text} from 'react-native';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import RNBootSplash from 'react-native-bootsplash';
-import HomeScreen from '../src/screens/HomeScreen';
+import HomeScreen from '../src/screens/shared/HomeScreen';
 import {
   CardStyleInterpolators,
   createStackNavigator,
@@ -10,7 +10,7 @@ import {
 import AppStack from './Stacks/AppStack';
 import {useMainContext} from '../context/MainContextProvider';
 import AuthStack from './Stacks/AuthStack';
-import OnboardingScreen from '../src/screens/OnboardingScreen';
+import OnboardingScreen from '../src/screens/shared/OnboardingScreen';
 
 const Stack = createStackNavigator();
 

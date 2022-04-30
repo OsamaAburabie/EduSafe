@@ -1,5 +1,4 @@
 import {
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
@@ -8,64 +7,108 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  Keyboard,
   ToastAndroid,
 } from 'react-native';
-import React from 'react';
-import {COLORS} from '../../utils/colors';
+import React, {useState} from 'react';
+import {COLORS} from '../../../utils/colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Feather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import axios from '../../config/axios';
-import {useMainContext} from '../../context/MainContextProvider';
-const SignupScreen = ({navigation}) => {
-  const [isPasswordVisable, setIsPasswordVisable] = React.useState(true);
-  const {setUser} = useMainContext();
-  const updateSecureTextEntry = () => {
-    setIsPasswordVisable(prevState => !prevState);
+import {useMainContext} from '../../../context/MainContextProvider';
+import ImagePicker from 'react-native-image-crop-picker';
+import {baseURL} from '../../../config/axios';
+
+const EditProfileScreen = ({navigation}) => {
+  const {user, setUser} = useMainContext();
+  const initialAvatar = {
+    path: user.avatar,
   };
+  const [avatar, setAvatar] = useState(initialAvatar);
 
   const SignupSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required('Email is required'),
-    password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
+    firstName: Yup.string()
+      .min(3, 'First name must be at least 3 characters long')
+      .max(50, 'First name must be less than 50 characters long')
+      .required('First name is required'),
+    lastName: Yup.string()
+      .min(3, 'Last name must be at least 3 characters long')
+      .max(50, 'First name must be less than 50 characters long')
+      .required('Last name is required'),
   });
 
-  const Login = (values, actions) => {
-    axios
-      .post('/api/auth/login', values)
-      .then(res => {
-        if (res?.data?.success) {
-          setUser(res?.data?.user);
-        }
-      })
-      .catch(err => {
-        if (err?.response?.data?.errors) {
-          err.response.data.errors.forEach(error => {
+  const submitEdit = async (values, actions) => {
+    let formData = new FormData();
+    formData.append('firstName', values.firstName);
+    formData.append('lastName', values.lastName);
+    if (avatar.path !== initialAvatar.path) {
+      formData.append('pic', {
+        uri: avatar?.path,
+        type: avatar?.mime,
+        name: avatar?.path,
+      });
+    }
+
+    try {
+      let res = await fetch(`${baseURL}/api/user/profile`, {
+        method: 'put',
+        body: formData,
+        headers: {
+          'content-type': 'multipart/form-data',
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      let responseJson = await res.json();
+      if (!res.ok) {
+        // get error message from body or default to response status
+        if (responseJson?.errors) {
+          responseJson?.errors.forEach(error => {
             actions.setFieldError(error.path[1], error.message);
           });
         } else {
-          ToastAndroid.show(
-            'Something went wrong, try again later',
-            ToastAndroid.SHORT,
-          );
+          return Promise.reject('Something went wrong');
         }
-      });
+      }
+      if (responseJson.success) {
+        setUser({
+          ...user,
+          ...responseJson.user,
+        });
+
+        Keyboard.dismiss();
+        navigation.navigate('Profile');
+      }
+    } catch (err) {
+      ToastAndroid.show(
+        'Something went wrong, try again later',
+        ToastAndroid.SHORT,
+      );
+    }
   };
 
   const onSubmit = (values, actions) => {
-    Login(values, actions);
+    submitEdit(values, actions);
   };
 
+  const openGalleryCrop = async () => {
+    try {
+      await ImagePicker.openPicker({
+        cropping: true,
+        compressImageQuality: 0.5,
+      }).then(image => {
+        setAvatar(image);
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" />
-      <View style={styles.header}>
-        <Image
-          source={require('../images/logo.png')}
-          style={{height: 200, width: 200}}
-        />
+      <View style={styles.avatarContainer}>
+        <TouchableOpacity onPress={openGalleryCrop}>
+          <Image source={{uri: avatar?.path}} style={styles.avatar} />
+        </TouchableOpacity>
       </View>
       <View
         style={[
@@ -76,7 +119,7 @@ const SignupScreen = ({navigation}) => {
         ]}>
         <Formik
           validateOnChange={false}
-          initialValues={{password: '', email: ''}}
+          initialValues={{firstName: user?.firstName, lastName: user?.lastName}}
           validationSchema={SignupSchema}
           onSubmit={onSubmit}>
           {({
@@ -86,6 +129,7 @@ const SignupScreen = ({navigation}) => {
             values,
             errors,
             touched,
+            isSubmitting,
           }) => (
             <>
               <Text
@@ -93,15 +137,14 @@ const SignupScreen = ({navigation}) => {
                   styles.text_footer,
                   {
                     color: COLORS.black,
-                    marginTop: 35,
                   },
                 ]}>
-                Email
+                First Name
               </Text>
               <View style={styles.action}>
-                <FontAwesome name="envelope-o" color={COLORS.black} size={20} />
+                <FontAwesome name="user-o" color={COLORS.black} size={20} />
                 <TextInput
-                  placeholder="Your Email"
+                  placeholder="Your First Name"
                   placeholderTextColor="#666666"
                   style={[
                     styles.textInput,
@@ -110,19 +153,17 @@ const SignupScreen = ({navigation}) => {
                     },
                   ]}
                   autoCapitalize="none"
-                  onChangeText={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  value={values.email}
+                  onChangeText={handleChange('firstName')}
+                  onBlur={handleBlur('firstName')}
+                  value={values.firstName}
                 />
               </View>
-
               {/* Error msg */}
-              {errors.email && touched.email ? (
+              {errors.firstName && touched.firstName ? (
                 <View>
-                  <Text style={styles.errorMsg}>{errors.email}</Text>
+                  <Text style={styles.errorMsg}>{errors.firstName}</Text>
                 </View>
               ) : null}
-
               {errors.general ? (
                 <View>
                   <Text style={styles.errorMsg}>{errors.general}</Text>
@@ -137,14 +178,13 @@ const SignupScreen = ({navigation}) => {
                     marginTop: 35,
                   },
                 ]}>
-                Password
+                Last Name
               </Text>
               <View style={styles.action}>
-                <Feather name="lock" color={COLORS.black} size={20} />
+                <FontAwesome name="user-o" color={COLORS.black} size={20} />
                 <TextInput
-                  placeholder="Your Password"
+                  placeholder="Your Last Name"
                   placeholderTextColor="#666666"
-                  secureTextEntry={isPasswordVisable ? true : false}
                   style={[
                     styles.textInput,
                     {
@@ -152,37 +192,24 @@ const SignupScreen = ({navigation}) => {
                     },
                   ]}
                   autoCapitalize="none"
-                  onChangeText={handleChange('password')}
-                  onBlur={handleBlur('password')}
-                  value={values.password}
+                  onChangeText={handleChange('lastName')}
+                  onBlur={handleBlur('lastName')}
+                  value={values.lastName}
                 />
-                <TouchableOpacity onPress={updateSecureTextEntry}>
-                  {isPasswordVisable ? (
-                    <Feather name="eye-off" color="grey" size={20} />
-                  ) : (
-                    <Feather name="eye" color="grey" size={20} />
-                  )}
-                </TouchableOpacity>
               </View>
-
               {/* Error msg */}
-              {errors.password && touched.password ? (
+              {errors.lastName && touched.lastName ? (
                 <View>
-                  <Text style={styles.errorMsg}>{errors.password}</Text>
+                  <Text style={styles.errorMsg}>{errors.lastName}</Text>
                 </View>
               ) : null}
 
-              <TouchableOpacity>
-                <Text style={{color: COLORS.primary, marginTop: 15}}>
-                  Forgot password?
-                </Text>
-              </TouchableOpacity>
               <View style={styles.button}>
                 <TouchableOpacity
                   activeOpacity={0.8}
                   onPress={handleSubmit}
                   style={[
-                    styles.signIn,
+                    styles.btn,
                     {
                       backgroundColor: COLORS.primary,
                       borderColor: COLORS.primary,
@@ -191,34 +218,12 @@ const SignupScreen = ({navigation}) => {
                   ]}>
                   <Text
                     style={[
-                      styles.textSign,
+                      styles.textBtn,
                       {
                         color: COLORS.white,
                       },
                     ]}>
-                    Sign In
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => navigation.navigate('SignupScreen')}
-                  style={[
-                    styles.signIn,
-                    {
-                      borderColor: COLORS.primary,
-                      borderWidth: 1,
-                      marginTop: 15,
-                    },
-                  ]}>
-                  <Text
-                    style={[
-                      styles.textSign,
-                      {
-                        color: COLORS.primary,
-                      },
-                    ]}>
-                    Sign Up
+                    Save
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -230,21 +235,26 @@ const SignupScreen = ({navigation}) => {
   );
 };
 
-export default SignupScreen;
+export default EditProfileScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
   },
-  header: {
-    flex: 1,
-    justifyContent: 'center',
+  avatarContainer: {
     alignItems: 'center',
-    paddingVertical: 50,
+    marginVertical: 30,
+  },
+  avatar: {
+    width: 125,
+    height: 125,
+    borderRadius: 62.5,
+    borderWidth: 2,
+    borderColor: COLORS.primary,
   },
   footer: {
-    flex: 3,
+    flex: 1,
     backgroundColor: '#fff',
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -286,16 +296,16 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: 20,
   },
-  signIn: {
+  btn: {
     width: '100%',
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
   },
-  textSign: {
+  textBtn: {
     fontSize: 18,
     fontWeight: 'bold',
   },

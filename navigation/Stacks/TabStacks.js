@@ -1,15 +1,14 @@
 import React from 'react';
-import ScanScreen from '../../src/screens/ScanScreen';
+import ScanScreen from '../../src/screens/guard/ScanScreen';
 import {COLORS} from '../../utils/colors';
-import EditProfileScreen from '../../src/screens/EditProfileScreen';
-import EventScreen from '../../src/screens/EventScreen';
-import EventDetailsScreen from '../../src/screens/EventDetailsScreen';
+import EditProfileScreen from '../../src/screens/shared/EditProfileScreen';
+import EventScreen from '../../src/screens/student/EventScreen';
+import EventDetailsScreen from '../../src/screens/student/EventDetailsScreen';
 import HeaderMenuButton from '../../src/components/HeaderMenuButton';
-import ProfileScreen from '../../src/screens/ProfileScreen';
-import HeaderBellButton from '../../src/components/HeaderBellButton';
+import ProfileScreen from '../../src/screens/shared/ProfileScreen';
 import HeaderBackButton from '../../src/components/HeaderBackButton';
-import HealthScreen from '../../src/screens/HealthScreen';
-import HomeScreen from '../../src/screens/HomeScreen';
+import HealthScreen from '../../src/screens/student/HealthScreen';
+import HomeScreen from '../../src/screens/shared/HomeScreen';
 import {
   CardStyleInterpolators,
   createStackNavigator,

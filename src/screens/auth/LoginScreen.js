@@ -11,14 +11,13 @@ import {
   ToastAndroid,
 } from 'react-native';
 import React from 'react';
-import {COLORS} from '../../utils/colors';
+import {COLORS} from '../../../utils/colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import axios from '../../config/axios';
-import {useStorage} from '../../hooks/UseStorage';
-import {useMainContext} from '../../context/MainContextProvider';
+import axios from '../../../config/axios';
+import {useMainContext} from '../../../context/MainContextProvider';
 const SignupScreen = ({navigation}) => {
   const [isPasswordVisable, setIsPasswordVisable] = React.useState(true);
   const {setUser} = useMainContext();
@@ -27,23 +26,15 @@ const SignupScreen = ({navigation}) => {
   };
 
   const SignupSchema = Yup.object().shape({
-    firstName: Yup.string()
-      .min(3, 'First name must be at least 3 characters long')
-      .max(50, 'First name must be less than 50 characters long')
-      .required('First name is required'),
-    lastName: Yup.string()
-      .min(3, 'Last name must be at least 3 characters long')
-      .max(50, 'Last name must be less than 50 characters long')
-      .required('Last name is required'),
     email: Yup.string().email('Invalid email').required('Email is required'),
     password: Yup.string()
       .min(6, 'Password must be at least 6 characters')
-      .required('Required'),
+      .required('Password is required'),
   });
 
-  const Register = (values, actions) => {
+  const Login = (values, actions) => {
     axios
-      .post('/api/auth/register', values)
+      .post('/api/auth/login', values)
       .then(res => {
         if (res?.data?.success) {
           setUser(res?.data?.user);
@@ -64,7 +55,7 @@ const SignupScreen = ({navigation}) => {
   };
 
   const onSubmit = (values, actions) => {
-    Register(values, actions);
+    Login(values, actions);
   };
 
   return (
@@ -72,7 +63,7 @@ const SignupScreen = ({navigation}) => {
       <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" />
       <View style={styles.header}>
         <Image
-          source={require('../images/logo.png')}
+          source={require('../../images/logo.png')}
           style={{height: 200, width: 200}}
         />
       </View>
@@ -85,7 +76,7 @@ const SignupScreen = ({navigation}) => {
         ]}>
         <Formik
           validateOnChange={false}
-          initialValues={{firstName: '', lastName: '', password: '', email: ''}}
+          initialValues={{password: '', email: ''}}
           validationSchema={SignupSchema}
           onSubmit={onSubmit}>
           {({
@@ -97,78 +88,6 @@ const SignupScreen = ({navigation}) => {
             touched,
           }) => (
             <>
-              <Text
-                style={[
-                  styles.text_footer,
-                  {
-                    color: COLORS.black,
-                  },
-                ]}>
-                First Name
-              </Text>
-              <View style={styles.action}>
-                <FontAwesome name="user-o" color={COLORS.black} size={20} />
-                <TextInput
-                  placeholder="Your First Name"
-                  placeholderTextColor="#666666"
-                  style={[
-                    styles.textInput,
-                    {
-                      color: COLORS.black,
-                    },
-                  ]}
-                  autoCapitalize="none"
-                  onChangeText={handleChange('firstName')}
-                  onBlur={handleBlur('firstName')}
-                  value={values.firstName}
-                />
-              </View>
-              {/* Error msg */}
-              {errors.firstName && touched.firstName ? (
-                <View>
-                  <Text style={styles.errorMsg}>{errors.firstName}</Text>
-                </View>
-              ) : null}
-              {errors.general ? (
-                <View>
-                  <Text style={styles.errorMsg}>{errors.general}</Text>
-                </View>
-              ) : null}
-
-              <Text
-                style={[
-                  styles.text_footer,
-                  {
-                    color: COLORS.black,
-                    marginTop: 35,
-                  },
-                ]}>
-                Last Name
-              </Text>
-              <View style={styles.action}>
-                <FontAwesome name="user-o" color={COLORS.black} size={20} />
-                <TextInput
-                  placeholder="Your Last Name"
-                  placeholderTextColor="#666666"
-                  style={[
-                    styles.textInput,
-                    {
-                      color: COLORS.black,
-                    },
-                  ]}
-                  autoCapitalize="none"
-                  onChangeText={handleChange('lastName')}
-                  onBlur={handleBlur('lastName')}
-                  value={values.lastName}
-                />
-              </View>
-              {/* Error msg */}
-              {errors.lastName && touched.lastName ? (
-                <View>
-                  <Text style={styles.errorMsg}>{errors.lastName}</Text>
-                </View>
-              ) : null}
-
               <Text
                 style={[
                   styles.text_footer,
@@ -201,6 +120,12 @@ const SignupScreen = ({navigation}) => {
               {errors.email && touched.email ? (
                 <View>
                   <Text style={styles.errorMsg}>{errors.email}</Text>
+                </View>
+              ) : null}
+
+              {errors.general ? (
+                <View>
+                  <Text style={styles.errorMsg}>{errors.general}</Text>
                 </View>
               ) : null}
 
@@ -247,6 +172,11 @@ const SignupScreen = ({navigation}) => {
                 </View>
               ) : null}
 
+              <TouchableOpacity>
+                <Text style={{color: COLORS.primary, marginTop: 15}}>
+                  Forgot password?
+                </Text>
+              </TouchableOpacity>
               <View style={styles.button}>
                 <TouchableOpacity
                   activeOpacity={0.8}
@@ -266,13 +196,13 @@ const SignupScreen = ({navigation}) => {
                         color: COLORS.white,
                       },
                     ]}>
-                    Sign Up
+                    Sign In
                   </Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   activeOpacity={0.8}
-                  onPress={() => navigation.navigate('LoginScreen')}
+                  onPress={() => navigation.navigate('SignupScreen')}
                   style={[
                     styles.signIn,
                     {
@@ -288,7 +218,7 @@ const SignupScreen = ({navigation}) => {
                         color: COLORS.primary,
                       },
                     ]}>
-                    Sign In
+                    Sign Up
                   </Text>
                 </TouchableOpacity>
               </View>

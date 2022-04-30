@@ -8,10 +8,10 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import {COLORS} from '../../utils/colors';
-import EventItem from '../components/EventItem';
-import axios from '../../config/axios';
-import {useMainContext} from '../../context/MainContextProvider';
+import {COLORS} from '../../../utils/colors';
+import EventItem from '../../components/EventItem';
+import axios from '../../../config/axios';
+import {useMainContext} from '../../../context/MainContextProvider';
 const EventScreen = ({navigation}) => {
   const {user, events, unseenEventsNum, setUnseenEventsNum} = useMainContext();
 

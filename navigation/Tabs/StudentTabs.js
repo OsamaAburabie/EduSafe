@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import HomeScreen from '../../src/screens/HomeScreen';
+import HomeScreen from '../../src/screens/shared/HomeScreen';
 import {
   EventStack,
   HealthStack,

@@ -1,6 +1,6 @@
 import {StatusBar, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
-import {COLORS} from '../../utils/colors';
+import {COLORS} from '../../../utils/colors';
 
 const HomeScreen = () => {
   return (

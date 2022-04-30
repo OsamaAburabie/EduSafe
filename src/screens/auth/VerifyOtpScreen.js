@@ -11,10 +11,10 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import React, {useState} from 'react';
-import {COLORS} from '../../utils/colors';
-import {useMainContext} from '../../context/MainContextProvider';
-import OTPInputField from '../components/OTPInputField';
-import axios from '../../config/axios';
+import {COLORS} from '../../../utils/colors';
+import {useMainContext} from '../../../context/MainContextProvider';
+import OTPInputField from '../../components/OTPInputField';
+import axios from '../../../config/axios';
 import {ScrollView} from 'react-native-gesture-handler';
 
 const VerifyOtpScreen = ({navigation}) => {

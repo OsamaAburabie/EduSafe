@@ -10,10 +10,10 @@ import {
   ToastAndroid,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
-import {COLORS} from '../../utils/colors';
-import {useMainContext} from '../../context/MainContextProvider';
-import axios from '../../config/axios';
-import ProfileStats from '../components/ProfileStats';
+import {COLORS} from '../../../utils/colors';
+import {useMainContext} from '../../../context/MainContextProvider';
+import axios from '../../../config/axios';
+import ProfileStats from '../../components/ProfileStats';
 const ProfileScreen = ({navigation}) => {
   const {user, setUser} = useMainContext();
   const [selected, setSelected] = useState('qr');

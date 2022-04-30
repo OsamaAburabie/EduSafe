@@ -16,13 +16,13 @@ import {
   View,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import DefaultModalContent from '../../utils/DefaultModalContent';
+import DefaultModalContent from '../../../utils/DefaultModalContent';
 import QRCodeScanner from 'react-native-qrcode-scanner';
-import {COLORS} from '../../utils/colors';
+import {COLORS} from '../../../utils/colors';
 // import axios from 'axios';
-import axios from '../../config/axios';
-import {useMainContext} from '../../context/MainContextProvider';
-import {FocusAwareStatusBar} from '../../utils/FocusAwareStatusBar';
+import axios from '../../../config/axios';
+import {useMainContext} from '../../../context/MainContextProvider';
+import {FocusAwareStatusBar} from '../../../utils/FocusAwareStatusBar';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;

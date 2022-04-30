@@ -3,7 +3,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
-import VerifyOtpScreen from '../../src/screens/VerifyOtpScreen';
+import VerifyOtpScreen from '../../src/screens/auth/VerifyOtpScreen';
 
 const Stack = createStackNavigator();
 
