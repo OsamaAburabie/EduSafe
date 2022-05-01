@@ -14,6 +14,7 @@ import {
   createStackNavigator,
 } from '@react-navigation/stack';
 import MakePenaltyScreen from '../../src/screens/instructor/MakePenaltyScreen';
+import ScanForEmailScreen from '../../src/screens/instructor/ScanForEmailScreen';
 const Stack = createStackNavigator();
 const stackOptions = {
   headerStyle: {
@@ -127,12 +128,31 @@ export const PenaltyStack = () => {
       screenOptions={({navigation, route}) => {
         return {
           ...stackOptions,
-          headerLeft: () => (
-            <HeaderMenuButton onPress={() => navigation.openDrawer()} />
-          ),
+          headerLeft: () => {
+            if (route.name === 'ScanForEmail') {
+              return <HeaderBackButton onPress={() => navigation.goBack()} />;
+            } else {
+              return (
+                <HeaderMenuButton onPress={() => navigation.openDrawer()} />
+              );
+            }
+          },
         };
       }}>
-      <Stack.Screen name="Create Penalty" component={MakePenaltyScreen} />
+      <Stack.Screen
+        name="CreatePenalty"
+        options={{
+          headerTitle: 'Create Penalty',
+        }}
+        component={MakePenaltyScreen}
+      />
+      <Stack.Screen
+        name="ScanForEmail"
+        options={{
+          headerTitle: 'Create Penalty',
+        }}
+        component={ScanForEmailScreen}
+      />
     </Stack.Navigator>
   );
 };

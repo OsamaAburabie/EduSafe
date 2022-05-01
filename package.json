@@ -8,11 +8,12 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "dev":"react-native run-android && react-native start",
-    "release" :"react-native run-android --no-jetifier --variant=release"
+    "dev": "react-native run-android && react-native start",
+    "release": "react-native run-android --no-jetifier --variant=release"
   },
   "dependencies": {
     "@react-native-masked-view/masked-view": "^0.2.6",
+    "@react-native-picker/picker": "^2.4.1",
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/drawer": "^6.4.1",
     "@react-navigation/material-bottom-tabs": "^6.2.1",

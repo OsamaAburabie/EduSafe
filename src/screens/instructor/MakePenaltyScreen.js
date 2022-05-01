@@ -10,33 +10,81 @@ import {
   Keyboard,
   ToastAndroid,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {COLORS} from '../../../utils/colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {useMainContext} from '../../../context/MainContextProvider';
 import {RadioButton} from 'react-native-paper';
-const MakePenaltyScreen = ({navigation}) => {
-  const {user} = useMainContext();
+import {Picker} from '@react-native-picker/picker';
+import {useFormik} from 'formik';
+import axios from '../../../config/axios';
+import {useFocusEffect} from '@react-navigation/native';
 
+const MakePenaltyScreen = ({navigation, route}) => {
+  // const {email} = route.params;
+  const [email, setEmail] = useState('');
+
+  const {user} = useMainContext();
   const SignupSchema = Yup.object().shape({
-    firstName: Yup.string()
-      .min(3, 'First name must be at least 3 characters long')
-      .max(50, 'First name must be less than 50 characters long')
-      .required('First name is required'),
-    lastName: Yup.string()
-      .min(3, 'Last name must be at least 3 characters long')
-      .max(50, 'First name must be less than 50 characters long')
-      .required('Last name is required'),
+    email: Yup.string()
+      .email('Invalid email')
+      .required('Student email is required'),
   });
 
-  const onSubmit = (values, actions) => {};
+  const sendRequest = async (values, actions) => {
+    try {
+      let res = await axios.post(
+        `/api/instructor/give_penalty`,
+        {
+          studentEmail: values.email,
+          type: values.type,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        },
+      );
+
+      if (res.data.success) {
+        actions.resetForm();
+      }
+
+      ToastAndroid.show('Penalty created successfully', ToastAndroid.SHORT);
+      console.log(res.data);
+    } catch (err) {
+      ToastAndroid.show(err.response.data.message, ToastAndroid.SHORT);
+    }
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      type: 'late',
+    },
+    validateOnChange: false,
+    validateOnBlur: true,
+    validationSchema: SignupSchema,
+    onSubmit: (values, actions) => {
+      sendRequest(values, actions);
+    },
+  });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (route.params?.email) {
+        formik.setFieldValue('email', route.params?.email);
+        formik.setErrors({});
+        route.params.email = '';
+      }
+    }, [route.params?.email]),
+  );
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
       <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" />
-
       <View
         style={[
           styles.footer,
@@ -44,155 +92,106 @@ const MakePenaltyScreen = ({navigation}) => {
             backgroundColor: COLORS.white,
           },
         ]}>
-        <Formik
-          validateOnChange={false}
-          initialValues={{
-            firstName: user?.firstName,
-            lastName: user?.lastName,
-            type: '',
-          }}
-          validationSchema={SignupSchema}
-          onSubmit={onSubmit}>
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-            isSubmitting,
-          }) => (
-            <>
-              <Text
-                style={[
-                  styles.text_footer,
-                  {
-                    color: COLORS.black,
-                  },
-                ]}>
-                Email
-              </Text>
-              <View style={styles.action}>
-                <FontAwesome name="envelope-o" color={COLORS.black} size={20} />
-                <TextInput
-                  placeholder="Student Email"
-                  placeholderTextColor="#666666"
-                  style={[
-                    styles.textInput,
-                    {
-                      color: COLORS.black,
-                    },
-                  ]}
-                  autoCapitalize="none"
-                  onChangeText={handleChange('firstName')}
-                  onBlur={handleBlur('firstName')}
-                  value={values.firstName}
-                />
-              </View>
-              {/* Error msg */}
-              {errors.firstName && touched.firstName ? (
-                <View>
-                  <Text style={styles.errorMsg}>{errors.firstName}</Text>
-                </View>
-              ) : null}
-              {errors.general ? (
-                <View>
-                  <Text style={styles.errorMsg}>{errors.general}</Text>
-                </View>
-              ) : null}
+        <Text
+          style={[
+            styles.text_footer,
+            {
+              color: COLORS.black,
+            },
+          ]}>
+          Email
+        </Text>
+        <View style={styles.action}>
+          <FontAwesome name="envelope-o" color={COLORS.black} size={20} />
+          <TextInput
+            placeholder="Student Email"
+            placeholderTextColor="#666666"
+            style={[
+              styles.textInput,
+              {
+                color: COLORS.black,
+              },
+            ]}
+            autoCapitalize="none"
+            onChangeText={e => {
+              formik.handleChange('email')(e);
+            }}
+            onBlur={e => {
+              formik.handleBlur('email')(e);
+            }}
+            value={formik.values.email}
+          />
+        </View>
+        {/* Error msg */}
+        {formik.errors.email && formik.touched.email ? (
+          <View>
+            <Text style={styles.errorMsg}>{formik.errors.email} </Text>
+          </View>
+        ) : null}
+        {formik.errors.general ? (
+          <View>
+            <Text style={styles.errorMsg}>{formik.errors.general}</Text>
+          </View>
+        ) : null}
+        <TouchableOpacity onPress={() => navigation.navigate('ScanForEmail')}>
+          <Text style={{color: COLORS.primary}}>Scan QR Instead?</Text>
+        </TouchableOpacity>
 
-              <Text
-                style={[
-                  styles.text_footer,
-                  {
-                    color: COLORS.black,
-                    marginTop: 35,
-                  },
-                ]}>
-                Last Name
-              </Text>
-              <View style={styles.action}>
-                <FontAwesome name="user-o" color={COLORS.black} size={20} />
-                <TextInput
-                  placeholder="Your Last Name"
-                  placeholderTextColor="#666666"
-                  style={[
-                    styles.textInput,
-                    {
-                      color: COLORS.black,
-                    },
-                  ]}
-                  autoCapitalize="none"
-                  onChangeText={handleChange('lastName')}
-                  onBlur={handleBlur('lastName')}
-                  value={values.lastName}
-                />
-              </View>
-              {/* Error msg */}
-              {errors.lastName && touched.lastName ? (
-                <View>
-                  <Text style={styles.errorMsg}>{errors.lastName}</Text>
-                </View>
-              ) : null}
+        <Text
+          style={[
+            styles.text_footer,
+            {
+              color: COLORS.black,
+              marginTop: 35,
+            },
+          ]}>
+          Penalty Type
+        </Text>
+        <View
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: '#f2f2f2',
+          }}>
+          <Picker
+            selectedValue={formik.values.type}
+            onValueChange={formik.handleChange('type')}
+            placeholder="Select Penalty Type"
+            mode="dropdown"
+            // mode="dropdown"
+            style={{
+              marginLeft: -15,
+              color: COLORS.black,
+            }}
+            dropdownIconRippleColor={'transparent'}>
+            <Picker.Item label="Late on class" value="late" />
+            <Picker.Item label="Smoking" value="smoking" />
+            <Picker.Item label="Not wearing a mask" value="mask" />
+          </Picker>
+        </View>
 
-              <Text
-                style={[
-                  styles.text_footer,
-                  {
-                    color: COLORS.black,
-                    marginTop: 35,
-                  },
-                ]}>
-                Penalty Type
-              </Text>
-              <View>
-                <RadioButton.Group
-                  onValueChange={handleChange('type')}
-                  value={values.type}>
-                  <RadioButton.Item
-                    label="Late on class"
-                    value="late"
-                    color={COLORS.primary}
-                  />
-                  <RadioButton.Item
-                    label="Smoking"
-                    value="smoking"
-                    color={COLORS.primary}
-                  />
-                  <RadioButton.Item
-                    label="Not wearing a mask"
-                    value="mask"
-                    color={COLORS.primary}
-                  />
-                </RadioButton.Group>
-              </View>
-
-              <View style={styles.button}>
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={handleSubmit}
-                  style={[
-                    styles.btn,
-                    {
-                      backgroundColor: COLORS.primary,
-                      borderColor: COLORS.primary,
-                      borderWidth: 1,
-                    },
-                  ]}>
-                  <Text
-                    style={[
-                      styles.textBtn,
-                      {
-                        color: COLORS.white,
-                      },
-                    ]}>
-                    Save
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
-        </Formik>
+        <View style={styles.button}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={formik.handleSubmit}
+            style={[
+              styles.btn,
+              {
+                backgroundColor: COLORS.primary,
+                borderColor: COLORS.primary,
+                borderWidth: 1,
+              },
+            ]}>
+            <Text
+              style={[
+                styles.textBtn,
+                {
+                  color: COLORS.white,
+                },
+              ]}>
+              Submit
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </ScrollView>
   );
