@@ -6,7 +6,7 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" />
-      <Text style={{color: '#333'}}>HomeScreen</Text>
+      <Text style={{color: '#333'}}>HomeScreens</Text>
     </View>
   );
 };
