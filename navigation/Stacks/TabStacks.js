@@ -13,6 +13,7 @@ import {
   CardStyleInterpolators,
   createStackNavigator,
 } from '@react-navigation/stack';
+import MakePenaltyScreen from '../../src/screens/instructor/MakePenaltyScreen';
 const Stack = createStackNavigator();
 const stackOptions = {
   headerStyle: {
@@ -116,6 +117,22 @@ export const HealthStack = () => {
         };
       }}>
       <Stack.Screen name="Health" component={HealthScreen} />
+    </Stack.Navigator>
+  );
+};
+
+export const PenaltyStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={({navigation, route}) => {
+        return {
+          ...stackOptions,
+          headerLeft: () => (
+            <HeaderMenuButton onPress={() => navigation.openDrawer()} />
+          ),
+        };
+      }}>
+      <Stack.Screen name="Create Penalty" component={MakePenaltyScreen} />
     </Stack.Navigator>
   );
 };
