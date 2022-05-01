@@ -55,7 +55,10 @@ const MakePenaltyScreen = ({navigation, route}) => {
       ToastAndroid.show('Penalty created successfully', ToastAndroid.SHORT);
       console.log(res.data);
     } catch (err) {
-      ToastAndroid.show(err.response.data.message, ToastAndroid.SHORT);
+      ToastAndroid.show(
+        err.response?.data?.message || 'Something went wrong',
+        ToastAndroid.SHORT,
+      );
     }
   };
 

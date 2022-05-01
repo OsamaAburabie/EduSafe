@@ -149,7 +149,7 @@ export const PenaltyStack = () => {
       <Stack.Screen
         name="ScanForEmail"
         options={{
-          headerTitle: 'Create Penalty',
+          headerTitle: 'Scan QR Code',
         }}
         component={ScanForEmailScreen}
       />
