@@ -14,7 +14,7 @@ import {useMainContext} from '../../context/MainContextProvider';
 const Tab = createBottomTabNavigator();
 
 function StudentTabs() {
-  const {unseenEventsNum} = useMainContext();
+  const {events} = useMainContext();
 
   return (
     <Tab.Navigator initialRouteName="Home" screenOptions={tabScreenOptions}>
@@ -58,7 +58,7 @@ function StudentTabs() {
               size={26}
             />
           ),
-          tabBarBadge: unseenEventsNum,
+          tabBarBadge: events?.unseenNumber,
         }}
       />
       <Tab.Screen

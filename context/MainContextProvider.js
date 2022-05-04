@@ -2,7 +2,7 @@ import React, {useState, createContext, useEffect, useRef} from 'react';
 import {useStorage} from '../hooks/UseStorage';
 import axios from '../config/axios';
 import {AppState} from 'react-native';
-
+import {useMMKVObject, useMMKVString} from 'react-native-mmkv';
 export const MainContext = createContext({});
 
 //custom hook to use the context
@@ -15,14 +15,9 @@ export const useMainContext = () => {
 };
 
 export const MainContextProvider = ({children}) => {
-  const [user, setUser] = useStorage('user', null);
-  //
-  const [events, setEvents] = useStorage('events', null);
-  const [unseenEventsNum, setUnseenEventsNum] = useStorage(
-    'unseenEventsNum',
-    null,
-  );
-  //
+  const [user, setUser] = useMMKVObject('user');
+  const [events, setEvents] = useMMKVObject('events');
+  const [token, setToken] = useMMKVString('token');
   const [appFirstLaunch, setAppFirstLaunch] = useStorage(
     'appFirstLaunch',
     true,
@@ -41,8 +36,7 @@ export const MainContextProvider = ({children}) => {
         },
       });
       if (res.data?.success) {
-        setEvents(res.data?.events);
-        setUnseenEventsNum(res.data?.unseenNumber);
+        setEvents(res.data);
       }
     } catch (error) {
       console.log(`${error} at fetchEvents`);
@@ -94,9 +88,9 @@ export const MainContextProvider = ({children}) => {
         setGranted,
         events,
         setEvents,
-        unseenEventsNum,
-        setUnseenEventsNum,
         fetchEvents,
+        token,
+        setToken,
       }}>
       {children}
     </MainContext.Provider>

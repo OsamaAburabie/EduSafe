@@ -13,10 +13,13 @@ import EventItem from '../../components/EventItem';
 import axios from '../../../config/axios';
 import {useMainContext} from '../../../context/MainContextProvider';
 const EventScreen = ({navigation}) => {
-  const {user, events, unseenEventsNum, setUnseenEventsNum} = useMainContext();
+  const {user, events, setEvents} = useMainContext();
 
   const updateSeenLocal = () => {
-    setUnseenEventsNum(null);
+    setEvents({
+      ...events,
+      unseenNumber: null,
+    });
   };
 
   const updateSeenRequest = async () => {
@@ -32,7 +35,7 @@ const EventScreen = ({navigation}) => {
   };
 
   React.useEffect(() => {
-    if (unseenEventsNum == null) return;
+    if (events?.unseenNumber == null) return;
     updateSeenLocal();
     updateSeenRequest();
   }, []);
@@ -41,7 +44,7 @@ const EventScreen = ({navigation}) => {
     <View style={{flex: 1}}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
       <FlatList
-        data={events}
+        data={events?.events}
         renderItem={({item}) => <EventItem {...item} />}
         style={styles.container}
         ListEmptyComponent={
