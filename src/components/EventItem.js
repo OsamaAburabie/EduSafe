@@ -88,7 +88,7 @@ const EventItem = ({
                 ]}>
                 {titleUpper}
               </Text>
-              {description && (
+              {description !== '' && (
                 <Text style={[styles.text, {marginBottom: 4}]}>
                   {description}
                 </Text>

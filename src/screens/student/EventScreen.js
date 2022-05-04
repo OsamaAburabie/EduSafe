@@ -1,5 +1,6 @@
 import {
   FlatList,
+  RefreshControl,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -7,13 +8,20 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {COLORS} from '../../../utils/colors';
 import EventItem from '../../components/EventItem';
 import axios from '../../../config/axios';
 import {useMainContext} from '../../../context/MainContextProvider';
 const EventScreen = ({navigation}) => {
-  const {token, events, setEvents} = useMainContext();
+  const {token, events, setEvents, fetchEvents} = useMainContext();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    fetchEvents();
+    setRefreshing(false);
+  }, []);
 
   const updateSeenLocal = () => {
     setEvents({
@@ -35,16 +43,35 @@ const EventScreen = ({navigation}) => {
   };
 
   React.useEffect(() => {
-    if (events?.unseenNumber == null) return;
-    updateSeenLocal();
-    updateSeenRequest();
-  }, []);
+    const unSubs = [
+      navigation.addListener('focus', () => {
+        updateSeenLocal();
+        updateSeenRequest();
+      }),
+      navigation.addListener('blur', () => {
+        updateSeenLocal();
+        updateSeenRequest();
+      }),
+    ];
+
+    return () => {
+      unSubs.forEach(unsub => unsub());
+    };
+  }, [navigation]);
 
   return (
     <View style={{flex: 1}}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
       <FlatList
         data={events?.events}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            progressBackgroundColor={COLORS.white}
+            colors={[COLORS.primary]}
+          />
+        }
         renderItem={({item}) => <EventItem {...item} />}
         style={styles.container}
         ListEmptyComponent={
