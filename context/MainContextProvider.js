@@ -1,7 +1,6 @@
-import React, {useState, createContext, useEffect, useRef} from 'react';
+import React, {createContext, useEffect} from 'react';
 import {useStorage} from '../hooks/UseStorage';
 import axios from '../config/axios';
-import {AppState} from 'react-native';
 import {useMMKVObject, useMMKVString} from 'react-native-mmkv';
 export const MainContext = createContext({});
 
@@ -16,8 +15,9 @@ export const useMainContext = () => {
 
 export const MainContextProvider = ({children}) => {
   const [user, setUser] = useMMKVObject('user');
-  const [events, setEvents] = useMMKVObject('events');
   const [token, setToken] = useMMKVString('token');
+  const [events, setEvents] = useMMKVObject('events');
+  const [penalties, setPenalties] = useMMKVObject('penalties');
   const [appFirstLaunch, setAppFirstLaunch] = useStorage(
     'appFirstLaunch',
     true,
@@ -37,7 +37,22 @@ export const MainContextProvider = ({children}) => {
         },
       });
       if (res.data?.success) {
-        setEvents(res.data);
+        setEvents(res.data.data);
+      }
+    } catch (error) {
+      console.log(`${error} at fetchEvents`);
+    }
+  };
+
+  const fetchPenalties = async () => {
+    try {
+      const res = await axios.get(`/api/student/penalties`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.data?.success) {
+        setPenalties(res.data.data);
       }
     } catch (error) {
       console.log(`${error} at fetchEvents`);
@@ -84,12 +99,15 @@ export const MainContextProvider = ({children}) => {
         setAppFirstLaunch,
         user,
         setUser,
+        fetchUser,
         Logout,
         granted,
         setGranted,
         events,
         setEvents,
         fetchEvents,
+        penalties,
+        fetchPenalties,
         token,
         setToken,
       }}>

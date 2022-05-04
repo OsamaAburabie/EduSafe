@@ -7,9 +7,8 @@ import {useMainContext} from '../../context/MainContextProvider';
 import PenaltyItem from './PenaltyItem';
 
 const ProfileStats = ({selected, setSelected}) => {
-  const {user, setUser} = useMainContext();
-  const {penalties} = user;
-  const penaltiesLength = penalties?.length;
+  const {user, penalties} = useMainContext();
+  const penaltiesLength = penalties?.penalties?.length;
 
   return (
     <View style={styles.profileStats}>
@@ -75,7 +74,7 @@ const ProfileStats = ({selected, setSelected}) => {
           <>
             {penaltiesLength ? (
               <View style={{width: '100%', flex: 1}}>
-                {penalties.map(penalty => (
+                {penalties?.penalties.map(penalty => (
                   <PenaltyItem key={penalty?.id} {...penalty} />
                 ))}
               </View>

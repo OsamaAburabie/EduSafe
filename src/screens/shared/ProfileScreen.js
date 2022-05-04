@@ -15,28 +15,15 @@ import {useMainContext} from '../../../context/MainContextProvider';
 import axios from '../../../config/axios';
 import ProfileStats from '../../components/ProfileStats';
 const ProfileScreen = ({navigation}) => {
-  const {user, token, setUser} = useMainContext();
+  const {user, token, setUser, fetchUser, fetchPenalties} = useMainContext();
   const [selected, setSelected] = useState('qr');
   const [refreshing, setRefreshing] = useState(false);
+
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    try {
-      const res = await axios.get(`/api/user/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setRefreshing(false);
-      if (res.data.success) {
-        setUser(res.data.user);
-      }
-    } catch (err) {
-      setRefreshing(false);
-      ToastAndroid.show(
-        'Something went wrong, try again later',
-        ToastAndroid.SHORT,
-      );
-    }
+    fetchUser();
+    fetchPenalties();
+    setRefreshing(false);
   }, []);
 
   return (
