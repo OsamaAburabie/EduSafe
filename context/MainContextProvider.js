@@ -25,14 +25,15 @@ export const MainContextProvider = ({children}) => {
   const [granted, setGranted] = useStorage('cameraPermissionGranted', false);
 
   const Logout = () => {
-    setUser(null);
+    setUser(undefined);
+    setToken(undefined);
   };
 
   const fetchEvents = async () => {
     try {
       const res = await axios.get(`/api/student/events`, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (res.data?.success) {
@@ -47,7 +48,7 @@ export const MainContextProvider = ({children}) => {
     try {
       const res = await axios.get(`/api/user/me`, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (res.data.success) {
@@ -62,7 +63,7 @@ export const MainContextProvider = ({children}) => {
   };
 
   useEffect(() => {
-    if (!user) return;
+    if (!token) return;
     fetchUser();
   }, []);
 

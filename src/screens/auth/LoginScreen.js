@@ -20,7 +20,7 @@ import axios from '../../../config/axios';
 import {useMainContext} from '../../../context/MainContextProvider';
 const SignupScreen = ({navigation}) => {
   const [isPasswordVisable, setIsPasswordVisable] = React.useState(true);
-  const {setUser} = useMainContext();
+  const {setUser, setToken} = useMainContext();
   const updateSecureTextEntry = () => {
     setIsPasswordVisable(prevState => !prevState);
   };
@@ -38,6 +38,7 @@ const SignupScreen = ({navigation}) => {
       .then(res => {
         if (res?.data?.success) {
           setUser(res?.data?.user);
+          setToken(res?.data?.token);
         }
       })
       .catch(err => {

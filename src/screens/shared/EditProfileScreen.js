@@ -20,7 +20,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {baseURL} from '../../../config/axios';
 
 const EditProfileScreen = ({navigation}) => {
-  const {user, setUser} = useMainContext();
+  const {user, token, setUser} = useMainContext();
   const initialAvatar = {
     path: user.avatar,
   };
@@ -55,7 +55,7 @@ const EditProfileScreen = ({navigation}) => {
         body: formData,
         headers: {
           'content-type': 'multipart/form-data',
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       let responseJson = await res.json();
@@ -70,10 +70,7 @@ const EditProfileScreen = ({navigation}) => {
         }
       }
       if (responseJson.success) {
-        setUser({
-          ...user,
-          ...responseJson.user,
-        });
+        setUser(responseJson.user);
 
         Keyboard.dismiss();
         navigation.navigate('Profile');

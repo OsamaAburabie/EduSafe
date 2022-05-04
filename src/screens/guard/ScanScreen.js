@@ -28,7 +28,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const ScanScreen = () => {
-  const {user, granted, setGranted} = useMainContext();
+  const {token, granted, setGranted} = useMainContext();
   const [isVisible, setIsVisible] = useState(false);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +42,7 @@ const ScanScreen = () => {
     try {
       const res = await axios.get(`/api/guard/student_info/${id}`, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (res.data.success) {

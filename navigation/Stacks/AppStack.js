@@ -8,10 +8,10 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import DrawerContent from '../../src/components/DrawerContent';
 
 function AppStack() {
-  const {user, fetchEvents} = useMainContext();
+  const {user, token, fetchEvents} = useMainContext();
   const verified = user?.verified;
   useEffect(() => {
-    if (!user) return;
+    if (!token) return;
     fetchEvents();
   }, []);
   if (!verified) {

@@ -15,7 +15,7 @@ import {useMainContext} from '../../../context/MainContextProvider';
 import axios from '../../../config/axios';
 import ProfileStats from '../../components/ProfileStats';
 const ProfileScreen = ({navigation}) => {
-  const {user, setUser} = useMainContext();
+  const {user, token, setUser} = useMainContext();
   const [selected, setSelected] = useState('qr');
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(async () => {
@@ -23,15 +23,12 @@ const ProfileScreen = ({navigation}) => {
     try {
       const res = await axios.get(`/api/user/me`, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       setRefreshing(false);
       if (res.data.success) {
-        setUser({
-          ...user,
-          ...res.data.user,
-        });
+        setUser(res.data.user);
       }
     } catch (err) {
       setRefreshing(false);

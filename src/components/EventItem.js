@@ -24,7 +24,7 @@ const EventItem = ({
   totalJoined,
   joining,
 }) => {
-  const {user} = useMainContext();
+  const {user, token} = useMainContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigation = useNavigation();
   const [state, setState] = useState({
@@ -41,7 +41,7 @@ const EventItem = ({
         },
         {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );

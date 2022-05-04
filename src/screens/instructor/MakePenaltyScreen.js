@@ -26,7 +26,7 @@ const MakePenaltyScreen = ({navigation, route}) => {
   // const {email} = route.params;
   const [email, setEmail] = useState('');
 
-  const {user} = useMainContext();
+  const {user, token} = useMainContext();
   const SignupSchema = Yup.object().shape({
     email: Yup.string()
       .email('Invalid email')
@@ -43,7 +43,7 @@ const MakePenaltyScreen = ({navigation, route}) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );

@@ -23,7 +23,7 @@ const VerifyOtpScreen = ({navigation}) => {
   const [pinReady, setPinReady] = useState(false);
   const MAX_CODE_LENGTH = 4;
 
-  const {user, setUser, Logout} = useMainContext();
+  const {user, setUser, token, Logout} = useMainContext();
   const data = {
     otp: code,
   };
@@ -33,7 +33,7 @@ const VerifyOtpScreen = ({navigation}) => {
     try {
       const res = await axios.put('api/user/verify', data, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (res.data?.success) {
@@ -52,7 +52,7 @@ const VerifyOtpScreen = ({navigation}) => {
     try {
       const res = await axios.post('api/user/send_otp', null, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       if (res.data?.success) {

@@ -13,7 +13,7 @@ import EventItem from '../../components/EventItem';
 import axios from '../../../config/axios';
 import {useMainContext} from '../../../context/MainContextProvider';
 const EventScreen = ({navigation}) => {
-  const {user, events, setEvents} = useMainContext();
+  const {token, events, setEvents} = useMainContext();
 
   const updateSeenLocal = () => {
     setEvents({
@@ -26,7 +26,7 @@ const EventScreen = ({navigation}) => {
     try {
       axios.put(`/api/student/update_seen`, null, {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
     } catch (error) {
