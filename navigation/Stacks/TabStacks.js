@@ -15,6 +15,8 @@ import {
 } from '@react-navigation/stack';
 import MakePenaltyScreen from '../../src/screens/instructor/MakePenaltyScreen';
 import ScanForEmailScreen from '../../src/screens/instructor/ScanForEmailScreen';
+import {EventsTopTabs} from '../Tabs/InstructorTabs';
+import EditEventScreen from '../../src/screens/instructor/EditEventScreen';
 const Stack = createStackNavigator();
 const stackOptions = {
   headerStyle: {
@@ -106,6 +108,36 @@ export const EventStack = () => {
     </Stack.Navigator>
   );
 };
+
+export const InstructorEventStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={({navigation, route}) => {
+        return {
+          ...stackOptions,
+          headerLeft: () => {
+            if (route.name === 'EditEvent') {
+              return <HeaderBackButton onPress={() => navigation.goBack()} />;
+            } else {
+              return (
+                <HeaderMenuButton onPress={() => navigation.openDrawer()} />
+              );
+            }
+          },
+        };
+      }}>
+      <Stack.Screen name="Events" component={EventsTopTabs} />
+      <Stack.Screen
+        name="EditEvent"
+        options={{
+          headerTitle: 'Edit Event ',
+        }}
+        component={EditEventScreen}
+      />
+    </Stack.Navigator>
+  );
+};
+
 export const HealthStack = () => {
   return (
     <Stack.Navigator

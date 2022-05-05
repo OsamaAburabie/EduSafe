@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {COLORS} from '../../../utils/colors';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {useMainContext} from '../../../context/MainContextProvider';
@@ -22,15 +22,10 @@ import {useFormik} from 'formik';
 import axios from '../../../config/axios';
 import {useFocusEffect} from '@react-navigation/native';
 
-const MakePenaltyScreen = ({navigation, route}) => {
-  // const {email} = route.params;
-  const [email, setEmail] = useState('');
-
+const CreateEventScreen = ({navigation, route}) => {
   const {user, token} = useMainContext();
   const SignupSchema = Yup.object().shape({
-    email: Yup.string()
-      .email('Invalid email')
-      .required('Student email is required'),
+    title: Yup.string().required('Title is required'),
   });
 
   const sendRequest = async (values, actions) => {
@@ -38,7 +33,7 @@ const MakePenaltyScreen = ({navigation, route}) => {
       let res = await axios.post(
         `/api/instructor/give_penalty`,
         {
-          studentEmail: values.email,
+          studentEmail: values.title,
           type: values.type,
         },
         {
@@ -64,26 +59,16 @@ const MakePenaltyScreen = ({navigation, route}) => {
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      type: 'late',
+      title: '',
+      description: '',
     },
     validateOnChange: false,
-    validateOnBlur: true,
+    validateOnBlur: false,
     validationSchema: SignupSchema,
     onSubmit: (values, actions) => {
       sendRequest(values, actions);
     },
   });
-
-  useFocusEffect(
-    React.useCallback(() => {
-      if (route.params?.email) {
-        formik.setFieldValue('email', route.params?.email);
-        formik.setErrors({});
-        route.params.email = '';
-      }
-    }, [route.params?.email]),
-  );
 
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
@@ -95,12 +80,16 @@ const MakePenaltyScreen = ({navigation, route}) => {
             color: COLORS.black,
           },
         ]}>
-        Email
+        Title
       </Text>
       <View style={styles.action}>
-        <FontAwesome name="envelope-o" color={COLORS.black} size={20} />
+        <MaterialCommunityIcons
+          name="format-title"
+          color={COLORS.black}
+          size={20}
+        />
         <TextInput
-          placeholder="Student Email"
+          placeholder="Title"
           placeholderTextColor="#666666"
           style={[
             styles.textInput,
@@ -109,19 +98,15 @@ const MakePenaltyScreen = ({navigation, route}) => {
             },
           ]}
           autoCapitalize="none"
-          onChangeText={e => {
-            formik.handleChange('email')(e);
-          }}
-          onBlur={e => {
-            formik.handleBlur('email')(e);
-          }}
-          value={formik.values.email}
+          onChangeText={formik.handleChange('title')}
+          onBlur={formik.handleBlur('title')}
+          value={formik.values.title}
         />
       </View>
       {/* Error msg */}
-      {formik.errors.email && formik.touched.email ? (
+      {formik.errors.title && formik.touched.title ? (
         <View>
-          <Text style={styles.errorMsg}>{formik.errors.email} </Text>
+          <Text style={styles.errorMsg}>{formik.errors.title} </Text>
         </View>
       ) : null}
       {formik.errors.general ? (
@@ -129,41 +114,47 @@ const MakePenaltyScreen = ({navigation, route}) => {
           <Text style={styles.errorMsg}>{formik.errors.general}</Text>
         </View>
       ) : null}
-      <TouchableOpacity onPress={() => navigation.navigate('ScanForEmail')}>
-        <Text style={{color: COLORS.primary}}>Scan QR Instead?</Text>
-      </TouchableOpacity>
-
       <Text
         style={[
           styles.text_footer,
           {
             color: COLORS.black,
-            marginTop: 35,
           },
         ]}>
-        Penalty Type
+        Description
       </Text>
-      <View
-        style={{
-          borderBottomWidth: 1,
-          borderBottomColor: '#f2f2f2',
-        }}>
-        <Picker
-          selectedValue={formik.values.type}
-          onValueChange={formik.handleChange('type')}
-          placeholder="Select Penalty Type"
-          mode="dropdown"
-          // mode="dropdown"
-          style={{
-            marginLeft: -15,
-            color: COLORS.black,
-          }}
-          dropdownIconRippleColor={'transparent'}>
-          <Picker.Item label="Late on class" value="late" />
-          <Picker.Item label="Smoking" value="smoking" />
-          <Picker.Item label="Not wearing a mask" value="mask" />
-        </Picker>
+      <View style={styles.action}>
+        <MaterialCommunityIcons
+          name="information-outline"
+          color={COLORS.black}
+          size={20}
+        />
+        <TextInput
+          placeholder="Description"
+          placeholderTextColor="#666666"
+          style={[
+            styles.textInput,
+            {
+              color: COLORS.black,
+            },
+          ]}
+          autoCapitalize="none"
+          onChangeText={formik.handleChange('description')}
+          onBlur={formik.handleBlur('description')}
+          value={formik.values.description}
+        />
       </View>
+      {/* Error msg */}
+      {formik.errors.description && formik.touched.description ? (
+        <View>
+          <Text style={styles.errorMsg}>{formik.errors.description} </Text>
+        </View>
+      ) : null}
+      {formik.errors.general ? (
+        <View>
+          <Text style={styles.errorMsg}>{formik.errors.general}</Text>
+        </View>
+      ) : null}
 
       <View style={styles.button}>
         <TouchableOpacity
@@ -192,13 +183,13 @@ const MakePenaltyScreen = ({navigation, route}) => {
   );
 };
 
-export default MakePenaltyScreen;
+export default CreateEventScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.white,
-    paddingHorizontal: 12,
+    padding: 12,
   },
 
   text_footer: {
