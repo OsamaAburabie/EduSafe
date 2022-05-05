@@ -61,7 +61,7 @@ const CreateEventScreen = ({navigation, route}) => {
     initialValues: {
       title: '',
       description: '',
-      valuePoint: '10',
+      valuePoints: '10',
       date: new Date(),
     },
     validateOnChange: false,
@@ -118,9 +118,9 @@ const CreateEventScreen = ({navigation, route}) => {
           />
         }
         keyboardType="number-pad"
-        value={formik.values.valuePoint}
-        onChangeText={formik.handleChange('valuePoint')}
-        error={formik.errors.valuePoint}
+        value={formik.values.valuePoints}
+        onChangeText={formik.handleChange('valuePoints')}
+        error={formik.errors.valuePoints}
       />
       <View
         style={{

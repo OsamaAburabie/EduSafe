@@ -1,20 +1,39 @@
 import {
   FlatList,
   RefreshControl,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  useWindowDimensions,
   View,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {COLORS} from '../../../utils/colors';
-import EventItem from '../../components/EventItem';
 import axios from '../../../config/axios';
 import {useMainContext} from '../../../context/MainContextProvider';
+import {ScrollView} from 'react-native-gesture-handler';
+import InstructorEventItem from '../../components/InstructorEventItem';
 const ManageEventsScreen = ({navigation}) => {
-  const {token, events, setEvents, fetchEvents} = useMainContext();
+  const {token} = useMainContext();
+  const [events, setEvents] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchEvents = async () => {
+    try {
+      const res = await axios.get(`/api/instructor/my_events`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.data?.success) {
+        setEvents(res.data.events);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log(`${error} at fetchEvents`);
+      setIsLoading(false);
+    }
+  };
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(async () => {
@@ -23,65 +42,57 @@ const ManageEventsScreen = ({navigation}) => {
     setRefreshing(false);
   }, []);
 
-  const updateSeenLocal = () => {
-    setEvents({
-      ...events,
-      unseenNumber: null,
-    });
-  };
-
-  const updateSeenRequest = async () => {
-    try {
-      axios.put(`/api/student/update_seen`, null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-    } catch (error) {
-      console.log(error.response.data);
-    }
-  };
-
   React.useEffect(() => {
-    const unSubs = [
-      navigation.addListener('focus', () => {
-        updateSeenLocal();
-        updateSeenRequest();
-      }),
-      navigation.addListener('blur', () => {
-        updateSeenLocal();
-        updateSeenRequest();
-      }),
-    ];
-
-    return () => {
-      unSubs.forEach(unsub => unsub());
-    };
-  }, [navigation]);
+    fetchEvents();
+  }, []);
 
   return (
     <View style={{flex: 1}}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
-      <FlatList
-        data={events?.events}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            progressBackgroundColor={COLORS.white}
-            colors={[COLORS.primary]}
-          />
-        }
-        renderItem={({item}) => <EventItem {...item} />}
-        style={styles.container}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={{color: COLORS.primary, fontSize: 16}}>
-              No events to show
-            </Text>
-          </View>
-        }
-      />
+      {isLoading && (
+        <View style={styles.emptyContainer}>
+          <ActivityIndicator size="large" color={COLORS.primary} />
+        </View>
+      )}
+      {events && !isLoading && (
+        <FlatList
+          data={events}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              progressBackgroundColor={COLORS.white}
+              colors={[COLORS.primary]}
+            />
+          }
+          renderItem={({item}) => <InstructorEventItem {...item} />}
+          style={styles.container}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text style={{color: COLORS.primary, fontSize: 16}}>
+                No events to show
+              </Text>
+            </View>
+          }
+        />
+      )}
+
+      {!isLoading && !events && (
+        <ScrollView
+          contentContainerStyle={styles.emptyContainer}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              progressBackgroundColor={COLORS.white}
+              colors={[COLORS.primary]}
+            />
+          }>
+          <Text style={{color: COLORS.primary, fontSize: 16}}>
+            No events to show
+          </Text>
+        </ScrollView>
+      )}
     </View>
   );
 };
@@ -96,10 +107,7 @@ const styles = StyleSheet.create({
   emptyContainer: {
     flex: 1,
     alignItems: 'center',
-    marginTop: '80%',
+    justifyContent: 'center',
+    backgroundColor: COLORS.white,
   },
 });
-
-// onPress={() =>
-//   navigation.navigate('EventsStack', {screen: 'EditEvent'})
-// }
