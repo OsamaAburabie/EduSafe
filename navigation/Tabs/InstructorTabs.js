@@ -27,6 +27,9 @@ export function EventsTopTabs() {
       screenOptions={{
         tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: COLORS.gray,
+        tabBarIndicatorStyle: {
+          backgroundColor: COLORS.primary,
+        },
       }}>
       <TopTab.Screen name="Manage" component={ManageEventsScreen} />
       <TopTab.Screen name="Create" component={CreateEventScreen} />
