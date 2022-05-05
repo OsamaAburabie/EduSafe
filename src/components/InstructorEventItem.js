@@ -148,9 +148,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   eventTitle: {
-    fontSize: 20,
+    fontSize: 18,
     color: COLORS.primary,
-    fontWeight: 'bold',
+    fontWeight: '500',
   },
   eventControls: {
     flexDirection: 'row-reverse',

@@ -8,16 +8,12 @@ import {
   Image,
 } from 'react-native';
 import {COLORS} from '../../utils/colors';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const ModalSuccess = ({message}) => {
+const ModalError = ({message}) => {
   return (
     <View style={styles.content}>
-      <MaterialCommunityIcons
-        name="checkbox-marked-circle-outline"
-        size={200}
-        color={COLORS.primary}
-      />
+      <MaterialIcons name="error-outline" size={200} color="red" />
       <Text style={[styles.contentTitle]}>{message}</Text>
     </View>
   );
@@ -39,4 +35,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ModalSuccess;
+export default ModalError;

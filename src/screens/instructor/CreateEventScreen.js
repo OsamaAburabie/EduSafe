@@ -35,6 +35,9 @@ const CreateEventScreen = ({navigation, route}) => {
   const SignupSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     date: Yup.string().required('Date is required'),
+    valuePoints: Yup.number('Value Points should be a number').required(
+      'Value Points is required',
+    ),
   });
 
   const sendRequest = async (values, actions) => {
@@ -61,7 +64,7 @@ const CreateEventScreen = ({navigation, route}) => {
     initialValues: {
       title: '',
       description: '',
-      valuePoints: '10',
+      valuePoints: 10,
       date: new Date(),
     },
     validateOnChange: false,
@@ -118,7 +121,7 @@ const CreateEventScreen = ({navigation, route}) => {
           />
         }
         keyboardType="number-pad"
-        value={formik.values.valuePoints}
+        value={`${formik.values.valuePoints}`}
         onChangeText={formik.handleChange('valuePoints')}
         error={formik.errors.valuePoints}
       />
@@ -199,7 +202,7 @@ const CreateEventScreen = ({navigation, route}) => {
         backdropTransitionInTiming={0}
         backdropTransitionOutTiming={0}
         style={styles.view}>
-        <ModalSuccess />
+        <ModalSuccess message="Event Created Successfully" />
       </Modal>
     </ScrollView>
   );
