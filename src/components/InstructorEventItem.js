@@ -30,7 +30,16 @@ const InstructorEventItem = ({
   const formatedDate = dayjs(date).format('MMM D, h:mm A');
 
   return (
-    <TouchableOpacity activeOpacity={0.8}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() =>
+        navigation.navigate('EventsStack', {
+          screen: 'EventDetails',
+          params: {
+            id,
+          },
+        })
+      }>
       <View key={id} style={styles.eventContainer}>
         <View style={styles.eventInfo}>
           <View>
@@ -104,8 +113,16 @@ const InstructorEventItem = ({
               />
             </View>
           </TouchableWithoutFeedback>
-          <View style={{width: 10}}></View>
-          <TouchableWithoutFeedback>
+          <View style={{width: 5}}></View>
+          <TouchableWithoutFeedback
+            onPress={() =>
+              navigation.navigate('EventsStack', {
+                screen: 'MakeInvites',
+                params: {
+                  id,
+                },
+              })
+            }>
             <View
               style={[
                 styles.joinButton,

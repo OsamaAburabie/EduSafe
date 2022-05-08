@@ -4,6 +4,7 @@ import {COLORS} from '../../utils/colors';
 import EditProfileScreen from '../../src/screens/shared/EditProfileScreen';
 import EventScreen from '../../src/screens/student/EventScreen';
 import EventDetailsScreen from '../../src/screens/student/EventDetailsScreen';
+import InstructorEventDetailsScreen from '../../src/screens/instructor/EventDetailsScreen';
 import HeaderMenuButton from '../../src/components/HeaderMenuButton';
 import ProfileScreen from '../../src/screens/shared/ProfileScreen';
 import HeaderBackButton from '../../src/components/HeaderBackButton';
@@ -17,6 +18,7 @@ import MakePenaltyScreen from '../../src/screens/instructor/MakePenaltyScreen';
 import ScanForEmailScreen from '../../src/screens/instructor/ScanForEmailScreen';
 import {EventsTopTabs} from '../Tabs/InstructorTabs';
 import EditEventScreen from '../../src/screens/instructor/EditEventScreen';
+import MakeInvitesScreen from '../../src/screens/instructor/MakeInvitesScreen';
 const Stack = createStackNavigator();
 const stackOptions = {
   headerStyle: {
@@ -116,7 +118,11 @@ export const InstructorEventStack = () => {
         return {
           ...stackOptions,
           headerLeft: () => {
-            if (route.name === 'EditEvent') {
+            if (
+              route.name === 'EditEvent' ||
+              route.name === 'MakeInvites' ||
+              route.name === 'EventDetails'
+            ) {
               return <HeaderBackButton onPress={() => navigation.goBack()} />;
             } else {
               return (
@@ -133,6 +139,20 @@ export const InstructorEventStack = () => {
           headerTitle: 'Edit Event ',
         }}
         component={EditEventScreen}
+      />
+      <Stack.Screen
+        name="MakeInvites"
+        options={{
+          headerTitle: 'Invite',
+        }}
+        component={MakeInvitesScreen}
+      />
+      <Stack.Screen
+        name="EventDetails"
+        options={{
+          headerTitle: 'Event Details',
+        }}
+        component={InstructorEventDetailsScreen}
       />
     </Stack.Navigator>
   );

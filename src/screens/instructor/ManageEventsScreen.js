@@ -42,10 +42,21 @@ const ManageEventsScreen = ({navigation}) => {
     setRefreshing(false);
   }, []);
 
-  React.useEffect(() => {
-    fetchEvents();
-  }, []);
+  // React.useEffect(() => {
+  //   fetchEvents();
+  // }, []);
 
+  React.useEffect(() => {
+    const unSubs = [
+      navigation.addListener('focus', () => {
+        fetchEvents();
+      }),
+    ];
+
+    return () => {
+      unSubs.forEach(unsub => unsub());
+    };
+  }, [navigation]);
   return (
     <View style={{flex: 1}}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
@@ -54,7 +65,7 @@ const ManageEventsScreen = ({navigation}) => {
           <ActivityIndicator size="large" color={COLORS.primary} />
         </View>
       )}
-      {events && !isLoading && (
+      {events && events.length > 0 && !isLoading && (
         <FlatList
           data={events}
           refreshControl={
@@ -67,17 +78,10 @@ const ManageEventsScreen = ({navigation}) => {
           }
           renderItem={({item}) => <InstructorEventItem {...item} />}
           style={styles.container}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <Text style={{color: COLORS.primary, fontSize: 16}}>
-                No events to show
-              </Text>
-            </View>
-          }
         />
       )}
 
-      {!isLoading && !events && (
+      {!isLoading && !events.length && (
         <ScrollView
           contentContainerStyle={styles.emptyContainer}
           refreshControl={
