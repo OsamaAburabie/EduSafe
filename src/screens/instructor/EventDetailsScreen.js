@@ -122,7 +122,7 @@ const EventDetailsScreen = ({route}) => {
           flex: 1,
           backgroundColor: COLORS.white,
           borderRadius: 5,
-          marginTop: 10,
+          marginVertical: 10,
           elevation: 2,
           justifyContent: 'center',
           alignItems: 'center',

@@ -42,7 +42,6 @@ const MakeInvitesScreen = ({route}) => {
   const handleError = err => {
     if (DocumentPicker.isCancel(err)) {
       console.log('cancelled');
-      // User cancelled the picker, exit any dialogs or menus and move on
     } else if (isInProgress(err)) {
       console.log(
         'multiple pickers were opened, only the last will be considered',
@@ -80,19 +79,21 @@ const MakeInvitesScreen = ({route}) => {
         },
       );
       let responseJson = await res.json();
+
       if (!res.ok) {
         throw new Error(responseJson?.message);
       }
       if (responseJson.success) {
-        // console.log(responseJson);
         setMessage(responseJson?.message);
         setIsVisible(true);
       }
     } catch (err) {
-      ToastAndroid.show(
-        err?.message || 'Something went wrong, try again later',
-        ToastAndroid.SHORT,
-      );
+      if (err.message !== 'Network request failed') {
+        ToastAndroid.show(
+          err?.message || 'Something went wrong, try again later',
+          ToastAndroid.SHORT,
+        );
+      }
     }
   };
 
