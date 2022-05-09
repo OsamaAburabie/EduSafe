@@ -15,7 +15,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import InstructorEventItem from '../../components/InstructorEventItem';
 const ManageEventsScreen = ({navigation}) => {
   const {token} = useMainContext();
-  const [events, setEvents] = useState(null);
+  const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchEvents = async () => {
