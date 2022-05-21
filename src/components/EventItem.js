@@ -24,13 +24,9 @@ const EventItem = ({
   totalJoined,
   joining,
 }) => {
-  const {user, token} = useMainContext();
+  const {user, token, events, setEvents} = useMainContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigation = useNavigation();
-  const [state, setState] = useState({
-    totalJoined,
-    joining,
-  });
 
   const fetch = async (id, joining) => {
     try {
@@ -55,14 +51,17 @@ const EventItem = ({
     }
   };
   const handleJoin = () => {
-    setState({
-      totalJoined: state.joining
-        ? state.totalJoined - 1
-        : state.totalJoined + 1,
-      joining: !state.joining,
+    const findEvent = events?.events.find(event => event.id === id);
+    findEvent.joining = !findEvent.joining;
+    findEvent.totalJoined = findEvent.joining
+      ? findEvent.totalJoined + 1
+      : findEvent.totalJoined - 1;
+    setEvents({
+      ...events,
+      ...events.events,
     });
 
-    fetch(id, !state.joining);
+    fetch(id, !joining);
   };
   const onHide = () => {
     setIsModalVisible(false);
@@ -119,7 +118,7 @@ const EventItem = ({
                 color={COLORS.primary}
               />
               <Text style={[styles.text, {marginRight: 8, fontWeight: 'bold'}]}>
-                {state.totalJoined} joined
+                {totalJoined} joined
               </Text>
             </View>
           </View>
@@ -129,18 +128,16 @@ const EventItem = ({
                 style={[
                   styles.joinButton,
                   {
-                    backgroundColor: state.joining
-                      ? COLORS.white
-                      : COLORS.primary,
+                    backgroundColor: joining ? COLORS.white : COLORS.primary,
                   },
                 ]}>
                 <Text
                   style={[
                     styles.joinButtonText,
-                    {color: state.joining ? COLORS.primary : COLORS.white},
+                    {color: joining ? COLORS.primary : COLORS.white},
                   ]}>
-                  {state.joining ? 'Joined' : 'Join'}
-                  {state.joining && (
+                  {joining ? 'Joined' : 'Join'}
+                  {joining && (
                     <MaterialCommunityIcons
                       name="account-check"
                       size={20}
@@ -151,7 +148,7 @@ const EventItem = ({
               </View>
             </TouchableWithoutFeedback>
             <View style={{width: 10}}></View>
-            {state.joining && (
+            {joining && (
               <TouchableWithoutFeedback onPress={() => setIsModalVisible(true)}>
                 <View
                   style={[

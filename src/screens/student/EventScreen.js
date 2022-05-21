@@ -23,12 +23,12 @@ const EventScreen = ({navigation}) => {
     setRefreshing(false);
   }, []);
 
-  const updateSeenLocal = () => {
+  const updateSeenLocal = useCallback(() => {
     setEvents({
       ...events,
       unseenNumber: null,
     });
-  };
+  }, [events]);
 
   const updateSeenRequest = async () => {
     try {
@@ -43,6 +43,7 @@ const EventScreen = ({navigation}) => {
   };
 
   React.useEffect(() => {
+    if (events.unseenNumber == null) return;
     const unSubs = [
       navigation.addListener('focus', () => {
         updateSeenLocal();
@@ -57,7 +58,7 @@ const EventScreen = ({navigation}) => {
     return () => {
       unSubs.forEach(unsub => unsub());
     };
-  }, [navigation]);
+  }, [navigation, events]);
 
   return (
     <View style={{flex: 1}}>
