@@ -19,6 +19,7 @@ import ScanForEmailScreen from '../../src/screens/instructor/ScanForEmailScreen'
 import {EventsTopTabs} from '../Tabs/InstructorTabs';
 import EditEventScreen from '../../src/screens/instructor/EditEventScreen';
 import MakeInvitesScreen from '../../src/screens/instructor/MakeInvitesScreen';
+import UploadVaccine from '../../src/screens/student/UploadVaccine';
 const Stack = createStackNavigator();
 const stackOptions = {
   headerStyle: {
@@ -170,6 +171,13 @@ export const HealthStack = () => {
         };
       }}>
       <Stack.Screen name="Health" component={HealthScreen} />
+      <Stack.Screen
+        name="UploadVaccine"
+        options={{
+          headerTitle: 'Upload',
+        }}
+        component={UploadVaccine}
+      />
     </Stack.Navigator>
   );
 };
