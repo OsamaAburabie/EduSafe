@@ -22,10 +22,10 @@ import {baseURL} from '../../../config/axios';
 
 const width = Dimensions.get('window').width;
 
-const UploadVaccine = ({navigation}) => {
-  const {user, token, fetchUser} = useMainContext();
+const EditVaccie = ({navigation, route}) => {
+  const {token, fetchUser} = useMainContext();
   const initialAvatar = {
-    path: 'https://alrai.com/uploads/images/2021/03/30/276084.jpg',
+    path: route.params?.vaccine?.image,
   };
   const [avatar, setAvatar] = useState(initialAvatar);
 
@@ -43,14 +43,17 @@ const UploadVaccine = ({navigation}) => {
     });
 
     try {
-      let res = await fetch(`${baseURL}/api/student/vaccine`, {
-        method: 'post',
-        body: formData,
-        headers: {
-          'content-type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
+      let res = await fetch(
+        `${baseURL}/api/student/vaccine/${route.params?.vaccine?.id}`,
+        {
+          method: 'put',
+          body: formData,
+          headers: {
+            'content-type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       let responseJson = await res.json();
       if (!res.ok) {
         throw new Error('error');
@@ -120,7 +123,7 @@ const UploadVaccine = ({navigation}) => {
   );
 };
 
-export default UploadVaccine;
+export default EditVaccie;
 
 const styles = StyleSheet.create({
   container: {

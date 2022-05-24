@@ -20,6 +20,7 @@ import {EventsTopTabs} from '../Tabs/InstructorTabs';
 import EditEventScreen from '../../src/screens/instructor/EditEventScreen';
 import MakeInvitesScreen from '../../src/screens/instructor/MakeInvitesScreen';
 import UploadVaccine from '../../src/screens/student/UploadVaccine';
+import EditVaccie from '../../src/screens/student/EditVaccineScreen';
 const Stack = createStackNavigator();
 const stackOptions = {
   headerStyle: {
@@ -165,9 +166,18 @@ export const HealthStack = () => {
       screenOptions={({navigation, route}) => {
         return {
           ...stackOptions,
-          headerLeft: () => (
-            <HeaderMenuButton onPress={() => navigation.openDrawer()} />
-          ),
+          headerLeft: () => {
+            if (
+              route.name === 'UploadVaccine' ||
+              route.name === 'EditVaccine'
+            ) {
+              return <HeaderBackButton onPress={() => navigation.goBack()} />;
+            } else {
+              return (
+                <HeaderMenuButton onPress={() => navigation.openDrawer()} />
+              );
+            }
+          },
         };
       }}>
       <Stack.Screen name="Health" component={HealthScreen} />
@@ -177,6 +187,13 @@ export const HealthStack = () => {
           headerTitle: 'Upload',
         }}
         component={UploadVaccine}
+      />
+      <Stack.Screen
+        name="EditVaccine"
+        options={{
+          headerTitle: 'Edit',
+        }}
+        component={EditVaccie}
       />
     </Stack.Navigator>
   );
