@@ -23,6 +23,7 @@ export const MainContextProvider = ({children}) => {
     true,
   );
   const [granted, setGranted] = useStorage('cameraPermissionGranted', false);
+  const [maskStatus, setMaskStatus] = React.useState('optional');
 
   const Logout = () => {
     setUser(undefined);
@@ -56,6 +57,17 @@ export const MainContextProvider = ({children}) => {
       }
     } catch (error) {
       console.log(`${error} at fetchEvents`);
+    }
+  };
+
+  const fetchMaskStatus = async () => {
+    try {
+      const response = await axios.get('/api/mask');
+      if (response.data) {
+        setMaskStatus(response.data?.status);
+      }
+    } catch (error) {
+      console.log(`${error} at fetchMaskStatus`);
     }
   };
 
@@ -110,6 +122,8 @@ export const MainContextProvider = ({children}) => {
         fetchPenalties,
         token,
         setToken,
+        maskStatus,
+        fetchMaskStatus,
       }}>
       {children}
     </MainContext.Provider>

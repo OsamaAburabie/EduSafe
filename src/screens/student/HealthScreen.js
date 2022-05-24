@@ -22,30 +22,20 @@ import Modal from 'react-native-modal';
 const width = Dimensions.get('window').width;
 
 const HealthScreen = ({navigation}) => {
-  const {user, fetchUser} = useMainContext();
+  const {user, fetchUser, maskStatus, fetchMaskStatus} = useMainContext();
   const {vaccines} = user;
-  const [maskStatus, setMaskStatus] = React.useState('optional');
+  // const [maskStatus, setMaskStatus] = React.useState('optional');
   const [refreshing, setRefreshing] = React.useState(false);
   const [isVisible, setIsVisible] = React.useState(false);
   const close = () => {
     setIsVisible(false);
   };
+
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     fetchUser();
+    fetchMaskStatus();
     setRefreshing(false);
-  }, []);
-  const getMaskStatus = async () => {
-    const response = await axios.get('/api/mask');
-
-    if (response.data) {
-      // setMaskStatus('yes');
-      setMaskStatus(response.data?.status);
-    }
-  };
-
-  React.useEffect(() => {
-    getMaskStatus();
   }, []);
 
   const maksColor = maskStatus => {

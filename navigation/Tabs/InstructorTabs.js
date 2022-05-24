@@ -45,24 +45,10 @@ export function EventsTopTabs() {
 }
 
 function InstructorTabs() {
-  const {unseenEventsNum} = useMainContext();
-
   return (
-    <Tab.Navigator initialRouteName="Home" screenOptions={tabScreenOptions}>
-      <Tab.Screen
-        name="HomeStack"
-        component={HomeStack}
-        options={{
-          tabBarLabel: 'Home',
-          tabBarIcon: ({color, focused}) => (
-            <MaterialCommunityIcons
-              name={`${focused ? 'home' : 'home-outline'}`}
-              color={color}
-              size={26}
-            />
-          ),
-        }}
-      />
+    <Tab.Navigator
+      initialRouteName="ProfileStack"
+      screenOptions={tabScreenOptions}>
       <Tab.Screen
         name="PenaltyStack"
         component={PenaltyStack}
