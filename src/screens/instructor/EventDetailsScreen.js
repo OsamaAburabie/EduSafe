@@ -21,7 +21,7 @@ const EventDetailsScreen = ({route}) => {
 
   const fetchEventDetails = async () => {
     try {
-      const res = await axios.get(`/api/instructor/event_details/${id}`, {
+      const res = await axios.get(`/api/instructor/event/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

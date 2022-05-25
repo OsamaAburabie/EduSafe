@@ -25,7 +25,7 @@ const MakeInvitesScreen = ({route}) => {
   const [isVisible, setIsVisible] = useState(false);
   const [fileLabel, setFileLabel] = useState('Choose a .csv file');
   const [message, setMessage] = useState('');
-  const {token} = useMainContext();
+  const {token, fetchInstructorEvents} = useMainContext();
   const {id} = route.params;
 
   useEffect(() => {
@@ -67,33 +67,26 @@ const MakeInvitesScreen = ({route}) => {
     });
 
     try {
-      let res = await fetch(
-        `${baseURL}/api/instructor/create_invites_csv/${id}`,
+      const res = await axios.post(
+        `/api/instructor/create_invites_csv/${id}`,
+        formData,
         {
-          method: 'post',
-          body: formData,
           headers: {
-            'content-type': 'multipart/form-data',
+            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`,
+          },
+          transformRequest: (data, headers) => {
+            return formData;
           },
         },
       );
-      let responseJson = await res.json();
-
-      if (!res.ok) {
-        throw new Error(responseJson?.message);
-      }
-      if (responseJson.success) {
-        setMessage(responseJson?.message);
+      if (res.data?.success) {
+        fetchInstructorEvents();
+        setMessage(res.data?.message);
         setIsVisible(true);
       }
-    } catch (err) {
-      if (err.message !== 'Network request failed') {
-        ToastAndroid.show(
-          err?.message || 'Something went wrong, try again later',
-          ToastAndroid.SHORT,
-        );
-      }
+    } catch (error) {
+      console.log(`${error} at editVaccine`);
     }
   };
 

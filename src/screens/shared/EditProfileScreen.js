@@ -17,7 +17,7 @@ import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {useMainContext} from '../../../context/MainContextProvider';
 import ImagePicker from 'react-native-image-crop-picker';
-import {baseURL} from '../../../config/axios';
+import axios, {baseURL} from '../../../config/axios';
 
 const EditProfileScreen = ({navigation}) => {
   const {user, token, setUser} = useMainContext();
@@ -50,36 +50,21 @@ const EditProfileScreen = ({navigation}) => {
     }
 
     try {
-      let res = await fetch(`${baseURL}/api/user/profile`, {
-        method: 'put',
-        body: formData,
+      const res = await axios.put(`/api/user/profile`, formData, {
         headers: {
-          'content-type': 'multipart/form-data',
+          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
+        transformRequest: (data, headers) => {
+          return formData;
+        },
       });
-      let responseJson = await res.json();
-      if (!res.ok) {
-        // get error message from body or default to response status
-        if (responseJson?.errors) {
-          responseJson?.errors.forEach(error => {
-            actions.setFieldError(error.path[1], error.message);
-          });
-        } else {
-          return Promise.reject('Something went wrong');
-        }
+      if (res.data?.success) {
+        setUser(res.data?.user);
+        navigation.goBack();
       }
-      if (responseJson.success) {
-        setUser(responseJson.user);
-
-        Keyboard.dismiss();
-        navigation.navigate('Profile');
-      }
-    } catch (err) {
-      ToastAndroid.show(
-        'Something went wrong, try again later',
-        ToastAndroid.SHORT,
-      );
+    } catch (error) {
+      console.log(`${error} at editProfile`);
     }
   };
 

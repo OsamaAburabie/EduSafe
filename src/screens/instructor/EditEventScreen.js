@@ -27,13 +27,13 @@ import DefaultModalContent from '../../../utils/DefaultModalContent';
 import ModalSuccess from '../../components/ModalSuccess';
 
 const EditEventScreen = ({navigation, route}) => {
-  const {token} = useMainContext();
+  const {token, fetchInstructorEvents, instructorEvents, setInstructorEvents} =
+    useMainContext();
   const [open, setOpen] = useState(false);
   const [dobLabel, setDobLabel] = useState(
     dayjs(route.params.date).format('MMM D, h:mm A'),
   );
   const [isVisible, setIsVisible] = useState(false);
-
   const SignupSchema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     date: Yup.string().required('Date is required'),
@@ -41,21 +41,44 @@ const EditEventScreen = ({navigation, route}) => {
 
   const sendRequest = async (values, actions) => {
     try {
-      let res = await axios.post(`/api/instructor/create_event`, values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      let res = await axios.put(
+        `/api/instructor/event/${route.params.id}`,
+        values,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       if (res.data.success) {
-        setIsVisible(true);
-        actions.resetForm();
+        fetchInstructorEvents();
+        navigation.goBack();
       }
     } catch (err) {
       ToastAndroid.show(
         err.response?.data?.message || 'Something went wrong',
         ToastAndroid.SHORT,
       );
+    }
+  };
+
+  const deleteEvent = async () => {
+    try {
+      let res = await axios.delete(`/api/instructor/event/${route.params.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.data.success) {
+        setInstructorEvents(
+          instructorEvents.filter(event => event.id !== route.params.id),
+        );
+        navigation.goBack();
+      }
+    } catch (err) {
+      console.log(err, 'at delete event');
     }
   };
 
@@ -179,6 +202,7 @@ const EditEventScreen = ({navigation, route}) => {
               backgroundColor: COLORS.primary,
               borderColor: COLORS.primary,
               borderWidth: 1,
+              marginBottom: 10,
             },
           ]}>
           <Text
@@ -189,6 +213,27 @@ const EditEventScreen = ({navigation, route}) => {
               },
             ]}>
             Submit
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={deleteEvent}
+          style={[
+            styles.btn,
+            {
+              backgroundColor: COLORS.white,
+              borderColor: COLORS.primary,
+              borderWidth: 1,
+            },
+          ]}>
+          <Text
+            style={[
+              styles.textBtn,
+              {
+                color: 'red',
+              },
+            ]}>
+            Delete
           </Text>
         </TouchableOpacity>
       </View>

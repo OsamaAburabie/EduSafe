@@ -13,13 +13,9 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {COLORS} from '../../../utils/colors';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {Formik} from 'formik';
-import * as Yup from 'yup';
 import {useMainContext} from '../../../context/MainContextProvider';
 import ImagePicker from 'react-native-image-crop-picker';
-import {baseURL} from '../../../config/axios';
-
+import axios from '../../../config/axios';
 const width = Dimensions.get('window').width;
 
 const UploadVaccine = ({navigation}) => {
@@ -43,28 +39,21 @@ const UploadVaccine = ({navigation}) => {
     });
 
     try {
-      let res = await fetch(`${baseURL}/api/student/vaccine`, {
-        method: 'post',
-        body: formData,
+      const res = await axios.post(`/api/student/vaccine`, formData, {
         headers: {
-          'content-type': 'multipart/form-data',
+          'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
+        transformRequest: (data, headers) => {
+          return formData;
+        },
       });
-      let responseJson = await res.json();
-      if (!res.ok) {
-        throw new Error('error');
-      }
-      if (responseJson.success) {
+      if (res.data?.success) {
         fetchUser();
-        navigation.navigate('Health');
+        navigation.goBack();
       }
-    } catch (err) {
-      console.log(err.message);
-      ToastAndroid.show(
-        'Something went wrong, try again later',
-        ToastAndroid.SHORT,
-      );
+    } catch (error) {
+      console.log(`${error} at uploadVaccine`);
     }
   };
 

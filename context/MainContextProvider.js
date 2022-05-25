@@ -17,6 +17,8 @@ export const MainContextProvider = ({children}) => {
   const [user, setUser] = useMMKVObject('user');
   const [token, setToken] = useMMKVString('token');
   const [events, setEvents] = useMMKVObject('events');
+  const [instructorEvents, setInstructorEvents] =
+    useMMKVObject('instructorEvents');
   const [penalties, setPenalties] = useMMKVObject('penalties');
   const [appFirstLaunch, setAppFirstLaunch] = useStorage(
     'appFirstLaunch',
@@ -42,6 +44,21 @@ export const MainContextProvider = ({children}) => {
       }
     } catch (error) {
       console.log(`${error} at fetchEvents`);
+    }
+  };
+
+  const fetchInstructorEvents = async () => {
+    try {
+      const res = await axios.get(`/api/instructor/events`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res.data?.success) {
+        setInstructorEvents(res.data.events);
+      }
+    } catch (error) {
+      console.log(`${error} at fetchInstructorEvents`);
     }
   };
 
@@ -124,6 +141,9 @@ export const MainContextProvider = ({children}) => {
         setToken,
         maskStatus,
         fetchMaskStatus,
+        instructorEvents,
+        setInstructorEvents,
+        fetchInstructorEvents,
       }}>
       {children}
     </MainContext.Provider>

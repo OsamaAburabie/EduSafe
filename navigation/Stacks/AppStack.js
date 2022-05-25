@@ -8,14 +8,24 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import DrawerContent from '../../src/components/DrawerContent';
 
 function AppStack() {
-  const {user, token, fetchEvents, fetchPenalties, fetchMaskStatus} =
-    useMainContext();
+  const {
+    user,
+    token,
+    fetchEvents,
+    fetchPenalties,
+    fetchMaskStatus,
+    fetchInstructorEvents,
+  } = useMainContext();
   const verified = user?.verified;
   useEffect(() => {
     if (!token) return;
     fetchEvents();
     fetchPenalties();
     fetchMaskStatus();
+
+    if (user?.role === 'instructor') {
+      fetchInstructorEvents();
+    }
   }, [token]);
 
   if (!verified) {
