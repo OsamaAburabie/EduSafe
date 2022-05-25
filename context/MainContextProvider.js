@@ -73,7 +73,7 @@ export const MainContextProvider = ({children}) => {
         setPenalties(res.data.data);
       }
     } catch (error) {
-      console.log(`${error} at fetchEvents`);
+      console.log(`${error} at fetchPenalties`);
     }
   };
 

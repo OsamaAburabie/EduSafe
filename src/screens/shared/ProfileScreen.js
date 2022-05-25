@@ -15,16 +15,16 @@ import {useMainContext} from '../../../context/MainContextProvider';
 import axios from '../../../config/axios';
 import ProfileStats from '../../components/ProfileStats';
 const ProfileScreen = ({navigation}) => {
-  const {user, token, setUser, fetchUser, fetchPenalties} = useMainContext();
+  const {token, user, fetchUser, fetchPenalties} = useMainContext();
   const [selected, setSelected] = useState('qr');
   const [refreshing, setRefreshing] = useState(false);
 
-  const onRefresh = useCallback(async () => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchUser();
     fetchPenalties();
     setRefreshing(false);
-  }, []);
+  }, [token]);
 
   return (
     <ScrollView

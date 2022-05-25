@@ -15,6 +15,7 @@ function AppStack() {
     fetchPenalties,
     fetchMaskStatus,
     fetchInstructorEvents,
+    fetchUser,
   } = useMainContext();
   const verified = user?.verified;
   useEffect(() => {
@@ -22,6 +23,7 @@ function AppStack() {
     fetchEvents();
     fetchPenalties();
     fetchMaskStatus();
+    fetchUser();
 
     if (user?.role === 'instructor') {
       fetchInstructorEvents();

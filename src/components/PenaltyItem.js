@@ -14,8 +14,6 @@ const PenaltyItem = ({
 }) => {
   const formatedDate = dayjs(createdAt).format('MMM D, h:mm A');
 
-  console.log(IssuedBy);
-
   const firstName =
     IssuedBy?.firstName.charAt(0).toUpperCase() + IssuedBy?.firstName.slice(1);
   const lastName =
