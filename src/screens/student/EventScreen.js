@@ -14,7 +14,7 @@ import EventItem from '../../components/EventItem';
 import axios from '../../../config/axios';
 import {useMainContext} from '../../../context/MainContextProvider';
 const EventScreen = ({navigation}) => {
-  const {token, events, setEvents, fetchEvents} = useMainContext();
+  const {events, setEvents, fetchEvents} = useMainContext();
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(async () => {
@@ -32,11 +32,7 @@ const EventScreen = ({navigation}) => {
 
   const updateSeenRequest = async () => {
     try {
-      axios.put(`/api/student/update_seen`, null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      axios.put(`/api/student/update_seen`, null);
     } catch (error) {
       console.log(error.response.data);
     }

@@ -11,15 +11,12 @@ import {
   AppState,
   Button,
   Dimensions,
-  StatusBar,
   StyleSheet,
   View,
 } from 'react-native';
 import Modal from 'react-native-modal';
-import DefaultModalContent from '../../../utils/DefaultModalContent';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {COLORS} from '../../../utils/colors';
-// import axios from 'axios';
 import axios from '../../../config/axios';
 import {useMainContext} from '../../../context/MainContextProvider';
 import {FocusAwareStatusBar} from '../../../utils/FocusAwareStatusBar';
@@ -30,7 +27,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const ScanInviteScreen = () => {
-  const {token, granted, setGranted} = useMainContext();
+  const {granted, setGranted} = useMainContext();
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -41,11 +38,7 @@ const ScanInviteScreen = () => {
   };
   const fetch = async id => {
     try {
-      const res = await axios.post(`/api/guard/scan_invite/${id}`, null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.post(`/api/guard/scan_invite/${id}`, null);
       if (res.data.success) {
         setIsLoading(false);
         setIsVisible(true);

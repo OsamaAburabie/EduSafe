@@ -8,24 +8,18 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import axios from '../../../config/axios';
-import {useMainContext} from '../../../context/MainContextProvider';
 import {COLORS} from '../../../utils/colors';
 import dayjs from 'dayjs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import InvitationItem from '../../components/InvitationItem';
 
 const EventDetailsScreen = ({route}) => {
-  const {token} = useMainContext();
   const {id} = route.params;
   const [event, setEvent] = useState(null);
 
   const fetchEventDetails = async () => {
     try {
-      const res = await axios.get(`/api/instructor/event/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(`/api/instructor/event/${id}`);
       if (res.data?.success) {
         setEvent(res.data.event);
       }

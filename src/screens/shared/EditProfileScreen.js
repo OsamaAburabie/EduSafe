@@ -20,7 +20,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import axios, {baseURL} from '../../../config/axios';
 
 const EditProfileScreen = ({navigation}) => {
-  const {user, token, setUser} = useMainContext();
+  const {user, setUser} = useMainContext();
   const initialAvatar = {
     path: user.avatar,
   };
@@ -53,7 +53,6 @@ const EditProfileScreen = ({navigation}) => {
       const res = await axios.put(`/api/user/profile`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
         },
         transformRequest: (data, headers) => {
           return formData;

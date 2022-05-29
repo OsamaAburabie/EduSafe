@@ -3,11 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableOpacity,
   Image,
-  ScrollView,
-  Keyboard,
   ToastAndroid,
   Dimensions,
 } from 'react-native';
@@ -19,7 +16,7 @@ import axios from '../../../config/axios';
 const width = Dimensions.get('window').width;
 
 const UploadVaccine = ({navigation}) => {
-  const {user, token, fetchUser} = useMainContext();
+  const {fetchUser} = useMainContext();
   const initialAvatar = {
     path: 'https://alrai.com/uploads/images/2021/03/30/276084.jpg',
   };
@@ -42,7 +39,6 @@ const UploadVaccine = ({navigation}) => {
       const res = await axios.post(`/api/student/vaccine`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
         },
         transformRequest: (data, headers) => {
           return formData;

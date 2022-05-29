@@ -25,7 +25,7 @@ const MakeInvitesScreen = ({route}) => {
   const [isVisible, setIsVisible] = useState(false);
   const [fileLabel, setFileLabel] = useState('Choose a .csv file');
   const [message, setMessage] = useState('');
-  const {token, fetchInstructorEvents} = useMainContext();
+  const {fetchInstructorEvents} = useMainContext();
   const {id} = route.params;
 
   useEffect(() => {
@@ -73,7 +73,6 @@ const MakeInvitesScreen = ({route}) => {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`,
           },
           transformRequest: (data, headers) => {
             return formData;

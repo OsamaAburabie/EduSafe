@@ -50,6 +50,20 @@ function InstructorTabs() {
       initialRouteName="ProfileStack"
       screenOptions={tabScreenOptions}>
       <Tab.Screen
+        name="HealthStack"
+        component={HealthStack}
+        options={{
+          tabBarLabel: 'Health',
+          tabBarIcon: ({color, focused}) => (
+            <MaterialCommunityIcons
+              name={`${focused ? 'heart' : 'heart-outline'}`}
+              color={color}
+              size={26}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="PenaltyStack"
         component={PenaltyStack}
         options={{

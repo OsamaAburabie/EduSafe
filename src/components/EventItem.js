@@ -24,23 +24,15 @@ const EventItem = ({
   totalJoined,
   joining,
 }) => {
-  const {user, token, events, setEvents} = useMainContext();
+  const {token, events, setEvents} = useMainContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigation = useNavigation();
 
   const fetch = async (id, joining) => {
     try {
-      const res = await axios.post(
-        `/api/student/join_event/${id}`,
-        {
-          joining,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const res = await axios.post(`/api/student/join_event/${id}`, {
+        joining,
+      });
       // console.log(res.data);
       // i dont need to do anything with the response
     } catch (error) {

@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {COLORS} from '../../../utils/colors';
-import axios from '../../../config/axios';
 import {useMainContext} from '../../../context/MainContextProvider';
 import {ScrollView} from 'react-native-gesture-handler';
 import InstructorEventItem from '../../components/InstructorEventItem';

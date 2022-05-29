@@ -16,7 +16,6 @@ import {useMainContext} from '../../../context/MainContextProvider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import axios from '../../../config/axios';
 import Modal from 'react-native-modal';
 
 const width = Dimensions.get('window').width;
@@ -24,7 +23,6 @@ const width = Dimensions.get('window').width;
 const HealthScreen = ({navigation}) => {
   const {user, fetchUser, maskStatus, fetchMaskStatus} = useMainContext();
   const {vaccines} = user;
-  // const [maskStatus, setMaskStatus] = React.useState('optional');
   const [refreshing, setRefreshing] = React.useState(false);
   const [isVisible, setIsVisible] = React.useState(false);
   const close = () => {

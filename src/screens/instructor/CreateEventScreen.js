@@ -27,7 +27,7 @@ import DefaultModalContent from '../../../utils/DefaultModalContent';
 import ModalSuccess from '../../components/ModalSuccess';
 
 const CreateEventScreen = ({navigation, route}) => {
-  const {token, fetchInstructorEvents} = useMainContext();
+  const {fetchInstructorEvents} = useMainContext();
   const [open, setOpen] = useState(false);
   const [dobLabel, setDobLabel] = useState(dayjs().format('MMM D, h:mm A'));
   const [isVisible, setIsVisible] = useState(false);
@@ -42,11 +42,7 @@ const CreateEventScreen = ({navigation, route}) => {
 
   const sendRequest = async (values, actions) => {
     try {
-      let res = await axios.post(`/api/instructor/event`, values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      let res = await axios.post(`/api/instructor/event`, values);
 
       if (res.data.success) {
         setIsVisible(true);

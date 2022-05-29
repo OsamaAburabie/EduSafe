@@ -15,7 +15,7 @@ import {useMainContext} from '../../../context/MainContextProvider';
 import axios from '../../../config/axios';
 import ProfileStats from '../../components/ProfileStats';
 const ProfileScreen = ({navigation}) => {
-  const {token, user, fetchUser, fetchPenalties} = useMainContext();
+  const {user, fetchUser, fetchPenalties} = useMainContext();
   const [selected, setSelected] = useState('qr');
   const [refreshing, setRefreshing] = useState(false);
 
@@ -24,7 +24,7 @@ const ProfileScreen = ({navigation}) => {
     fetchUser();
     fetchPenalties();
     setRefreshing(false);
-  }, [token]);
+  }, []);
 
   return (
     <ScrollView

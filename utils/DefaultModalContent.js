@@ -7,15 +7,28 @@ import {
   ActivityIndicator,
   Image,
 } from 'react-native';
+import {COLORS} from './colors';
 
 const DefaultModalContent = ({data, fetchError}) => {
   return (
-    <View style={styles.content}>
+    <View
+      style={[
+        styles.content,
+        {
+          backgroundColor: data?.vaccinated ? COLORS.primary : '#ff0000',
+        },
+      ]}>
       {data && (
         <>
           <View style={styles.avatarContainer}>
             <Image style={styles.avatar} source={{uri: data.avatar}} />
-            <Text style={[styles.contentTitle]}>
+            <Text
+              style={[
+                styles.contentTitle,
+                {
+                  color: COLORS.white,
+                },
+              ]}>
               {data?.firstName} {data?.lastName}
             </Text>
           </View>
@@ -29,7 +42,7 @@ const DefaultModalContent = ({data, fetchError}) => {
 
 const styles = StyleSheet.create({
   content: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     borderColor: 'rgba(0, 0, 0, 0.1)',
@@ -39,7 +52,7 @@ const styles = StyleSheet.create({
   },
   contentTitle: {
     fontSize: 20,
-    color: '#333',
+    // color: '#333',
   },
   avatarContainer: {
     alignItems: 'center',

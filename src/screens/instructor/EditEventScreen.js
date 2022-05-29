@@ -27,7 +27,7 @@ import DefaultModalContent from '../../../utils/DefaultModalContent';
 import ModalSuccess from '../../components/ModalSuccess';
 
 const EditEventScreen = ({navigation, route}) => {
-  const {token, fetchInstructorEvents, instructorEvents, setInstructorEvents} =
+  const {fetchInstructorEvents, instructorEvents, setInstructorEvents} =
     useMainContext();
   const [open, setOpen] = useState(false);
   const [dobLabel, setDobLabel] = useState(
@@ -44,11 +44,6 @@ const EditEventScreen = ({navigation, route}) => {
       let res = await axios.put(
         `/api/instructor/event/${route.params.id}`,
         values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
       );
 
       if (res.data.success) {
@@ -65,11 +60,7 @@ const EditEventScreen = ({navigation, route}) => {
 
   const deleteEvent = async () => {
     try {
-      let res = await axios.delete(`/api/instructor/event/${route.params.id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      let res = await axios.delete(`/api/instructor/event/${route.params.id}`);
 
       if (res.data.success) {
         setInstructorEvents(

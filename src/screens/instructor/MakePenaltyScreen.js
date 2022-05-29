@@ -10,13 +10,11 @@ import {
   Keyboard,
   ToastAndroid,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {COLORS} from '../../../utils/colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
-import {useMainContext} from '../../../context/MainContextProvider';
-import {RadioButton} from 'react-native-paper';
 import {Picker} from '@react-native-picker/picker';
 import {useFormik} from 'formik';
 import axios from '../../../config/axios';
@@ -24,9 +22,7 @@ import {useFocusEffect} from '@react-navigation/native';
 
 const MakePenaltyScreen = ({navigation, route}) => {
   // const {email} = route.params;
-  const [email, setEmail] = useState('');
 
-  const {user, token} = useMainContext();
   const SignupSchema = Yup.object().shape({
     email: Yup.string()
       .email('Invalid email')
@@ -35,18 +31,10 @@ const MakePenaltyScreen = ({navigation, route}) => {
 
   const sendRequest = async (values, actions) => {
     try {
-      let res = await axios.post(
-        `/api/instructor/give_penalty`,
-        {
-          studentEmail: values.email,
-          type: values.type,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      let res = await axios.post(`/api/instructor/give_penalty`, {
+        studentEmail: values.email,
+        type: values.type,
+      });
 
       if (res.data.success) {
         actions.resetForm();

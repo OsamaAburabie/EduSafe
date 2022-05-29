@@ -20,7 +20,7 @@ import axios from '../../../config/axios';
 const width = Dimensions.get('window').width;
 
 const EditVaccie = ({navigation, route}) => {
-  const {token, fetchUser} = useMainContext();
+  const {fetchUser} = useMainContext();
   const initialAvatar = {
     path: route.params?.vaccine?.image,
   };
@@ -46,7 +46,6 @@ const EditVaccie = ({navigation, route}) => {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`,
           },
           transformRequest: (data, headers) => {
             return formData;

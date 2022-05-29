@@ -6,7 +6,7 @@ import {
   View,
   Keyboard,
 } from 'react-native';
-import React, {createRef, useEffect, useState} from 'react';
+import React, {createRef, useEffect} from 'react';
 import {COLORS} from '../../utils/colors';
 
 const OTPInputField = ({setPinReady, code, setCode, maxLength}) => {

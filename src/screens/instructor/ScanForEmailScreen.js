@@ -17,7 +17,6 @@ import {
 } from 'react-native';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {COLORS} from '../../../utils/colors';
-// import axios from 'axios';
 import axios from '../../../config/axios';
 import {useMainContext} from '../../../context/MainContextProvider';
 import {FocusAwareStatusBar} from '../../../utils/FocusAwareStatusBar';
@@ -26,7 +25,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const ScanForEmailScreen = ({navigation}) => {
-  const {token, granted, setGranted} = useMainContext();
+  const {granted, setGranted} = useMainContext();
   const [isLoading, setIsLoading] = useState(false);
   let scannerRef = useRef(null);
   const close = () => {
@@ -34,11 +33,7 @@ const ScanForEmailScreen = ({navigation}) => {
   };
   const fetch = async id => {
     try {
-      const res = await axios.get(`/api/guard/student_info/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(`/api/guard/student_info/${id}`);
       if (res.data.success) {
         setIsLoading(false);
         navigation.navigate('CreatePenalty', {

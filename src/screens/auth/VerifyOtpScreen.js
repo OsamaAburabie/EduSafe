@@ -23,7 +23,7 @@ const VerifyOtpScreen = ({navigation}) => {
   const [pinReady, setPinReady] = useState(false);
   const MAX_CODE_LENGTH = 4;
 
-  const {user, setUser, token, Logout} = useMainContext();
+  const {user, setUser, Logout} = useMainContext();
   const data = {
     otp: code,
   };
@@ -31,11 +31,7 @@ const VerifyOtpScreen = ({navigation}) => {
   const handleSubmit = async () => {
     Keyboard.dismiss();
     try {
-      const res = await axios.put('api/user/verify', data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.put('api/user/verify', data);
       if (res.data?.success) {
         setUser({
           ...user,
@@ -50,11 +46,7 @@ const VerifyOtpScreen = ({navigation}) => {
 
   const handleSendCode = async () => {
     try {
-      const res = await axios.post('api/user/send_otp', null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.post('api/user/send_otp', null);
       if (res.data?.success) {
         ToastAndroid.show(res.data.message, ToastAndroid.SHORT);
       }

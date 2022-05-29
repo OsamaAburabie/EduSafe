@@ -1,8 +1,10 @@
 import React, {createContext, useEffect} from 'react';
 import {useStorage} from '../hooks/UseStorage';
 import axios from '../config/axios';
-import {useMMKVObject, useMMKVString} from 'react-native-mmkv';
+import {useMMKVObject, useMMKVString, MMKV} from 'react-native-mmkv';
 export const MainContext = createContext({});
+
+export const storage = new MMKV();
 
 //custom hook to use the context
 export const useMainContext = () => {
@@ -34,11 +36,7 @@ export const MainContextProvider = ({children}) => {
 
   const fetchEvents = async () => {
     try {
-      const res = await axios.get(`/api/student/events`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(`/api/student/events`);
       if (res.data?.success) {
         setEvents(res.data.data);
       }
@@ -49,11 +47,7 @@ export const MainContextProvider = ({children}) => {
 
   const fetchInstructorEvents = async () => {
     try {
-      const res = await axios.get(`/api/instructor/events`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(`/api/instructor/events`);
       if (res.data?.success) {
         setInstructorEvents(res.data.events);
       }
@@ -64,11 +58,7 @@ export const MainContextProvider = ({children}) => {
 
   const fetchPenalties = async () => {
     try {
-      const res = await axios.get(`/api/student/penalties`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(`/api/student/penalties`);
       if (res.data?.success) {
         setPenalties(res.data.data);
       }
@@ -90,11 +80,7 @@ export const MainContextProvider = ({children}) => {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get(`/api/user/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.get(`/api/user/me`);
       if (res.data.success) {
         setUser({
           ...user,
