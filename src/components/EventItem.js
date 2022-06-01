@@ -66,7 +66,19 @@ const EventItem = ({
     <>
       <TouchableOpacity
         activeOpacity={0.8}
-        onPress={() => navigation.navigate('EventDetails')}>
+        onPress={() =>
+          navigation.navigate('EventDetails', {
+            eventDetails: {
+              id,
+              title,
+              description,
+              date,
+              totalInvited,
+              totalJoined,
+              joining,
+            },
+          })
+        }>
         <View key={id} style={styles.eventContainer}>
           <View style={styles.eventInfo}>
             <View>
@@ -74,16 +86,11 @@ const EventItem = ({
                 style={[
                   styles.eventTitle,
                   {
-                    marginBottom: description ? -5 : 2,
+                    marginBottom: 2,
                   },
                 ]}>
                 {titleUpper}
               </Text>
-              {description !== '' && (
-                <Text style={[styles.text, {marginBottom: 4}]}>
-                  {description}
-                </Text>
-              )}
             </View>
             <View style={styles.eventDate}>
               <MaterialCommunityIcons

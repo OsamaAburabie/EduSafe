@@ -105,8 +105,10 @@ export const EventStack = () => {
       <Stack.Screen name="Events" component={EventScreen} />
       <Stack.Screen
         name="EventDetails"
-        options={{
-          headerTitle: 'Event Details',
+        options={({navigation, route}) => {
+          return {
+            headerTitle: route.params?.eventDetails?.title + ' Details',
+          };
         }}
         component={EventDetailsScreen}
       />
