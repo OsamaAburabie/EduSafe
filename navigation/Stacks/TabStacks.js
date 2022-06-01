@@ -21,6 +21,7 @@ import EditEventScreen from '../../src/screens/instructor/EditEventScreen';
 import MakeInvitesScreen from '../../src/screens/instructor/MakeInvitesScreen';
 import UploadVaccine from '../../src/screens/student/UploadVaccine';
 import EditVaccie from '../../src/screens/student/EditVaccineScreen';
+import ScannedListScreen from '../../src/screens/instructor/ScannedListScreen';
 const Stack = createStackNavigator();
 const stackOptions = {
   headerStyle: {
@@ -123,7 +124,8 @@ export const InstructorEventStack = () => {
             if (
               route.name === 'EditEvent' ||
               route.name === 'MakeInvites' ||
-              route.name === 'EventDetails'
+              route.name === 'EventDetails' ||
+              'EventScanned'
             ) {
               return <HeaderBackButton onPress={() => navigation.goBack()} />;
             } else {
@@ -155,6 +157,13 @@ export const InstructorEventStack = () => {
           headerTitle: 'Event Details',
         }}
         component={InstructorEventDetailsScreen}
+      />
+      <Stack.Screen
+        name="EventScanned"
+        options={{
+          headerTitle: 'Scanned',
+        }}
+        component={ScannedListScreen}
       />
     </Stack.Navigator>
   );

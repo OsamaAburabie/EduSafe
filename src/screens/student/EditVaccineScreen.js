@@ -24,6 +24,8 @@ const EditVaccie = ({navigation, route}) => {
   const initialAvatar = {
     path: route.params?.vaccine?.image,
   };
+
+  console.log(initialAvatar);
   const [avatar, setAvatar] = useState(initialAvatar);
 
   const submitEdit = async () => {

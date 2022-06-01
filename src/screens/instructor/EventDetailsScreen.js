@@ -5,6 +5,8 @@ import {
   StyleSheet,
   Text,
   View,
+  Button,
+  Pressable,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import axios from '../../../config/axios';
@@ -13,7 +15,7 @@ import dayjs from 'dayjs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import InvitationItem from '../../components/InvitationItem';
 
-const EventDetailsScreen = ({route}) => {
+const EventDetailsScreen = ({route, navigation}) => {
   const {id} = route.params;
   const [event, setEvent] = useState(null);
 
@@ -51,7 +53,7 @@ const EventDetailsScreen = ({route}) => {
       <View
         style={{
           width: '100%',
-          height: 90,
+          height: 95,
           backgroundColor: COLORS.primary,
           borderRadius: 5,
           padding: 10,
@@ -109,6 +111,35 @@ const EventDetailsScreen = ({route}) => {
             {event?.totalSeen} Seen
           </Text>
         </View>
+
+        <Pressable
+          onPress={() =>
+            navigation.navigate('EventsStack', {
+              screen: 'EventScanned',
+              params: {
+                id,
+                event,
+              },
+            })
+          }
+          style={{
+            padding: 10,
+            backgroundColor: COLORS.white,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 20,
+            position: 'absolute',
+            top: 10,
+            right: 10,
+          }}>
+          <Text
+            style={{
+              color: COLORS.primary,
+              fontWeight: '700',
+            }}>
+            View Scanned
+          </Text>
+        </Pressable>
       </View>
 
       <View
