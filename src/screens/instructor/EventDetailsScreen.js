@@ -34,6 +34,15 @@ const EventDetailsScreen = ({route, navigation}) => {
     fetchEventDetails();
   }, []);
 
+  const EmptyListMessage = ({item}) => {
+    return (
+      // Flat List Item
+      <View style={styles.emptyListStyle}>
+        <Text style={styles.emptyText}>No Invites Found</Text>
+      </View>
+    );
+  };
+
   if (!event)
     return (
       <View
@@ -141,7 +150,6 @@ const EventDetailsScreen = ({route, navigation}) => {
           </Text>
         </Pressable>
       </View>
-
       <View
         style={{
           flex: 1,
@@ -158,6 +166,8 @@ const EventDetailsScreen = ({route, navigation}) => {
           keyExtractor={item => item.id}
           renderItem={({item}) => <InvitationItem {...item} />}
           style={{width: '100%'}}
+          ListEmptyComponent={EmptyListMessage}
+          contentContainerStyle={{flexGrow: 1}}
         />
       </View>
     </View>
@@ -171,5 +181,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 10,
+  },
+  emptyListStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 18,
+    textAlign: 'center',
+    color: COLORS.primary,
   },
 });

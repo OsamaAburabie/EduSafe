@@ -9,7 +9,9 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "dev": "react-native run-android && react-native start",
-    "release": "react-native run-android --no-jetifier --variant=release"
+    "release": "react-native run-android --no-jetifier --variant=release",
+    "postinstall": "patch-package"
+    
   },
   "dependencies": {
     "@react-native-masked-view/masked-view": "^0.2.6",
@@ -24,6 +26,7 @@
     "axios": "^0.26.1",
     "dayjs": "^1.11.1",
     "formik": "^2.2.9",
+    "patch-package": "^6.4.7",
     "react": "17.0.2",
     "react-native": "0.68.0",
     "react-native-bootsplash": "^4.1.4",
@@ -46,6 +49,7 @@
     "react-native-svg": "^12.3.0",
     "react-native-tab-view": "^3.1.1",
     "react-native-vector-icons": "^9.1.0",
+    "rn-fetch-blob": "^0.12.0",
     "yup": "^0.32.11"
   },
   "devDependencies": {

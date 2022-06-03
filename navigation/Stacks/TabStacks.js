@@ -22,6 +22,7 @@ import MakeInvitesScreen from '../../src/screens/instructor/MakeInvitesScreen';
 import UploadVaccine from '../../src/screens/student/UploadVaccine';
 import EditVaccie from '../../src/screens/student/EditVaccineScreen';
 import ScannedListScreen from '../../src/screens/instructor/ScannedListScreen';
+import Download from '../../src/screens/instructor/Download';
 const Stack = createStackNavigator();
 const stackOptions = {
   headerStyle: {
@@ -163,9 +164,17 @@ export const InstructorEventStack = () => {
       <Stack.Screen
         name="EventScanned"
         options={{
-          headerTitle: 'Scanned',
+          headerTitle: 'Scanned Invites',
         }}
         component={ScannedListScreen}
+      />
+
+      <Stack.Screen
+        name="EventDownload"
+        options={{
+          headerTitle: 'Download',
+        }}
+        component={Download}
       />
     </Stack.Navigator>
   );
