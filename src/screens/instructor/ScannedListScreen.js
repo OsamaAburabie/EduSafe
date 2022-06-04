@@ -15,11 +15,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import InvitationItem from '../../components/InvitationItem';
 import RNFetchBlob from 'rn-fetch-blob';
 import {useMainContext} from '../../../context/MainContextProvider';
+import {baseURL} from '../../../config/axios';
 
 const ScannedListScreen = ({route}) => {
   const {id, event} = route.params;
+  console.log(event);
   const {token} = useMainContext();
-  const fileUrl = `http://192.168.1.67:5000/api/instructor/download/${id}`;
+  const fileUrl = `${baseURL}/api/instructor/download/${id}`;
 
   const filteredEvents = event?.Invitations?.filter(evt => evt.scanned);
   const EmptyListMessage = ({item}) => {

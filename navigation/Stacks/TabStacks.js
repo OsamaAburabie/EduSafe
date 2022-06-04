@@ -23,6 +23,8 @@ import UploadVaccine from '../../src/screens/student/UploadVaccine';
 import EditVaccie from '../../src/screens/student/EditVaccineScreen';
 import ScannedListScreen from '../../src/screens/instructor/ScannedListScreen';
 import Download from '../../src/screens/instructor/Download';
+import VaccinesScreen from '../../src/screens/admin/VaccinesScreen';
+import VaccineDetailsScreen from '../../src/screens/admin/VaccineDetailsScreen';
 const Stack = createStackNavigator();
 const stackOptions = {
   headerStyle: {
@@ -207,6 +209,48 @@ export const HealthStack = () => {
           headerTitle: 'Upload',
         }}
         component={UploadVaccine}
+      />
+      <Stack.Screen
+        name="EditVaccine"
+        options={{
+          headerTitle: 'Edit',
+        }}
+        component={EditVaccie}
+      />
+    </Stack.Navigator>
+  );
+};
+
+export const ManageVaccineStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={({navigation, route}) => {
+        return {
+          ...stackOptions,
+          headerLeft: () => {
+            if (route.name === 'VaccineDetails') {
+              return <HeaderBackButton onPress={() => navigation.goBack()} />;
+            } else {
+              return (
+                <HeaderMenuButton onPress={() => navigation.openDrawer()} />
+              );
+            }
+          },
+        };
+      }}>
+      <Stack.Screen
+        name="ManageVaccines"
+        component={VaccinesScreen}
+        options={{
+          headerTitle: 'Manage Vaccines',
+        }}
+      />
+      <Stack.Screen
+        name="VaccineDetails"
+        options={{
+          headerTitle: 'Details',
+        }}
+        component={VaccineDetailsScreen}
       />
       <Stack.Screen
         name="EditVaccine"

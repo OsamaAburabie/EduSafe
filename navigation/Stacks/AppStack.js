@@ -6,6 +6,7 @@ import StudentTabs from '../Tabs/StudentTabs';
 import VerifyStack from './VerifyStack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import DrawerContent from '../../src/components/DrawerContent';
+import AdminTabs from '../Tabs/AdminTabs';
 
 function AppStack() {
   const {
@@ -41,6 +42,8 @@ function AppStack() {
       return <InstructorTabs />;
     case 'student':
       return <StudentTabs />;
+    case 'admin':
+      return <AdminTabs />;
     default:
       return <StudentTabs />;
   }

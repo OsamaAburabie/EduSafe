@@ -45,15 +45,16 @@ const ProfileScreen = ({navigation}) => {
           <View style={styles.profileInfo}>
             <Text style={styles.profileName}>
               {user?.firstName} {user?.lastName}{' '}
-              {user?.role !== 'instructor' && (
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: user?.valuePoints >= 0 ? 'orange' : 'red',
-                  }}>
-                  ({user?.valuePoints} Points)
-                </Text>
-              )}
+              {user?.role !== 'instructor' ||
+                ('guard' && (
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: user?.valuePoints >= 0 ? 'orange' : 'red',
+                    }}>
+                    ({user?.valuePoints} Points)
+                  </Text>
+                ))}
             </Text>
             <Text style={styles.profileEmail}>{user?.email}</Text>
             <Pressable
