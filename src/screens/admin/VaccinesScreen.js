@@ -1,7 +1,8 @@
 import {
+  FlatList,
   Pressable,
   RefreshControl,
-  ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -11,21 +12,12 @@ import axios from '../../../config/axios';
 import {COLORS} from '../../../utils/colors';
 import AdminVaccineItem from '../../components/AdminVaccineItem';
 
-const VaccinesScreen = () => {
+const VaccinesScreen = ({navigation}) => {
   const [Vaccines, setVaccines] = React.useState([]);
   const [filterStatus, setFilterStatus] = React.useState('pending');
   const [refreshing, setRefreshing] = React.useState(false);
-  const filterVaccines = Vaccines.filter(vaccine => {
-    if (filterStatus === 'pending') {
-      return vaccine.status === 'pending';
-    } else if (filterStatus === 'approved') {
-      return vaccine.status === 'approved';
-    } else if (filterStatus === 'rejected') {
-      return vaccine.status === 'rejected';
-    } else {
-      return vaccine;
-    }
-  });
+
+  const status = ['pending', 'approved', 'rejected'];
 
   const getVaccines = async () => {
     try {
@@ -39,9 +31,12 @@ const VaccinesScreen = () => {
   };
 
   React.useEffect(() => {
-    getVaccines();
-  }),
-    [];
+    const unsubscribe = navigation.addListener('focus', () => {
+      getVaccines();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -49,73 +44,73 @@ const VaccinesScreen = () => {
     setRefreshing(false);
   }, []);
 
+  const EmptyListMessage = ({item}) => {
+    return (
+      <View style={styles.emptyListStyle}>
+        <Text style={styles.emptyText}>No {filterStatus} vaccines</Text>
+      </View>
+    );
+  };
+
+  const calcBackgroundColor = status => {
+    if (status === 'pending') {
+      return 'orange';
+    } else if (status === 'approved') {
+      return 'green';
+    } else {
+      return 'red';
+    }
+  };
+
   return (
     <View
       style={{
         flex: 1,
+        backgroundColor: COLORS.white,
       }}>
+      <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" />
       <View
         style={{
           flexDirection: 'row',
+          paddingHorizontal: 10,
+          paddingBottom: 10,
         }}>
-        <Pressable
-          onPress={() => setFilterStatus('pending')}
-          style={{
-            padding: 10,
-            flex: 1,
-            backgroundColor:
-              filterStatus === 'pending' ? COLORS.white : COLORS.primary,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text
+        {status.map((sts, index) => (
+          <Pressable
+            key={index}
+            onPress={() => setFilterStatus(sts)}
             style={{
-              color: filterStatus === 'pending' ? COLORS.primary : COLORS.white,
-              fontWeight: 'bold',
+              padding: 10,
+              flex: 1,
+              backgroundColor:
+                filterStatus === sts ? COLORS.white : calcBackgroundColor(sts),
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 100,
+              marginRight: index === status.length - 1 ? 0 : 10,
+              borderWidth: filterStatus === sts ? 1 : 0,
+              borderColor: COLORS.primary,
             }}>
-            pending
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setFilterStatus('approved')}
-          style={{
-            padding: 10,
-            flex: 1,
-            backgroundColor:
-              filterStatus === 'approved' ? COLORS.white : COLORS.primary,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              color:
-                filterStatus === 'approved' ? COLORS.primary : COLORS.white,
-              fontWeight: 'bold',
-            }}>
-            approved
-          </Text>
-        </Pressable>
-        <Pressable
-          onPress={() => setFilterStatus('rejected')}
-          style={{
-            padding: 20,
-            flex: 1,
-            backgroundColor:
-              filterStatus === 'rejected' ? COLORS.white : COLORS.primary,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Text
-            style={{
-              color:
-                filterStatus === 'rejected' ? COLORS.primary : COLORS.white,
-              fontWeight: 'bold',
-            }}>
-            rejected
-          </Text>
-        </Pressable>
+            <Text
+              style={{
+                color: filterStatus === sts ? COLORS.primary : COLORS.white,
+                fontSize: 18,
+                textTransform: 'capitalize',
+                fontWeight: filterStatus === sts ? '500' : 'normal',
+              }}>
+              {sts}
+            </Text>
+          </Pressable>
+        ))}
       </View>
-      <ScrollView
+
+      <FlatList
+        data={Vaccines.filter(vaccine => {
+          return vaccine.status === filterStatus;
+        })}
+        keyExtractor={(item, index) => item.id}
+        renderItem={({item}) => <AdminVaccineItem key={item.id} {...item} />}
+        ListEmptyComponent={EmptyListMessage}
         contentContainerStyle={{flexGrow: 1}}
         refreshControl={
           <RefreshControl
@@ -124,15 +119,23 @@ const VaccinesScreen = () => {
             progressBackgroundColor={COLORS.white}
             colors={[COLORS.primary]}
           />
-        }>
-        {filterVaccines?.map(vaccine => (
-          <AdminVaccineItem key={vaccine.id} {...vaccine} />
-        ))}
-      </ScrollView>
+        }
+      />
     </View>
   );
 };
 
 export default VaccinesScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  emptyListStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 18,
+    textAlign: 'center',
+    color: COLORS.primary,
+  },
+});

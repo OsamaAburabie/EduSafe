@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {storage} from '../context/MainContextProvider';
-export const baseURL = 'http://192.168.65.44:5000';
+export const baseURL = 'http://192.168.1.67:5000';
 const instance = axios.create({baseURL});
 
 instance.interceptors.request.use(function (config) {

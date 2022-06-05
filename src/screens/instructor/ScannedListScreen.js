@@ -19,7 +19,6 @@ import {baseURL} from '../../../config/axios';
 
 const ScannedListScreen = ({route}) => {
   const {id, event} = route.params;
-  console.log(event);
   const {token} = useMainContext();
   const fileUrl = `${baseURL}/api/instructor/download/${id}`;
 

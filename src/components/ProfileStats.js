@@ -13,37 +13,36 @@ const ProfileStats = ({selected, setSelected}) => {
   return (
     <View style={styles.profileStats}>
       <View style={styles.statButtons}>
-        {user?.role !== 'instructor' ||
-          ('guard' && (
-            <Pressable
-              onPress={() => setSelected('penalties')}
+        {user?.role === 'student' && (
+          <Pressable
+            onPress={() => setSelected('penalties')}
+            style={[
+              styles.statbtn,
+              {
+                backgroundColor:
+                  selected === 'penalties' ? COLORS.primary : COLORS.white,
+                borderColor:
+                  selected === 'penalties' ? COLORS.white : COLORS.primary,
+                borderWidth: selected === 'penalties' ? 0 : 1,
+              },
+            ]}>
+            <MaterialCommunityIcons
+              name="alert-circle"
+              size={22}
+              color={selected === 'penalties' ? COLORS.white : COLORS.primary}
+            />
+            <Text
               style={[
-                styles.statbtn,
+                styles.statbtnText,
                 {
-                  backgroundColor:
-                    selected === 'penalties' ? COLORS.primary : COLORS.white,
-                  borderColor:
+                  color:
                     selected === 'penalties' ? COLORS.white : COLORS.primary,
-                  borderWidth: selected === 'penalties' ? 0 : 1,
                 },
               ]}>
-              <MaterialCommunityIcons
-                name="alert-circle"
-                size={22}
-                color={selected === 'penalties' ? COLORS.white : COLORS.primary}
-              />
-              <Text
-                style={[
-                  styles.statbtnText,
-                  {
-                    color:
-                      selected === 'penalties' ? COLORS.white : COLORS.primary,
-                  },
-                ]}>
-                Penalties
-              </Text>
-            </Pressable>
-          ))}
+              Penalties
+            </Text>
+          </Pressable>
+        )}
         {/* separator */}
         <View style={{width: 2}}></View>
         <Pressable

@@ -12,6 +12,7 @@ const AdminVaccineItem = ({id, status, image, User}) => {
           id,
           status,
           image,
+          User,
         })
       }>
       <View

@@ -3,15 +3,11 @@ import {
   StyleSheet,
   Text,
   View,
-  TextInput,
   TouchableOpacity,
   Image,
-  ScrollView,
-  Keyboard,
-  ToastAndroid,
   Dimensions,
 } from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import {COLORS} from '../../../utils/colors';
 import axios from '../../../config/axios';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -19,17 +15,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const width = Dimensions.get('window').width;
 
 const VaccineDetailsScreen = ({navigation, route}) => {
-  const initialAvatar = {
-    path: route.params?.image,
-  };
-
-  console.log(route.params?.id);
-
-  const [avatar, setAvatar] = useState(initialAvatar);
+  const {id, status, image, User} = route.params;
 
   const acceptVaccine = async () => {
     try {
-      const res = await axios.put(`/api/admin/vaccines/${route.params?.id}`, {
+      const res = await axios.put(`/api/admin/vaccines/${id}`, {
         status: 'approved',
       });
       if (res.data?.success) {
@@ -42,7 +32,7 @@ const VaccineDetailsScreen = ({navigation, route}) => {
 
   const rejectVaccine = async () => {
     try {
-      const res = await axios.put(`/api/admin/vaccines/${route.params?.id}`, {
+      const res = await axios.put(`/api/admin/vaccines/${id}`, {
         status: 'rejected',
       });
       if (res.data?.success) {
@@ -53,53 +43,159 @@ const VaccineDetailsScreen = ({navigation, route}) => {
     }
   };
 
+  function renderHeader() {
+    return (
+      <View
+        style={{
+          backgroundColor: COLORS.white,
+          elevation: 2,
+          overflow: 'hidden',
+          alignItems: 'center',
+          padding: 10,
+          borderRadius: 10,
+          marginBottom: 10,
+        }}>
+        <Image
+          source={{
+            uri: User?.avatar,
+          }}
+          style={{
+            width: 100,
+            height: 100,
+            borderRadius: 50,
+            resizeMode: 'cover',
+          }}
+        />
+        <View
+          style={{
+            flexDirection: 'row',
+          }}>
+          <Text
+            style={{
+              color: COLORS.primary,
+              fontSize: 20,
+            }}>
+            {User?.firstName} {User?.lastName}
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container} keyboardShouldPersistTaps="handled">
       <StatusBar backgroundColor={COLORS.white} barStyle="dark-content" />
+      {renderHeader()}
       <Image
-        source={{uri: avatar?.path}}
+        source={{uri: image}}
         style={[
           styles.avatar,
           {
-            resizeMode: 'contain',
+            resizeMode: 'cover',
+            borderRadius: 10,
           },
         ]}
       />
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={acceptVaccine}
-          style={[
-            {
-              backgroundColor: 'green',
-              paddingVertical: 5,
-              paddingHorizontal: 20,
-            },
-          ]}>
-          <MaterialCommunityIcons name="check" size={30} color={COLORS.white} />
-        </TouchableOpacity>
+      {status === 'pending' && (
         <View
           style={{
-            width: 10,
-          }}></View>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={rejectVaccine}
-          style={[
-            {
-              backgroundColor: 'red',
-              paddingVertical: 5,
-              paddingHorizontal: 20,
-            },
-          ]}>
-          <MaterialCommunityIcons name="close" size={30} color={COLORS.white} />
-        </TouchableOpacity>
-      </View>
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 10,
+          }}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={acceptVaccine}
+            style={[
+              {
+                backgroundColor: 'green',
+                paddingVertical: 5,
+                paddingHorizontal: 20,
+              },
+            ]}>
+            <MaterialCommunityIcons
+              name="check"
+              size={30}
+              color={COLORS.white}
+            />
+          </TouchableOpacity>
+          <View
+            style={{
+              width: 10,
+            }}></View>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={rejectVaccine}
+            style={[
+              {
+                backgroundColor: 'red',
+                paddingVertical: 5,
+                paddingHorizontal: 20,
+              },
+            ]}>
+            <MaterialCommunityIcons
+              name="close"
+              size={30}
+              color={COLORS.white}
+            />
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {status === 'approved' && (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 10,
+          }}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={rejectVaccine}
+            style={[
+              {
+                backgroundColor: 'red',
+                paddingVertical: 5,
+                paddingHorizontal: 20,
+              },
+            ]}>
+            <MaterialCommunityIcons
+              name="close"
+              size={30}
+              color={COLORS.white}
+            />
+          </TouchableOpacity>
+        </View>
+      )}
+
+      {status === 'rejected' && (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 10,
+          }}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={acceptVaccine}
+            style={[
+              {
+                backgroundColor: 'green',
+                paddingVertical: 5,
+                paddingHorizontal: 20,
+              },
+            ]}>
+            <MaterialCommunityIcons
+              name="check"
+              size={30}
+              color={COLORS.white}
+            />
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };

@@ -130,7 +130,7 @@ export const InstructorEventStack = () => {
               route.name === 'EditEvent' ||
               route.name === 'MakeInvites' ||
               route.name === 'EventDetails' ||
-              'EventScanned'
+              route.name === 'EventScanned'
             ) {
               return <HeaderBackButton onPress={() => navigation.goBack()} />;
             } else {
@@ -139,6 +139,8 @@ export const InstructorEventStack = () => {
               );
             }
           },
+
+          headerShown: route.name === 'Events' ? false : true,
         };
       }}>
       <Stack.Screen name="Events" component={EventsTopTabs} />

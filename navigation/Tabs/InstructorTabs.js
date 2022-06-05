@@ -1,17 +1,13 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import HomeScreen from '../../src/screens/shared/HomeScreen';
 import {
-  EventStack,
   HealthStack,
-  HomeStack,
   InstructorEventStack,
   PenaltyStack,
   ProfileStack,
 } from '../Stacks/TabStacks';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {tabScreenOptions} from '../../utils/tabScreenOptions';
-import {useMainContext} from '../../context/MainContextProvider';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import ManageEventsScreen from '../../src/screens/instructor/ManageEventsScreen';
 import CreateEventScreen from '../../src/screens/instructor/CreateEventScreen';
