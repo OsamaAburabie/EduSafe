@@ -83,7 +83,7 @@ const VaccinesScreen = ({navigation}) => {
               padding: 10,
               flex: 1,
               backgroundColor:
-                filterStatus === sts ? COLORS.white : calcBackgroundColor(sts),
+                filterStatus === sts ? COLORS.white : COLORS.primary,
               justifyContent: 'center',
               alignItems: 'center',
               borderRadius: 100,

@@ -25,6 +25,7 @@ import ScannedListScreen from '../../src/screens/instructor/ScannedListScreen';
 import Download from '../../src/screens/instructor/Download';
 import VaccinesScreen from '../../src/screens/admin/VaccinesScreen';
 import VaccineDetailsScreen from '../../src/screens/admin/VaccineDetailsScreen';
+import MaskStatusScreen from '../../src/screens/admin/MaskStatusScreen';
 const Stack = createStackNavigator();
 const stackOptions = {
   headerStyle: {
@@ -295,6 +296,27 @@ export const PenaltyStack = () => {
           headerTitle: 'Scan QR Code',
         }}
         component={ScanForEmailScreen}
+      />
+    </Stack.Navigator>
+  );
+};
+export const AdminMaskStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={({navigation, route}) => {
+        return {
+          ...stackOptions,
+          headerLeft: () => {
+            return <HeaderMenuButton onPress={() => navigation.openDrawer()} />;
+          },
+        };
+      }}>
+      <Stack.Screen
+        name="MaskStatus"
+        options={{
+          headerTitle: 'Mask Status',
+        }}
+        component={MaskStatusScreen}
       />
     </Stack.Navigator>
   );

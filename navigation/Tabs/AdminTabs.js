@@ -1,6 +1,10 @@
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {ManageVaccineStack, PenaltyStack} from '../Stacks/TabStacks';
+import {
+  AdminMaskStack,
+  ManageVaccineStack,
+  PenaltyStack,
+} from '../Stacks/TabStacks';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {tabScreenOptions} from '../../utils/tabScreenOptions';
 
@@ -27,7 +31,7 @@ function AdminTabs() {
       />
       <Tab.Screen
         name="MaskStack"
-        component={PenaltyStack}
+        component={AdminMaskStack}
         options={{
           tabBarLabel: 'Mask Status',
           tabBarIcon: ({color, focused}) => (

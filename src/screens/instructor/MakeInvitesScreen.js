@@ -1,7 +1,9 @@
 import {
   Button,
+  Pressable,
   StyleSheet,
   Text,
+  TextInput,
   ToastAndroid,
   TouchableOpacity,
   View,
@@ -26,7 +28,10 @@ const MakeInvitesScreen = ({route}) => {
   const [fileLabel, setFileLabel] = useState('Choose a .csv file');
   const [message, setMessage] = useState('');
   const {fetchInstructorEvents} = useMainContext();
+  const [email, setEmail] = useState('');
+  const [selectedOption, setSelectedOption] = useState('CSV');
   const {id} = route.params;
+  const options = ['CSV', 'email'];
 
   useEffect(() => {
     if (result) {
@@ -51,7 +56,7 @@ const MakeInvitesScreen = ({route}) => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmitCsv = async () => {
     if (!result) {
       ToastAndroid.show(
         'No file selected, please select a file to upload',
@@ -89,6 +94,45 @@ const MakeInvitesScreen = ({route}) => {
     }
   };
 
+  const handleSubmitEmail = async () => {
+    if (!email) {
+      ToastAndroid.show(
+        'No Email entered, please enter an email to invite',
+        ToastAndroid.SHORT,
+      );
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        `/api/instructor/create_invites_email/${id}`,
+        {
+          email,
+        },
+      );
+      if (res.data?.success) {
+        fetchInstructorEvents();
+        setMessage(res.data?.message);
+        setEmail('');
+        setIsVisible(true);
+      }
+    } catch (error) {
+      console.log(`${error} at editVaccine`);
+      if (error.response.status === 500) {
+        ToastAndroid.show(
+          'Something went wrong, please try again later',
+          ToastAndroid.SHORT,
+        );
+      } else {
+        ToastAndroid.show(
+          error.response.data?.message ||
+            'Something went wrong, please try again later',
+          ToastAndroid.SHORT,
+        );
+      }
+    }
+  };
+
   const chooseDocument = async () => {
     try {
       const pickerResult = await DocumentPicker.pickSingle({
@@ -106,49 +150,137 @@ const MakeInvitesScreen = ({route}) => {
       <View
         style={{
           flexDirection: 'row',
-          alignItems: 'center',
-          borderBottomColor: '#f2f2f2',
-          borderBottomWidth: 1,
-          paddingBottom: 8,
-          marginBottom: 25,
-          flexWrap: 'wrap',
+          paddingBottom: 10,
         }}>
-        <FontAwesome5
-          name="file-upload"
-          size={20}
-          color="#666"
-          style={{marginRight: 5}}
-        />
-        <TouchableOpacity onPress={chooseDocument}>
-          <Text style={{color: '#666', marginLeft: 5, marginTop: 5}}>
-            {fileLabel}
-          </Text>
-        </TouchableOpacity>
+        {options.map((sts, index) => (
+          <Pressable
+            key={index}
+            onPress={() => setSelectedOption(sts)}
+            style={{
+              padding: 10,
+              flex: 1,
+              backgroundColor:
+                selectedOption === sts ? COLORS.white : COLORS.primary,
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 100,
+              marginRight: index === options.length - 1 ? 0 : 10,
+              borderWidth: selectedOption === sts ? 1 : 0,
+              borderColor: COLORS.primary,
+            }}>
+            <Text
+              style={{
+                color: selectedOption === sts ? COLORS.primary : COLORS.white,
+                fontSize: 18,
+                textTransform: 'uppercase',
+                fontWeight: selectedOption === sts ? '500' : 'normal',
+              }}>
+              {sts}
+            </Text>
+          </Pressable>
+        ))}
       </View>
 
-      <View style={styles.button}>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={handleSubmit}
-          style={[
-            styles.btn,
-            {
-              backgroundColor: COLORS.primary,
-              borderColor: COLORS.primary,
-              borderWidth: 1,
-            },
-          ]}>
-          <Text
-            style={[
-              styles.textBtn,
-              {
-                color: COLORS.white,
-              },
-            ]}>
-            Submit
-          </Text>
-        </TouchableOpacity>
-      </View>
+      {selectedOption === 'CSV' ? (
+        <>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 10,
+              flexWrap: 'wrap',
+              marginTop: 10,
+              marginBottom: 25,
+            }}>
+            <FontAwesome5
+              name="file-upload"
+              size={20}
+              color="#666"
+              style={{marginRight: 5}}
+            />
+            <TouchableOpacity onPress={chooseDocument}>
+              <Text style={{color: '#666', marginLeft: 5, marginTop: 5}}>
+                {fileLabel}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.button}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={handleSubmitCsv}
+              style={[
+                styles.btn,
+                {
+                  backgroundColor: COLORS.primary,
+                  borderColor: COLORS.primary,
+                  borderWidth: 1,
+                },
+              ]}>
+              <Text
+                style={[
+                  styles.textBtn,
+                  {
+                    color: COLORS.white,
+                  },
+                ]}>
+                Submit
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      ) : (
+        <>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 10,
+              flexWrap: 'wrap',
+            }}>
+            <FontAwesome5
+              name="envelope"
+              size={20}
+              color="#666"
+              style={{marginRight: 5}}
+            />
+            <TextInput
+              placeholder="Enter student email"
+              style={{
+                color: '#666',
+                marginLeft: 5,
+              }}
+              placeholderTextColor="#666"
+              value={email}
+              onChangeText={text => setEmail(text)}
+            />
+          </View>
+          <View style={styles.button}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={handleSubmitEmail}
+              style={[
+                styles.btn,
+                {
+                  backgroundColor: COLORS.primary,
+                  borderColor: COLORS.primary,
+                  borderWidth: 1,
+                },
+              ]}>
+              <Text
+                style={[
+                  styles.textBtn,
+                  {
+                    color: COLORS.white,
+                  },
+                ]}>
+                Submit
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
+
       <Modal
         testID={'modal'}
         animationIn="bounceIn"
