@@ -126,6 +126,7 @@ export const MainContextProvider = ({children}) => {
         token,
         setToken,
         maskStatus,
+        setMaskStatus,
         fetchMaskStatus,
         instructorEvents,
         setInstructorEvents,
