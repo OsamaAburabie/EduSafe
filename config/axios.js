@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {storage} from '../context/MainContextProvider';
-export const baseURL = 'http://192.168.166.44:5000';
+const DEVURL = 'http://192.168.1.67:5000';
+const PRODURL = 'http://edusafe.ddns.net';
+export const baseURL = PRODURL;
 const instance = axios.create({baseURL});
 
 instance.interceptors.request.use(function (config) {
